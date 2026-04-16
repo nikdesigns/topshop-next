@@ -56,8 +56,8 @@ export default function AccessCodeGeneratorPage() {
               </Badge>
               <h2>Generate Access Hashes</h2>
               <p>
-                This page is password-gated. Use it to generate hashes for protected finalist and
-                winner logo downloads.
+                This page is password-gated. Generate role-scoped hashes so finalist and winner
+                downloads can be unlocked separately.
               </p>
             </header>
 

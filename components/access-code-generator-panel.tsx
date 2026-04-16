@@ -6,12 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { sha256Hex } from '@/lib/crypto-client';
 import { ASSET_YEARS, type AssetYear } from '@/lib/assets-downloads';
+import { ASSET_ACCESS_SCOPES, type AssetAccessScope } from '@/lib/assets-access';
 
 const GENERATOR_PASSWORD = 'topshop';
 
-function buildRandomCode() {
+function buildRandomCode(year: AssetYear, scope: AssetAccessScope) {
+  const normalizedScope = scope.toUpperCase();
+
   if (typeof window === 'undefined' || !window.crypto?.getRandomValues) {
-    return `TOPSHOP-${new Date().getFullYear()}-ACCESS`;
+    return `TOPSHOP-${normalizedScope}-${year}-ACCESS`;
   }
 
   const randomBytes = new Uint8Array(4);
@@ -21,7 +24,7 @@ function buildRandomCode() {
     .join('')
     .toUpperCase();
 
-  return `TOPSHOP-${new Date().getFullYear()}-${suffix}`;
+  return `TOPSHOP-${normalizedScope}-${year}-${suffix}`;
 }
 
 export function AccessCodeGeneratorPanel() {
@@ -29,6 +32,7 @@ export function AccessCodeGeneratorPanel() {
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [selectedYear, setSelectedYear] = useState<AssetYear>(ASSET_YEARS[0]);
+  const [selectedScope, setSelectedScope] = useState<AssetAccessScope>('finalist');
   const [plainCode, setPlainCode] = useState('');
   const [hashValue, setHashValue] = useState('');
   const [generatorError, setGeneratorError] = useState('');
@@ -38,6 +42,15 @@ export function AccessCodeGeneratorPanel() {
   const [copiedHash, setCopiedHash] = useState(false);
   const [copiedSnippet, setCopiedSnippet] = useState(false);
 
+  const clearGeneratedResult = () => {
+    setPlainCode('');
+    setHashValue('');
+    setGeneratedAt('');
+    setCopiedCode(false);
+    setCopiedHash(false);
+    setCopiedSnippet(false);
+  };
+
   const snippet = useMemo(() => {
     if (!hashValue) {
       return '';
@@ -46,8 +59,9 @@ export function AccessCodeGeneratorPanel() {
     return `{
   hash: '${hashValue}',
   years: [${selectedYear}],
+  scopes: ['${selectedScope}'],
 },`;
-  }, [hashValue, selectedYear]);
+  }, [hashValue, selectedScope, selectedYear]);
 
   const generatedAtLabel = useMemo(() => {
     if (!generatedAt) {
@@ -61,7 +75,7 @@ export function AccessCodeGeneratorPanel() {
   }, [generatedAt]);
 
   const generateAccessPair = async () => {
-    const nextCode = buildRandomCode();
+    const nextCode = buildRandomCode(selectedYear, selectedScope);
     setIsGenerating(true);
     setGeneratorError('');
     setCopiedHash(false);
@@ -98,13 +112,8 @@ export function AccessCodeGeneratorPanel() {
     setIsUnlocked(false);
     setPasswordInput('');
     setPasswordError('');
-    setPlainCode('');
-    setHashValue('');
+    clearGeneratedResult();
     setGeneratorError('');
-    setGeneratedAt('');
-    setCopiedCode(false);
-    setCopiedHash(false);
-    setCopiedSnippet(false);
   };
 
   const copyText = async (
@@ -202,11 +211,29 @@ export function AccessCodeGeneratorPanel() {
                   : 'A fresh access code is ready.'}
               </p>
               <p className="codegen-status-sub">
-                Select year scope, generate code, then paste the rule snippet into
+                Select year and role scope, generate code, then paste the rule snippet into
                 `lib/assets-access.ts`.
               </p>
             </div>
             <div className="codegen-toolbar">
+              <label className="codegen-year-control" htmlFor="generatorRoleScope">
+                <span>Role Scope</span>
+                <select
+                  id="generatorRoleScope"
+                  className="codegen-year-select"
+                  value={selectedScope}
+                  onChange={(event) => {
+                    setSelectedScope(event.target.value as AssetAccessScope);
+                    clearGeneratedResult();
+                  }}
+                >
+                  {ASSET_ACCESS_SCOPES.map((scope) => (
+                    <option key={scope} value={scope}>
+                      {scope === 'winner' ? 'Winner' : 'Finalist'}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <label className="codegen-year-control" htmlFor="generatorYearScope">
                 <span>Year Scope</span>
                 <select
@@ -215,6 +242,7 @@ export function AccessCodeGeneratorPanel() {
                   value={selectedYear}
                   onChange={(event) => {
                     setSelectedYear(Number(event.target.value) as AssetYear);
+                    clearGeneratedResult();
                   }}
                 >
                   {ASSET_YEARS.map((year) => (
@@ -245,6 +273,10 @@ export function AccessCodeGeneratorPanel() {
           {hashValue ? (
             <>
               <div className="codegen-kpi-strip">
+                <div className="codegen-kpi">
+                  <p>Role Scope</p>
+                  <strong>{selectedScope === 'winner' ? 'Winner' : 'Finalist'}</strong>
+                </div>
                 <div className="codegen-kpi">
                   <p>Year Scope</p>
                   <strong>{selectedYear}</strong>

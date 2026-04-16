@@ -18,7 +18,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
+  ASSET_ACCESS_SCOPES,
+  ASSET_ACCESS_SCOPES_SESSION_KEY,
   ASSET_ACCESS_CODE_RULES,
+  type AssetAccessScope,
   ASSET_ACCESS_HELP_TEXT,
   ASSET_ACCESS_SESSION_KEY,
   ASSET_ACCESS_YEARS_SESSION_KEY,
@@ -35,13 +38,23 @@ type ProtectedAssetsLibraryProps = {
 type AssetTypeFilter = 'all' | 'winner' | 'finalist' | 'vote';
 type AccessFilter = 'all' | 'public' | 'protected' | 'locked' | 'unlocked';
 type YearFilter = 'all' | AssetYear;
+type AssetType = Exclude<AssetTypeFilter, 'all'>;
+type GrantedAssetAccess = {
+  years: AssetYear[];
+  scopes: AssetAccessScope[];
+};
 
 const EMPTY_GRANTED_YEARS: AssetYear[] = [];
+const EMPTY_GRANTED_SCOPES: AssetAccessScope[] = [];
+const EMPTY_GRANTED_ACCESS: GrantedAssetAccess = {
+  years: EMPTY_GRANTED_YEARS,
+  scopes: EMPTY_GRANTED_SCOPES,
+};
 const ASSET_ACCESS_CHANGE_EVENT = 'topshop-asset-access-change';
-let cachedGrantedYearsKey = '__server__';
-let cachedGrantedYearsSnapshot: AssetYear[] = EMPTY_GRANTED_YEARS;
+let cachedGrantedAccessKey = '__server__';
+let cachedGrantedAccessSnapshot: GrantedAssetAccess = EMPTY_GRANTED_ACCESS;
 
-function getAssetType(assetId: string): Exclude<AssetTypeFilter, 'all'> {
+function getAssetType(assetId: string): AssetType {
   if (assetId.includes('winner')) {
     return 'winner';
   }
@@ -65,6 +78,14 @@ function getAssetTypeLabel(assetType: Exclude<AssetTypeFilter, 'all'>) {
   return 'Vote';
 }
 
+function getAssetScopeLabel(scope: AssetAccessScope) {
+  if (scope === 'winner') {
+    return 'Winner';
+  }
+
+  return 'Finalist';
+}
+
 function parseGrantedYears(rawYears: string | null): AssetYear[] {
   if (!rawYears) {
     return EMPTY_GRANTED_YEARS;
@@ -86,6 +107,27 @@ function parseGrantedYears(rawYears: string | null): AssetYear[] {
   }
 }
 
+function parseGrantedScopes(rawScopes: string | null): AssetAccessScope[] {
+  if (!rawScopes) {
+    return EMPTY_GRANTED_SCOPES;
+  }
+
+  try {
+    const parsedScopes = JSON.parse(rawScopes);
+    if (!Array.isArray(parsedScopes)) {
+      return EMPTY_GRANTED_SCOPES;
+    }
+
+    const scopes = parsedScopes.filter((scope): scope is AssetAccessScope =>
+      ASSET_ACCESS_SCOPES.includes(scope as AssetAccessScope),
+    );
+
+    return scopes.length ? scopes : EMPTY_GRANTED_SCOPES;
+  } catch {
+    return EMPTY_GRANTED_SCOPES;
+  }
+}
+
 function subscribeToAssetAccessChanges(onStoreChange: () => void) {
   if (typeof window === 'undefined') {
     return () => {};
@@ -99,7 +141,8 @@ function subscribeToAssetAccessChanges(onStoreChange: () => void) {
     if (
       event.key === null ||
       event.key === ASSET_ACCESS_SESSION_KEY ||
-      event.key === ASSET_ACCESS_YEARS_SESSION_KEY
+      event.key === ASSET_ACCESS_YEARS_SESSION_KEY ||
+      event.key === ASSET_ACCESS_SCOPES_SESSION_KEY
     ) {
       onStoreChange();
     }
@@ -116,9 +159,9 @@ function subscribeToAssetAccessChanges(onStoreChange: () => void) {
   };
 }
 
-function readGrantedYearsFromSessionStorage(): AssetYear[] {
+function readGrantedAccessFromSessionStorage(): GrantedAssetAccess {
   if (typeof window === 'undefined') {
-    return EMPTY_GRANTED_YEARS;
+    return EMPTY_GRANTED_ACCESS;
   }
 
   try {
@@ -126,25 +169,31 @@ function readGrantedYearsFromSessionStorage(): AssetYear[] {
     const rawYears = isGranted
       ? window.sessionStorage.getItem(ASSET_ACCESS_YEARS_SESSION_KEY)
       : null;
-    const nextCacheKey = `${isGranted ? '1' : '0'}:${rawYears ?? ''}`;
+    const rawScopes = isGranted
+      ? window.sessionStorage.getItem(ASSET_ACCESS_SCOPES_SESSION_KEY)
+      : null;
+    const nextCacheKey = `${isGranted ? '1' : '0'}:${rawYears ?? ''}:${rawScopes ?? ''}`;
 
-    if (nextCacheKey === cachedGrantedYearsKey) {
-      return cachedGrantedYearsSnapshot;
+    if (nextCacheKey === cachedGrantedAccessKey) {
+      return cachedGrantedAccessSnapshot;
     }
 
-    cachedGrantedYearsKey = nextCacheKey;
-    cachedGrantedYearsSnapshot = isGranted
-      ? parseGrantedYears(rawYears)
-      : EMPTY_GRANTED_YEARS;
+    cachedGrantedAccessKey = nextCacheKey;
+    cachedGrantedAccessSnapshot = isGranted
+      ? {
+          years: parseGrantedYears(rawYears),
+          scopes: parseGrantedScopes(rawScopes),
+        }
+      : EMPTY_GRANTED_ACCESS;
 
-    return cachedGrantedYearsSnapshot;
+    return cachedGrantedAccessSnapshot;
   } catch {
-    return EMPTY_GRANTED_YEARS;
+    return EMPTY_GRANTED_ACCESS;
   }
 }
 
-function getServerGrantedYearsSnapshot() {
-  return EMPTY_GRANTED_YEARS;
+function getServerGrantedAccessSnapshot() {
+  return EMPTY_GRANTED_ACCESS;
 }
 
 function notifyAssetAccessChange() {
@@ -156,11 +205,13 @@ function notifyAssetAccessChange() {
 }
 
 export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps) {
-  const grantedYears = useSyncExternalStore(
+  const grantedAccess = useSyncExternalStore(
     subscribeToAssetAccessChanges,
-    readGrantedYearsFromSessionStorage,
-    getServerGrantedYearsSnapshot,
+    readGrantedAccessFromSessionStorage,
+    getServerGrantedAccessSnapshot,
   );
+  const grantedYears = grantedAccess.years;
+  const grantedScopes = grantedAccess.scopes;
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [isChecking, setIsChecking] = useState(false);
@@ -168,8 +219,9 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
   const [yearFilter, setYearFilter] = useState<YearFilter>('all');
   const [typeFilter, setTypeFilter] = useState<AssetTypeFilter>('all');
   const [accessFilter, setAccessFilter] = useState<AccessFilter>('all');
-  const isUnlocked = grantedYears.length > 0;
+  const isUnlocked = grantedYears.length > 0 && grantedScopes.length > 0;
   const grantedYearsLabel = [...grantedYears].sort((a, b) => b - a).join(', ');
+  const grantedScopesLabel = [...grantedScopes].map(getAssetScopeLabel).join(' / ');
   const normalizedSearch = searchQuery.trim().toLowerCase();
 
   const filteredBundles = useMemo(() => {
@@ -181,7 +233,9 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
       const cards = bundle.cards.filter((asset) => {
         const assetType = getAssetType(asset.id);
         const isYearAllowed = grantedYears.includes(bundle.year);
-        const isLocked = asset.protection === 'protected' && !isYearAllowed;
+        const requiredScope = assetType === 'vote' ? null : assetType;
+        const isScopeAllowed = requiredScope ? grantedScopes.includes(requiredScope) : true;
+        const isLocked = asset.protection === 'protected' && (!isYearAllowed || !isScopeAllowed);
 
         if (typeFilter !== 'all' && assetType !== typeFilter) {
           return false;
@@ -221,7 +275,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
       });
       return accumulator;
     }, []);
-  }, [accessFilter, bundles, grantedYears, normalizedSearch, typeFilter, yearFilter]);
+  }, [accessFilter, bundles, grantedScopes, grantedYears, normalizedSearch, typeFilter, yearFilter]);
 
   const totalAssetCount = useMemo(
     () => bundles.reduce((total, bundle) => total + bundle.cards.length, 0),
@@ -272,12 +326,22 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
       return;
     }
 
+    const scopes = matchingRule.scopes.filter((scope) =>
+      ASSET_ACCESS_SCOPES.includes(scope),
+    );
+    if (!scopes.length) {
+      setError('This code has no active role permission.');
+      setIsChecking(false);
+      return;
+    }
+
     setCode('');
     setIsChecking(false);
 
     try {
       window.sessionStorage.setItem(ASSET_ACCESS_SESSION_KEY, 'true');
       window.sessionStorage.setItem(ASSET_ACCESS_YEARS_SESSION_KEY, JSON.stringify(years));
+      window.sessionStorage.setItem(ASSET_ACCESS_SCOPES_SESSION_KEY, JSON.stringify(scopes));
       notifyAssetAccessChange();
     } catch {
       // Ignore storage write issues. Session unlock still applies for current runtime.
@@ -291,6 +355,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
     try {
       window.sessionStorage.removeItem(ASSET_ACCESS_SESSION_KEY);
       window.sessionStorage.removeItem(ASSET_ACCESS_YEARS_SESSION_KEY);
+      window.sessionStorage.removeItem(ASSET_ACCESS_SCOPES_SESSION_KEY);
       notifyAssetAccessChange();
     } catch {
       // Ignore storage removal issues.
@@ -319,8 +384,8 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
 
         {isUnlocked ? (
           <p className="assets-access-success">
-            Access verified for years: {grantedYearsLabel}. Protected logos are unlocked for this
-            browser session.
+            Access verified for {grantedScopesLabel} assets in years: {grantedYearsLabel}. Matching
+            protected logos are unlocked for this browser session.
           </p>
         ) : (
           <form className="assets-access-form" onSubmit={handleSubmit} aria-busy={isChecking}>
@@ -339,7 +404,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
               {isChecking ? 'Checking...' : 'Unlock Assets'}
             </Button>
             <p className="assets-access-helper">
-              Codes are scoped by year. One code can unlock only approved cycles.
+              Codes are scoped by year and role. A finalist code cannot unlock winner files.
             </p>
           </form>
         )}
@@ -467,9 +532,11 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
           <div className="assets-grid">
             {bundle.cards.map((asset) => {
               const isYearAllowed = grantedYears.includes(bundle.year);
-              const isLocked = asset.protection === 'protected' && !isYearAllowed;
               const assetType = getAssetType(asset.id);
               const assetTypeLabel = getAssetTypeLabel(assetType);
+              const requiredScope = assetType === 'vote' ? null : assetType;
+              const isScopeAllowed = requiredScope ? grantedScopes.includes(requiredScope) : true;
+              const isLocked = asset.protection === 'protected' && (!isYearAllowed || !isScopeAllowed);
 
               return (
                 <article key={asset.id} className={`assets-card${isLocked ? ' is-locked' : ''}`}>
@@ -545,7 +612,9 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
                         </Button>
                         <p className="assets-locked-note">
                           {isUnlocked ? (
-                            <>This code unlocks years: {grantedYearsLabel}.</>
+                            <>
+                              Current access is {grantedScopesLabel} for years {grantedYearsLabel}.
+                            </>
                           ) : (
                             <>
                               Need access code? <a href={CONTACT_MAILTO_HREF}>{CONTACT_EMAIL}</a>
