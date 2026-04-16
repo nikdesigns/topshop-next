@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Compass, ShieldCheck, Sparkles, TimerReset } from 'lucide-react';
+import {
+  ArrowRight,
+  Compass,
+  ShieldCheck,
+  Sparkles,
+  TimerReset,
+} from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { Badge } from '@/components/ui/badge';
@@ -72,10 +78,14 @@ export default function AboutUsPage() {
                 <Sparkles size={12} aria-hidden="true" />
                 Why We Created Top Shop Awards
               </Badge>
-              <h2>Built to celebrate repair centers that raise the aviation standard.</h2>
+              <h2>
+                Built to celebrate repair centers that raise the aviation
+                standard.
+              </h2>
               <p>
-                Top Shop Awards is designed to recognize technical excellence, operational
-                discipline, and customer trust across the MRO community.
+                Top Shop Awards is designed to recognize technical excellence,
+                operational discipline, and customer trust across the MRO
+                community.
               </p>
             </header>
 
@@ -95,18 +105,21 @@ export default function AboutUsPage() {
 
               <article className="about-copy about-copy-rich">
                 <p>
-                  Aviation is a zero-error industry and flying is the safest means of transportation
-                  because we make it so. When it comes to aviation maintenance, perfection is not an
-                  abstract concept, it is a daily goal.
+                  Aviation is a zero-error industry and flying is the safest
+                  means of transportation because we make it so. When it comes
+                  to aviation maintenance, perfection is not an abstract
+                  concept, it is a daily goal.
                 </p>
                 <p>
-                  The MRO industry is more than workmanship, engineering, and quality material. The
-                  human element sets great shops apart: clear communication, innovative thinking,
-                  flexibility, and ethical principles.
+                  The MRO industry is more than workmanship, engineering, and
+                  quality material. The human element sets great shops apart:
+                  clear communication, innovative thinking, flexibility, and
+                  ethical principles.
                 </p>
                 <p>
-                  The145 created Top Shop Awards in honor of shops that deliver more than technical
-                  expertise. We created these awards for companies that believe in:
+                  The145 created Top Shop Awards in honor of shops that deliver
+                  more than technical expertise. We created these awards for
+                  companies that believe in:
                 </p>
 
                 <ul className="about-principles-list">
@@ -117,18 +130,22 @@ export default function AboutUsPage() {
                 </ul>
 
                 <p>
-                  Top Shop Awards is 100% peer-driven and open to any repair center within the
-                  aviation community. No sign-up is required, and any professional within the
-                  industry can nominate a business.
+                  Top Shop Awards is 100% peer-driven and open to any repair
+                  center within the aviation community. No sign-up is required,
+                  and any professional within the industry can nominate a
+                  business.
                 </p>
 
                 <blockquote className="about-quote">
-                  Kudos to the {nominationWindow.seasonLabel} Top Shop winners for their
-                  outstanding achievements and excellence.
+                  Kudos to the {nominationWindow.seasonLabel} Top Shop winners
+                  for their outstanding achievements and excellence.
                   <cite>Justin Spaulding, The145</cite>
                 </blockquote>
 
-                <section className="about-standards" aria-label="Top Shop standards">
+                <section
+                  className="about-standards"
+                  aria-label="Top Shop standards"
+                >
                   {standards.map((item) => {
                     const Icon = item.icon;
 
@@ -146,12 +163,15 @@ export default function AboutUsPage() {
 
                 <div className="about-signature-row about-signature-row-rich">
                   <Image
-                    src="/assets/images/about/singnture3.png"
+                    src="/assets/images/about/signature.webp"
                     alt="Justin Spaulding signature"
                     width={165}
                     height={52}
                   />
-                  <Link href="/#votebutton" className="about-vote-btn about-vote-btn-rich">
+                  <Link
+                    href="/#votebutton"
+                    className="about-vote-btn about-vote-btn-rich"
+                  >
                     Download Vote Button
                   </Link>
                   <Link
