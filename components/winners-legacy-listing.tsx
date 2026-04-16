@@ -5,6 +5,10 @@ import { RotateCcw, Trophy } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { ResultsListingShell } from '@/components/results-listing-shell';
 import type { WinnerCard } from '@/lib/parse-winners-cards';
+import {
+  WINNERS_LEGACY_CARD_NAMESPACE,
+  WINNERS_LEGACY_RESULTS_NAMESPACE,
+} from '@/lib/results-namespaces';
 
 export function WinnersLegacyListing({
   cards,
@@ -48,11 +52,13 @@ export function WinnersLegacyListing({
 
   const hasActiveFilters = normalizedQuery.length > 0;
   const searchId = `winners-search-${seasonLabel}`;
+  const listingNamespace = WINNERS_LEGACY_RESULTS_NAMESPACE;
+  const cardNamespace = WINNERS_LEGACY_CARD_NAMESPACE;
   const resetQuery = () => setQuery('');
 
   return (
     <ResultsListingShell
-      namespace="winners-2026"
+      namespace={listingNamespace}
       seasonLabel={seasonLabel}
       summaryCards={[
         { value: summary.categories, label: 'Award Categories' },
@@ -66,8 +72,12 @@ export function WinnersLegacyListing({
       onQueryChange={(event) => setQuery(event.target.value)}
       controlsSlot={
         hasActiveFilters ? (
-          <div className="winners-2026-filter-row">
-            <button type="button" className="winners-2026-reset-btn" onClick={resetQuery}>
+          <div className={`${listingNamespace}-filter-row`}>
+            <button
+              type="button"
+              className={`${listingNamespace}-reset-btn`}
+              onClick={resetQuery}
+            >
               <RotateCcw size={13} aria-hidden="true" />
               Reset
             </button>
@@ -79,15 +89,17 @@ export function WinnersLegacyListing({
       onReset={resetQuery}
       emptyDescription="Try a different search keyword."
     >
-      <div className="winners-2026-grid">
+      <div className={`${listingNamespace}-grid`}>
         {filteredCards.map((card, cardIndex) => (
-          <article key={`${card.category}-${cardIndex}`} className="winner-2026-card">
+          <article key={`${card.category}-${cardIndex}`} className={`${cardNamespace}-card`}>
             <h3>
               <Trophy size={16} aria-hidden="true" />
               {card.category}
             </h3>
 
-            <div className="winner-2026-group winner-2026-group-single winners-legacy-group">
+            <div
+              className={`${cardNamespace}-group ${cardNamespace}-group-single winners-legacy-group`}
+            >
               <ul className="winners-legacy-entries">
                 {card.winners.map((winner, index) => (
                   <li key={`${winner.name}-${index}`} className="winners-legacy-entry">

@@ -14,7 +14,7 @@ export const WINNERS_2021_PAGE_CONFIG = {
         The official 2021 Top Shop winners are listed below by repair category, including company
         names and contact details as published during the awards cycle.
       </p>
-      <p className="winners-2025-callout">Below are the 2021 winners by repair category:</p>
+      <p className="winners-results-callout">Below are the 2021 winners by repair category:</p>
     </>
   ),
   cardsFile: 'topshop_2021_winners_cards.html',

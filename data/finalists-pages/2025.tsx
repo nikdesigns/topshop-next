@@ -29,7 +29,7 @@ export const FINALISTS_2025_PAGE_CONFIG = {
         finalists selected from this highly competitive field.
       </p>
 
-      <div className="finalists-2026-important">
+      <div className="finalists-results-important">
         <p>
           <strong>IMPORTANT:</strong> Winner selection opened Friday, January 10, 2025 on The145
           website for airlines and suppliers only.
@@ -39,7 +39,7 @@ export const FINALISTS_2025_PAGE_CONFIG = {
         </p>
       </div>
 
-      <p className="finalists-2026-callout">Below are the 2025 finalists by repair category:</p>
+      <p className="finalists-results-callout">Below are the 2025 finalists by repair category:</p>
     </>
   ),
 } as const satisfies FinalistsPageConfig;

@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronDown, Menu, TriangleAlert } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AWARDS_FINALIST_LINKS, AWARDS_WINNER_LINKS, LATEST_WINNERS_LINK } from '@/lib/awards-links';
@@ -36,6 +38,7 @@ const primaryLinks: NavLink[] = [
   { href: '/#welcome', label: 'Welcome' },
   { href: LATEST_WINNERS_LINK.href, label: LATEST_WINNERS_LINK.label },
   { href: '/#schedule', label: 'Schedule' },
+  { href: '/assets.html', label: 'Assets' },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About' },
 ];
@@ -46,7 +49,55 @@ const allMobileLinks: NavLink[] = [
   ...winnerLinks,
 ];
 
+function normalizePath(path: string) {
+  if (path.length > 1 && path.endsWith('/')) {
+    return path.slice(0, -1);
+  }
+
+  return path;
+}
+
 export function SiteHeader() {
+  const pathname = usePathname();
+  const [activeHash, setActiveHash] = useState('');
+
+  useEffect(() => {
+    const syncHash = () => {
+      setActiveHash(window.location.hash || '');
+    };
+
+    syncHash();
+    window.addEventListener('hashchange', syncHash);
+
+    return () => {
+      window.removeEventListener('hashchange', syncHash);
+    };
+  }, [pathname]);
+
+  const currentPath = normalizePath(pathname || '/');
+
+  const isLinkActive = useMemo(() => {
+    return (href: string) => {
+      if (href.startsWith('/#')) {
+        if (currentPath !== '/') {
+          return false;
+        }
+
+        const expectedHash = href.slice(1);
+        if (expectedHash === '#welcome' && !activeHash) {
+          return true;
+        }
+
+        return activeHash === expectedHash;
+      }
+
+      return normalizePath(href) === currentPath;
+    };
+  }, [activeHash, currentPath]);
+
+  const isFinalistsMenuActive = AWARDS_FINALIST_LINKS.some((link) => isLinkActive(link.href));
+  const isWinnersMenuActive = AWARDS_WINNER_LINKS.some((link) => isLinkActive(link.href));
+
   const mobileCta = nominationWindow.isOpen
     ? { href: '/submit_nomination.html', label: 'Submit Nominations' }
     : { href: allMobileLinks[0]?.href ?? '/', label: 'Continue Browsing' };
@@ -91,16 +142,19 @@ export function SiteHeader() {
             <ul className="rich-nav-list">
               {primaryLinks.map((link) => (
                 <li key={link.href}>
-                  <Link className="rich-nav-link" href={link.href}>
+                  <Link
+                    className={`rich-nav-link${isLinkActive(link.href) ? ' is-active' : ''}`}
+                    href={link.href}
+                  >
                     {link.label}
                   </Link>
                 </li>
               ))}
 
-              <li className="rich-nav-group">
+              <li className={`rich-nav-group${isFinalistsMenuActive ? ' is-active' : ''}`}>
                 <button
                   type="button"
-                  className="rich-nav-link rich-nav-link-button"
+                  className={`rich-nav-link rich-nav-link-button${isFinalistsMenuActive ? ' is-active' : ''}`}
                 >
                   Finalists <ChevronDown size={14} aria-hidden="true" />
                 </button>
@@ -108,17 +162,22 @@ export function SiteHeader() {
                   <ul>
                     {finalistLinks.map((link) => (
                       <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
+                        <Link
+                          href={link.href}
+                          className={isLinkActive(link.href) ? 'is-active' : undefined}
+                        >
+                          {link.label}
+                        </Link>
                       </li>
                     ))}
                   </ul>
                 </div>
               </li>
 
-              <li className="rich-nav-group">
+              <li className={`rich-nav-group${isWinnersMenuActive ? ' is-active' : ''}`}>
                 <button
                   type="button"
-                  className="rich-nav-link rich-nav-link-button"
+                  className={`rich-nav-link rich-nav-link-button${isWinnersMenuActive ? ' is-active' : ''}`}
                 >
                   Hall of Fame <ChevronDown size={14} aria-hidden="true" />
                 </button>
@@ -126,7 +185,12 @@ export function SiteHeader() {
                   <ul>
                     {winnerLinks.map((link) => (
                       <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
+                        <Link
+                          href={link.href}
+                          className={isLinkActive(link.href) ? 'is-active' : undefined}
+                        >
+                          {link.label}
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -180,7 +244,12 @@ export function SiteHeader() {
                   <ul>
                     {primaryLinks.map((link) => (
                       <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
+                        <Link
+                          href={link.href}
+                          className={isLinkActive(link.href) ? 'is-active' : undefined}
+                        >
+                          {link.label}
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -191,7 +260,12 @@ export function SiteHeader() {
                   <ul>
                     {finalistLinks.map((link) => (
                       <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
+                        <Link
+                          href={link.href}
+                          className={isLinkActive(link.href) ? 'is-active' : undefined}
+                        >
+                          {link.label}
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -202,7 +276,12 @@ export function SiteHeader() {
                   <ul>
                     {winnerLinks.map((link) => (
                       <li key={link.href}>
-                        <Link href={link.href}>{link.label}</Link>
+                        <Link
+                          href={link.href}
+                          className={isLinkActive(link.href) ? 'is-active' : undefined}
+                        >
+                          {link.label}
+                        </Link>
                       </li>
                     ))}
                   </ul>

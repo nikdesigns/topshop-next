@@ -21,6 +21,7 @@ export function AwardsResultsPageShell({
   logo,
   singleIntroColumn = false,
   introContent,
+  structuredData,
   listingContent,
 }: {
   shellClass: string;
@@ -31,12 +32,20 @@ export function AwardsResultsPageShell({
   logo?: LogoConfig;
   singleIntroColumn?: boolean;
   introContent: ReactNode;
+  structuredData?: Record<string, unknown>;
   listingContent: ReactNode;
 }) {
   return (
     <div className={`app-shell ${shellClass}`}>
       <SiteHeader />
       <main>
+        {structuredData ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          />
+        ) : null}
+
         <section className={`${namespace}-page-title`}>
           <div className={`${namespace}-page-title-bg`} aria-hidden="true">
             <Image

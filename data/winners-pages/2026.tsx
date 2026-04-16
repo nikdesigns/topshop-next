@@ -35,7 +35,7 @@ export const WINNERS_2026_PAGE_CONFIG = {
         Congratulations to all 2026 winners. Earning Top Shop recognition reflects commitment to
         quality, reliability, and excellence.
       </p>
-      <p className="winners-2026-callout">Below are the 2026 winners by repair category:</p>
+      <p className="winners-results-callout">Below are the 2026 winners by repair category:</p>
     </>
   ),
   cards: TOPSHOP_2026_WINNER_CARDS,

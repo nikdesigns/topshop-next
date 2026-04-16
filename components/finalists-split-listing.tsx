@@ -3,14 +3,24 @@
 import { Star } from 'lucide-react';
 import { SplitResultsListing } from '@/components/split-results-listing';
 import type { FinalistCard } from '@/lib/parse-finalists-cards';
+import {
+  FINALISTS_CARD_NAMESPACE,
+  FINALISTS_RESULTS_NAMESPACE,
+} from '@/lib/results-namespaces';
 
-export function Finalists2026Listing({
-  cards,
-  seasonLabel = '2026',
-}: {
+type FinalistsSplitListingProps = {
   cards: FinalistCard[];
-  seasonLabel?: string;
-}) {
+  seasonLabel: string;
+  namespace?: string;
+  cardNamespace?: string;
+};
+
+export function FinalistsSplitListing({
+  cards,
+  seasonLabel,
+  namespace = FINALISTS_RESULTS_NAMESPACE,
+  cardNamespace = FINALISTS_CARD_NAMESPACE,
+}: FinalistsSplitListingProps) {
   return (
     <SplitResultsListing
       cards={cards.map((card) => ({
@@ -20,8 +30,8 @@ export function Finalists2026Listing({
         items: card.finalists,
       }))}
       seasonLabel={seasonLabel}
-      namespace="finalists-2026"
-      cardNamespace="finalist-2026"
+      namespace={namespace}
+      cardNamespace={cardNamespace}
       icon={Star}
       searchLabel="Search categories and finalist names"
       searchPlaceholder="Search category or finalist..."

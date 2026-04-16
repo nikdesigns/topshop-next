@@ -2,7 +2,13 @@
 
 import Image from 'next/image';
 import { MapPin, Phone, RotateCcw, Search, Sparkles } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  getWinnersShowcaseBundle,
+  type WinnerShowcaseSeed,
+} from '@/data/winners-showcase';
+import { nominationWindow } from '@/lib/nomination-window';
 
 type WinnerGroup = 'Engine' | 'Avionics' | 'Airframe' | 'Cabin' | 'Components';
 type WinnerFilter = 'All' | WinnerGroup;
@@ -17,220 +23,9 @@ type WinnerCard = {
   group: WinnerGroup;
 };
 
-type WinnerSeed = Omit<WinnerCard, 'id' | 'group'>;
-
-const winnerSeeds: WinnerSeed[] = [
-  {
-    category: 'Best Accessories Class I, II, and III Repair',
-    company: 'VSE Aviation Services - FL',
-    address: '570 NE 185th St, North Miami Beach, FL 33179',
-    phone: '+1 954-316-6015',
-    image: '/assets/images/ts_winner_2025/vse.jpg',
-  },
-  {
-    category: 'Best Airframe & Aerostructures Repair',
-    company: 'Spirit AeroSystems',
-    address: '3801 S. Oliver St. Wichita, KS 67210',
-    phone: '+1 (316) 526-9000',
-    image: '/assets/images/clients/spirit_aero.png',
-  },
-  {
-    category: 'Best APU Components',
-    company: 'Setnix LLC',
-    address: '475 Bond St, Lincolnshire, IL 60069',
-    phone: '+1 312-549-4459',
-    image: '/assets/images/ts_winner_2025/setnix.jpg',
-  },
-  {
-    category: 'Best APU Overhaul',
-    company: 'TAG Aero, LLC',
-    address: '1247 Apex Dr, Rock Hill, SC 29730',
-    phone: '+1 803-831-9390',
-    image: '/assets/images/ts_winner_2025/tag_aero.jpg',
-  },
-  {
-    category: 'Best Avionics and Instruments',
-    company: 'Cross-Check Aviation',
-    address: '9565 Prototype Ct #102, Reno, NV 89521',
-    phone: '+1 775-852-5552',
-    image: '/assets/images/ts_winner_2025/crosscheck.jpg',
-  },
-  {
-    category: 'Best DER',
-    company: 'CVG Aerospace',
-    address: '13500 SW 134th Ave, Miami, FL 33186',
-    phone: '+1 786-293-9923',
-    image: '/assets/images/ts_winner_2025/cvg_aviation.jpg',
-  },
-  {
-    category: 'Best Ducting',
-    company: 'AvDUCT Worldwide',
-    address: '1630 N. 166th East Ave. Tulsa, OK 74116',
-    phone: '(918) 437-7772',
-    image: '/assets/images/ts_winner_2025/avduct.jpg',
-  },
-  {
-    category: 'Best Electrical Panels',
-    company: 'Skysmart MRO Ltd',
-    address: '12, Flitch Industrial Estate, Chelmsford Rd, Essex CM6 1XJ, United Kingdom',
-    phone: '+44 1371 492000',
-    image: '/assets/images/ts_winner_2025/sky_smart.jpg',
-  },
-  {
-    category: 'Best Electro-Mechanical',
-    company: 'Fokker Services B.V.',
-    address: 'Hoeksteen 40, 2132 MS, Hoofddorp, Netherlands',
-    phone: '+31 (0)88 6280 000',
-    image: '/assets/images/ts_winner_2025/fokker.jpg',
-  },
-  {
-    category: 'Best Engine Accessories',
-    company: 'Silver Wings Aerospace',
-    address: '25400 SW 140th Ave, Princeton, FL 33032',
-    phone: '+1 305-258-5950',
-    image: '/assets/images/ts_winner_2025/sound_air.jpg',
-  },
-  {
-    category: 'Best Engine Components',
-    company: 'BP Aero Services',
-    address: '4961 Hanson Dr, Irving, TX, 75038',
-    phone: '972-252-2800',
-    image: '/assets/images/ts_winner_2025/bpaero.jpg',
-  },
-  {
-    category: 'Best Engine Overhaul',
-    company: 'StandardAero',
-    address: '11550 Mosteller Rd, Cincinnati, OH 45241',
-    phone: '+1 513-618-9588',
-    image: '/assets/images/ts_winner_2024/standard.jpeg',
-  },
-  {
-    category: 'Best Fuel Systems and Fuel Accessories',
-    company: 'CIMA Aviation',
-    address: '2260 NW 102nd Pl, Miami, FL 33172',
-    phone: '+1 786-391-1315',
-    image: '/assets/images/ts_winner_2025/cima_aviation.jpg',
-  },
-  {
-    category: 'Best Galley Components',
-    company: 'VSE Aviation Services - KY',
-    address: '3000 Kustom Drive, Hebron, KY 41048',
-    phone: '+1 859-283-2264',
-    image: '/assets/images/ts_winner_2025/vse.jpg',
-  },
-  {
-    category: 'Best Gyros',
-    company: 'North Bay Aviation',
-    address: '424 Executive Ct N STE E, Fairfield, CA 94534',
-    phone: '+1 707-863-4970',
-    image: '/assets/images/ts_winner_2025/northbay.jpg',
-  },
-  {
-    category: 'Best Heat Transfer',
-    company: 'Ametek MRO - Drake Air Tulsa',
-    address: '4085 Southwest Blvd, Tulsa, OK 74107',
-    phone: '+1 918-445-3545',
-    image: '/assets/images/ts_winner_2025/ametek_drake.jpg',
-  },
-  {
-    category: 'Best Hydraulics',
-    company: 'Lift MRO',
-    address: '5475 NW 72nd Ave, Miami, FL 33166',
-    phone: '+1 305-574-9932',
-    image: '/assets/images/ts_winner_2025/lift.jpg',
-  },
-  {
-    category: 'Best In-Flight Entertainment Systems',
-    company: 'Thales Avionics, Inc.',
-    address: '58 Discovery, Irvine, CA 92618',
-    phone: '+1 949 660 7722',
-    image: '/assets/images/ts_winner_2025/thales.jpg',
-  },
-  {
-    category: 'Best Interiors',
-    company: 'Allflight Corporation',
-    address: '20014 70th Ave S, Kent, WA 98032',
-    phone: '+1 253-437-0582',
-    image: '/assets/images/ts_winner_2025/allflight.jpg',
-  },
-  {
-    category: 'Best Landing Gear',
-    company: 'Summit Aerospace, Inc.',
-    address: '8130 NW 74th Ave. Medley, FL 33166',
-    phone: '+1 (305) 267-6400',
-    image: '/assets/images/ts_winner_2024/summit.jpeg',
-  },
-  {
-    category: 'Best Lavatory / Sanitation Components',
-    company: 'Soundair Aviation Svcs.',
-    address: '1826 Bickford Ave, Snohomish, WA 98290',
-    phone: '(360) 453-2300',
-    image: '/assets/images/ts_winner_2025/sound_air.jpg',
-  },
-  {
-    category: 'Best Lighting',
-    company: 'MTI Aviation, Inc.',
-    address: '13150 NW 45th Avenue Miami, FL 33054',
-    phone: '305-817-4244',
-    image: '/assets/images/clients/mti_aviation.jpg',
-  },
-  {
-    category: 'Best NDT Facility',
-    company: 'MARTEC Aviation',
-    address: '3980 W 104th St Suite 1, Hialeah, FL 33018',
-    phone: '+1 305-456-7563',
-    image: '/assets/images/ts_winner_2024/martec.jpeg',
-  },
-  {
-    category: 'Best Ozone',
-    company: 'Limco Airepair',
-    address: '5304 S Lawton Ave, Tulsa, OK 74107',
-    phone: '+1 918-445-4300',
-    image: '/assets/images/ts_winner_2025/limco.jpg',
-  },
-  {
-    category: 'Best Plastic Components',
-    company: 'Evans Composites, Inc.',
-    address: '300 S Wisteria St, Mansfield, TX 76063',
-    phone: '+1 817-477-9014',
-    image: '/assets/images/ts_winner_2025/evans.jpg',
-  },
-  {
-    category: 'Best Pneumatics',
-    company: 'EMC Aerospace',
-    address: '570 NE 185th St, North Miami Beach, FL 33179',
-    phone: '+1 954-316-6015',
-    image: '/assets/images/clients/emc_aerospace.webp',
-  },
-  {
-    category: 'Best Safety Equipment',
-    company: 'HRD Aero Systems, Inc.',
-    address: '25555 Avenue Stanford Valencia, California 91355',
-    phone: '(661) 407-2772',
-    image: '/assets/images/ts_winner_2025/hrd.jpg',
-  },
-  {
-    category: 'Best Total Solutions Provider',
-    company: 'AAR MRO Services',
-    address: '1100 N. Wood Dale Rd. Wood Dale, IL 60191',
-    phone: '+1-630-227-2000',
-    image: '/assets/images/ts_winner_2025/aar.jpg',
-  },
-  {
-    category: 'Best Transparencies',
-    company: 'Glass Aero, Inc.',
-    address: '8131 NW 66th St, Miami, FL 33166',
-    phone: '+1 305-400-1877',
-    image: '/assets/images/ts_winner_2025/glass_aero.jpg',
-  },
-  {
-    category: 'Best Wheel and Brake',
-    company: 'Earp Aviation Repairs',
-    address: '380 E Chilton Dr, Chandler, AZ 85225',
-    phone: '+1 602-737-1230',
-    image: '/assets/images/ts_winner_2025/earp.jpg',
-  },
-];
+const winnersShowcaseRequestYear = nominationWindow.winnersShowcaseYear;
+const { year: winnersShowcaseYear, seeds: winnerSeeds } =
+  getWinnersShowcaseBundle(winnersShowcaseRequestYear);
 
 function inferWinnerGroup(category: string): WinnerGroup {
   const normalized = category.toLowerCase();
@@ -275,7 +70,7 @@ function inferWinnerGroup(category: string): WinnerGroup {
   return 'Components';
 }
 
-const winners2025: WinnerCard[] = winnerSeeds.map((winner, index) => ({
+const winnersShowcase: WinnerCard[] = winnerSeeds.map((winner: WinnerShowcaseSeed, index) => ({
   id: `winner-${index + 1}`,
   group: inferWinnerGroup(winner.category),
   ...winner,
@@ -285,15 +80,117 @@ const filters: WinnerFilter[] = ['All', 'Engine', 'Avionics', 'Airframe', 'Cabin
 
 const spotlightOrder = new Set(['winner-1', 'winner-10', 'winner-18']);
 const INITIAL_COMPACT_VISIBLE = 9;
+const WINNERS_QUERY_PARAM = 'winners-q';
+const WINNERS_FILTER_PARAM = 'winners-group';
+const WINNERS_QUERY_STORAGE_KEY = 'home:winners:query';
+const WINNERS_FILTER_STORAGE_KEY = 'home:winners:group';
+
+function parseWinnerFilter(value: string | null): WinnerFilter | null {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.toLowerCase();
+  for (const filter of filters) {
+    if (filter.toLowerCase() === normalized) {
+      return filter;
+    }
+  }
+
+  return null;
+}
 
 export function WinnersCardsSection() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const hasHydratedState = useRef(false);
+  const showcaseYear = winnersShowcaseYear;
+  const showcaseLocation = nominationWindow.winnersShowcaseLocation;
   const [activeFilter, setActiveFilter] = useState<WinnerFilter>('All');
   const [query, setQuery] = useState('');
   const [visibleCompactCount, setVisibleCompactCount] = useState(INITIAL_COMPACT_VISIBLE);
 
+  useEffect(() => {
+    if (hasHydratedState.current) {
+      return;
+    }
+
+    const urlQuery = searchParams.get(WINNERS_QUERY_PARAM) ?? '';
+    const urlFilter = parseWinnerFilter(searchParams.get(WINNERS_FILTER_PARAM));
+
+    let persistedQuery = '';
+    let persistedFilter: WinnerFilter = 'All';
+    if (typeof window !== 'undefined') {
+      persistedQuery = window.localStorage.getItem(WINNERS_QUERY_STORAGE_KEY) ?? '';
+      persistedFilter =
+        parseWinnerFilter(window.localStorage.getItem(WINNERS_FILTER_STORAGE_KEY)) ?? 'All';
+    }
+
+    const nextQuery = urlQuery || persistedQuery;
+    const nextFilter = urlFilter ?? persistedFilter;
+
+    const initialize = () => {
+      setQuery(nextQuery);
+      setActiveFilter(nextFilter);
+      setVisibleCompactCount(INITIAL_COMPACT_VISIBLE);
+      hasHydratedState.current = true;
+    };
+
+    if (typeof window !== 'undefined') {
+      window.queueMicrotask(initialize);
+      return;
+    }
+
+    initialize();
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!hasHydratedState.current) {
+      return;
+    }
+
+    const normalizedQuery = query.trim();
+    const normalizedFilter = activeFilter === 'All' ? null : activeFilter.toLowerCase();
+    const nextParams = new URLSearchParams(searchParams.toString());
+
+    if (normalizedQuery) {
+      nextParams.set(WINNERS_QUERY_PARAM, normalizedQuery);
+    } else {
+      nextParams.delete(WINNERS_QUERY_PARAM);
+    }
+
+    if (normalizedFilter) {
+      nextParams.set(WINNERS_FILTER_PARAM, normalizedFilter);
+    } else {
+      nextParams.delete(WINNERS_FILTER_PARAM);
+    }
+
+    if (typeof window !== 'undefined') {
+      if (normalizedQuery) {
+        window.localStorage.setItem(WINNERS_QUERY_STORAGE_KEY, normalizedQuery);
+      } else {
+        window.localStorage.removeItem(WINNERS_QUERY_STORAGE_KEY);
+      }
+
+      if (normalizedFilter) {
+        window.localStorage.setItem(WINNERS_FILTER_STORAGE_KEY, normalizedFilter);
+      } else {
+        window.localStorage.removeItem(WINNERS_FILTER_STORAGE_KEY);
+      }
+    }
+
+    const currentParamsString = searchParams.toString();
+    const nextParamsString = nextParams.toString();
+    if (nextParamsString !== currentParamsString) {
+      const nextHref = nextParamsString ? `${pathname}?${nextParamsString}` : pathname;
+      router.replace(nextHref, { scroll: false });
+    }
+  }, [activeFilter, pathname, query, router, searchParams]);
+
   const filterCounts = useMemo(() => {
     const counts: Record<WinnerFilter, number> = {
-      All: winners2025.length,
+      All: winnersShowcase.length,
       Engine: 0,
       Avionics: 0,
       Airframe: 0,
@@ -301,7 +198,7 @@ export function WinnersCardsSection() {
       Components: 0,
     };
 
-    for (const winner of winners2025) {
+    for (const winner of winnersShowcase) {
       counts[winner.group] += 1;
     }
 
@@ -311,7 +208,7 @@ export function WinnersCardsSection() {
   const normalizedQuery = query.trim().toLowerCase();
 
   const filteredWinners = useMemo(() => {
-    return winners2025.filter((winner) => {
+    return winnersShowcase.filter((winner) => {
       const matchesFilter = activeFilter === 'All' ? true : winner.group === activeFilter;
       if (!matchesFilter) {
         return false;
@@ -375,9 +272,9 @@ export function WinnersCardsSection() {
         <header className="winners-header">
           <p className="winners-eyebrow">Top Shop Winners</p>
           <h2>
-            Top Shop 2025
+            Top Shop {showcaseYear}
             <br />
-            MRO Americas in Atlanta, Georgia, USA
+            {showcaseLocation}
           </h2>
           <p className="winners-header-copy">
             Explore award-winning shops by service group and quickly search companies or
@@ -388,12 +285,12 @@ export function WinnersCardsSection() {
         <div className="winners-summary-row" aria-label="Winners summary">
           <article className="winners-summary-card">
             <p className="winners-summary-label">Season</p>
-            <p className="winners-summary-value">2025</p>
+            <p className="winners-summary-value">{showcaseYear}</p>
           </article>
           <article className="winners-summary-card">
             <p className="winners-summary-label">Showing</p>
             <p className="winners-summary-value">
-              {filteredWinners.length} / {winners2025.length}
+              {filteredWinners.length} / {winnersShowcase.length}
             </p>
           </article>
           <article className="winners-summary-card">

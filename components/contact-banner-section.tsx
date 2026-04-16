@@ -11,6 +11,14 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
+import {
+  buildMailtoLink,
+  CONTACT_EMAIL,
+  CONTACT_MAILTO_HREF,
+  CONTACT_PHONE_LABEL,
+  CONTACT_TEL_HREF,
+  CONTACT_WEBSITE_URL,
+} from '@/lib/contact';
 
 const testimonials = [
   {
@@ -43,10 +51,27 @@ export function ContactBannerSection() {
     const form = event.currentTarget;
     setSubmitState('submitting');
 
-    window.setTimeout(() => {
-      form.reset();
-      setSubmitState('submitted');
-    }, 700);
+    const formData = new FormData(form);
+    const messageLines = [
+      'Top Shop Awards Contact Request',
+      '',
+      `Full Name: ${String(formData.get('fullName') ?? '').trim()}`,
+      `Email: ${String(formData.get('email') ?? '').trim()}`,
+      `Phone: ${String(formData.get('phone') ?? '').trim()}`,
+      `Company Name: ${String(formData.get('companyName') ?? '').trim()}`,
+      `Inquiry Type: ${String(formData.get('inquiryType') ?? '').trim()}`,
+      '',
+      'Details:',
+      String(formData.get('details') ?? '').trim(),
+    ];
+
+    const mailtoLink = buildMailtoLink({
+      subject: 'Top Shop Awards Contact Request',
+      body: messageLines.join('\n'),
+    });
+
+    window.location.href = mailtoLink;
+    setSubmitState('submitted');
   };
 
   return (
@@ -65,7 +90,9 @@ export function ContactBannerSection() {
         <div className="content-wrap contact-banner-grid">
           <form
             className="contact-form-panel"
-            action="#"
+            action={CONTACT_MAILTO_HREF}
+            method="post"
+            encType="text/plain"
             onSubmit={handleSubmit}
             onInput={() => {
               if (submitState === 'submitted') {
@@ -148,8 +175,8 @@ export function ContactBannerSection() {
 
             <p className="contact-submit-note" role="status">
               {submitState === 'submitted'
-                ? 'Thanks, your message has been captured. We will contact you shortly.'
-                : 'Static export note: this form captures UX flow and validation; backend endpoint wiring remains optional.'}
+                ? `Your email client should now open with a pre-filled message to ${CONTACT_EMAIL}.`
+                : `Static export mode: this sends through your local email client to ${CONTACT_EMAIL}.`}
             </p>
           </form>
 
@@ -186,21 +213,21 @@ export function ContactBannerSection() {
         <div className="content-wrap contact-info-inner">
           <p className="contact-info-note">We will get back to you within 24 hours.</p>
           <div className="contact-info-boxes">
-            <a href="tel:+18888208551" className="contact-info-box">
+            <a href={CONTACT_TEL_HREF} className="contact-info-box">
               <span className="contact-info-box-icon" aria-hidden="true">
                 <Phone size={16} />
               </span>
               <span className="contact-info-box-label">Call Us</span>
-              <strong>+1 (888) 820-8551</strong>
+              <strong>{CONTACT_PHONE_LABEL}</strong>
             </a>
-            <a href="mailto:support@the145.com" className="contact-info-box">
+            <a href={CONTACT_MAILTO_HREF} className="contact-info-box">
               <span className="contact-info-box-icon" aria-hidden="true">
                 <Mail size={16} />
               </span>
               <span className="contact-info-box-label">Email Us</span>
-              <strong>support@the145.com</strong>
+              <strong>{CONTACT_EMAIL}</strong>
             </a>
-            <a href="https://the145.com" target="_blank" rel="noopener noreferrer" className="contact-info-box">
+            <a href={CONTACT_WEBSITE_URL} target="_blank" rel="noopener noreferrer" className="contact-info-box">
               <span className="contact-info-box-icon" aria-hidden="true">
                 <MapPin size={16} />
               </span>

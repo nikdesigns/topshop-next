@@ -21,13 +21,13 @@ export const FINALISTS_2022_PAGE_CONFIG = {
       <p>
         Congratulations to this year&apos;s finalists and thank you to everyone who participated.
       </p>
-      <div className="finalists-2026-important">
+      <div className="finalists-results-important">
         <p>
           <strong>IMPORTANT:</strong> Airlines and suppliers selected winners through the second-round
           voting pop-up on The145.
         </p>
       </div>
-      <p className="finalists-2026-callout">Below are the 2022 finalists by repair category:</p>
+      <p className="finalists-results-callout">Below are the 2022 finalists by repair category:</p>
     </>
   ),
 } as const satisfies FinalistsPageConfig;

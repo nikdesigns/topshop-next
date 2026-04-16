@@ -32,6 +32,7 @@ export function getWinnersMetadata(year: WinnersPageYear): Metadata {
     kind: 'Winners',
     description: config.description,
     canonicalPath: config.canonicalPath,
+    titleImageSrc: config.titleImageSrc,
   });
 }
 
@@ -42,6 +43,7 @@ export function getFinalistsMetadata(year: FinalistsPageYear): Metadata {
     kind: 'Finalists',
     description: config.description,
     canonicalPath: config.canonicalPath,
+    titleImageSrc: config.titleImageSrc,
   });
 }
 
@@ -55,6 +57,8 @@ export function getWinnersPage(year: WinnersPageYear): ReactElement {
         variant="legacy"
         year={config.year}
         titleImageSrc={config.titleImageSrc}
+        description={config.description}
+        canonicalPath={config.canonicalPath}
         introContent={config.introContent}
         logo={logo}
         singleIntroColumn={singleIntroColumn}
@@ -68,6 +72,8 @@ export function getWinnersPage(year: WinnersPageYear): ReactElement {
       variant="split"
       year={config.year}
       titleImageSrc={config.titleImageSrc}
+      description={config.description}
+      canonicalPath={config.canonicalPath}
       introContent={config.introContent}
       logo={logo}
       singleIntroColumn={singleIntroColumn}
@@ -84,6 +90,8 @@ export function getFinalistsPage(year: FinalistsPageYear): ReactElement {
     <FinalistsPageTemplate
       year={config.year}
       titleImageSrc={config.titleImageSrc}
+      description={config.description}
+      canonicalPath={config.canonicalPath}
       introContent={config.introContent}
       logo={logo}
       singleIntroColumn={singleIntroColumn}

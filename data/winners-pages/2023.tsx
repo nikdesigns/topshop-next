@@ -30,7 +30,7 @@ export const WINNERS_2023_PAGE_CONFIG = {
         On behalf of <strong>The 145</strong> and all participating repair centers, thank you to
         everyone who submitted votes. Congratulations to all 2023 winners.
       </p>
-      <p className="winners-2025-callout">Below are the 2023 winners by repair category:</p>
+      <p className="winners-results-callout">Below are the 2023 winners by repair category:</p>
     </>
   ),
   cardsFile: 'topshop_2023_winners_cards.html',

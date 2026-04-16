@@ -2,7 +2,8 @@
 
 import type { LucideIcon } from 'lucide-react';
 import { RotateCcw } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ResultsListingShell } from '@/components/results-listing-shell';
 import type { SplitResultsCard } from '@/lib/results-types';
 
@@ -16,6 +17,27 @@ function getItemNames(card: SplitResultsCard) {
 
 function getMode(card: SplitResultsCard): Exclude<SplitMode, 'All'> {
   return card.multiEntity || card.singleEntity ? 'Split' : 'Single';
+}
+
+function parseSplitMode(value: string | null): SplitMode | null {
+  if (!value) {
+    return null;
+  }
+
+  const normalized = value.toLowerCase();
+  if (normalized === 'all') {
+    return 'All';
+  }
+
+  if (normalized === 'split') {
+    return 'Split';
+  }
+
+  if (normalized === 'single') {
+    return 'Single';
+  }
+
+  return null;
 }
 
 export function SplitResultsListing({
@@ -45,8 +67,102 @@ export function SplitResultsListing({
   singleHeading?: string;
   itemsHeading?: string;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const queryParamKey = `${namespace}-q`;
+  const modeParamKey = `${namespace}-mode`;
+  const storageQueryKey = `${namespace}:query`;
+  const storageModeKey = `${namespace}:mode`;
+  const hasHydratedState = useRef(false);
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<SplitMode>('All');
+
+  useEffect(() => {
+    if (hasHydratedState.current) {
+      return;
+    }
+
+    const urlQuery = searchParams.get(queryParamKey) ?? '';
+    const urlMode = parseSplitMode(searchParams.get(modeParamKey));
+
+    let persistedQuery = '';
+    let persistedMode: SplitMode = 'All';
+
+    if (typeof window !== 'undefined') {
+      persistedQuery = window.localStorage.getItem(storageQueryKey) ?? '';
+      persistedMode = parseSplitMode(window.localStorage.getItem(storageModeKey)) ?? 'All';
+    }
+
+    const nextQuery = urlQuery || persistedQuery;
+    const nextMode = urlMode ?? persistedMode;
+
+    const initialize = () => {
+      setQuery(nextQuery);
+      setMode(nextMode);
+      hasHydratedState.current = true;
+    };
+
+    if (typeof window !== 'undefined') {
+      window.queueMicrotask(initialize);
+      return;
+    }
+
+    initialize();
+  }, [modeParamKey, queryParamKey, searchParams, storageModeKey, storageQueryKey]);
+
+  useEffect(() => {
+    if (!hasHydratedState.current) {
+      return;
+    }
+
+    const normalizedMode = mode === 'All' ? null : mode.toLowerCase();
+    const normalizedQuery = query.trim();
+    const nextParams = new URLSearchParams(searchParams.toString());
+
+    if (normalizedQuery) {
+      nextParams.set(queryParamKey, normalizedQuery);
+    } else {
+      nextParams.delete(queryParamKey);
+    }
+
+    if (normalizedMode) {
+      nextParams.set(modeParamKey, normalizedMode);
+    } else {
+      nextParams.delete(modeParamKey);
+    }
+
+    if (typeof window !== 'undefined') {
+      if (normalizedQuery) {
+        window.localStorage.setItem(storageQueryKey, normalizedQuery);
+      } else {
+        window.localStorage.removeItem(storageQueryKey);
+      }
+
+      if (normalizedMode) {
+        window.localStorage.setItem(storageModeKey, normalizedMode);
+      } else {
+        window.localStorage.removeItem(storageModeKey);
+      }
+    }
+
+    const currentParamsString = searchParams.toString();
+    const nextParamsString = nextParams.toString();
+    if (nextParamsString !== currentParamsString) {
+      const nextHref = nextParamsString ? `${pathname}?${nextParamsString}` : pathname;
+      router.replace(nextHref, { scroll: false });
+    }
+  }, [
+    mode,
+    modeParamKey,
+    pathname,
+    query,
+    queryParamKey,
+    router,
+    searchParams,
+    storageModeKey,
+    storageQueryKey,
+  ]);
 
   const normalizedQuery = query.trim().toLowerCase();
 

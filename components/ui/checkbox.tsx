@@ -12,7 +12,7 @@ export function Checkbox({
   return (
     <CheckboxPrimitive.Root className={cn('ui-checkbox', className)} {...props}>
       <CheckboxPrimitive.Indicator className="ui-checkbox-indicator">
-        <Check size={14} />
+        <Check size={14} color="#ffffff" strokeWidth={3} />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

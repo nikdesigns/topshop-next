@@ -42,7 +42,7 @@ export const WINNERS_2024_PAGE_CONFIG = {
         Congratulations to this year&apos;s winners. If you are a Top Shop, you are doing something
         right.
       </p>
-      <p className="winners-2025-callout">Below are the 2024 winners by repair category:</p>
+      <p className="winners-results-callout">Below are the 2024 winners by repair category:</p>
     </>
   ),
   cardsFile: 'topshop_2024_winners_cards.html',

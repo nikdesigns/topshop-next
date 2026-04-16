@@ -30,7 +30,7 @@ export const FINALISTS_2026_PAGE_CONFIG = {
         selected from an exceptionally competitive field.
       </p>
 
-      <div className="finalists-2026-important">
+      <div className="finalists-results-important">
         <p>
           <strong>IMPORTANT:</strong> The winner selection phase will begin{' '}
           <strong>Friday, January 9th</strong> via The145 website. The voting ballot will be visible to
@@ -53,7 +53,7 @@ export const FINALISTS_2026_PAGE_CONFIG = {
         </ul>
       </div>
 
-      <p className="finalists-2026-callout">Below are the 2026 Top Shop Finalists by repair category:</p>
+      <p className="finalists-results-callout">Below are the 2026 Top Shop Finalists by repair category:</p>
     </>
   ),
 } as const satisfies FinalistsPageConfig;

@@ -4,47 +4,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Trophy } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { LATEST_FINALISTS_LINK, LATEST_WINNERS_LINK } from '@/lib/awards-links';
+import { HOME_HERO_SLIDES } from '@/lib/home-hero-slides';
 
-type Slide = {
-  title: string;
-  subtitle: string;
-  image: string;
-  href: string;
-  ctaLabel: string;
-};
-
-const slides: Slide[] = [
-  {
-    title: LATEST_WINNERS_LINK.label,
-    subtitle: 'Celebrating the shops setting the benchmark for excellence.',
-    image: '/assets/images/banners/ts_winner_2026.jpg',
-    href: LATEST_WINNERS_LINK.href,
-    ctaLabel: 'View winners',
-  },
-  {
-    title: LATEST_FINALISTS_LINK.label,
-    subtitle:
-      "Explore this year's finalists across aviation maintenance categories.",
-    image: '/assets/images/banners/ts_finalist_2026.jpg',
-    href: LATEST_FINALISTS_LINK.href,
-    ctaLabel: 'View finalists',
-  },
-  {
-    title: '2025 Event Recap',
-    subtitle: 'Watch the event highlights from the Top Shop Awards.',
-    image: '/assets/images/banners/ts_recap_2025.jpg',
-    href: 'https://vimeo.com/1075212605/dbaa994485?share=copy',
-    ctaLabel: 'Watch video',
-  },
-];
+const slides = HOME_HERO_SLIDES;
 
 export function HeroCarousel() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const currentSlide = useMemo(() => slides[activeSlide], [activeSlide]);
+  const currentSlide = slides[activeSlide];
   const currentSlideIsExternal = currentSlide.href.startsWith('https://');
 
   useEffect(() => {

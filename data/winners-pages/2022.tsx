@@ -22,7 +22,7 @@ export const WINNERS_2022_PAGE_CONFIG = {
         On behalf of <strong>The 145</strong> and all repair centers, thank you to everyone who
         participated and voted. Congratulations to all 2022 winners.
       </p>
-      <p className="winners-2025-callout">Below are the 2022 winners by repair category:</p>
+      <p className="winners-results-callout">Below are the 2022 winners by repair category:</p>
     </>
   ),
   cardsFile: 'topshop_2022_winners_cards.html',

@@ -2,19 +2,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, PlayCircle, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { VoteButtonToolkit } from '@/components/vote-button-toolkit';
+import { NOMINATION_COMPANY_SUGGESTIONS } from '@/lib/company-suggestions';
 import { nominationWindow } from '@/lib/nomination-window';
+import { SITE_URL } from '@/lib/site';
 
-const HIGHLIGHTS_VIDEO_URL = 'https://player.vimeo.com/video/1075212605';
-
-//test
 export function BannerFeatureSection() {
   return (
     <section id="banner1" className="banner-feature-section">
       <div className="banner-feature-grid">
         <article className="banner-video-pane">
           <Image
-            src="/assets/images/banners/24.jpg"
-            alt="Top Shop Awards 2025 highlights"
+            src={nominationWindow.highlightsPosterImageSrc}
+            alt={nominationWindow.highlightsTitle}
             fill
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="banner-pane-image"
@@ -22,17 +22,17 @@ export function BannerFeatureSection() {
 
           <div className="banner-video-labels">
             <Badge variant="secondary" className="banner-video-badge">
-              2025 Recap
+              {nominationWindow.highlightsBadgeLabel}
             </Badge>
             <p>MRO Americas Highlights</p>
           </div>
 
           <Link
-            href={HIGHLIGHTS_VIDEO_URL}
+            href={nominationWindow.highlightsVideoEmbedUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="banner-video-play"
-            aria-label="Play Top Shop Awards 2025 Highlights"
+            aria-label={`Play ${nominationWindow.highlightsTitle}`}
           >
             <PlayCircle
               size={28}
@@ -50,13 +50,13 @@ export function BannerFeatureSection() {
               className="banner-video-cta-bg"
             />
             <div className="banner-video-cta-content">
-              <h4>Top Shop Awards 2025 Highlights</h4>
+              <h4>{nominationWindow.highlightsTitle}</h4>
               <p>
                 Watch key moments from the winner celebration and awards
                 presentation.
               </p>
               <Link
-                href={HIGHLIGHTS_VIDEO_URL}
+                href={nominationWindow.highlightsVideoEmbedUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="banner-video-cta-link"
@@ -100,7 +100,7 @@ export function BannerFeatureSection() {
                 favorite shops for the category they deserve most and help honor
                 the best in the industry.
               </p>
-              <p className="banner-hash">#TopShopAwards2026</p>
+              <p className="banner-hash">{nominationWindow.hashtag}</p>
               {nominationWindow.isOpen ? (
                 <Link
                   href="/submit_nomination.html"
@@ -118,6 +118,14 @@ export function BannerFeatureSection() {
                 </p>
               )}
             </div>
+
+            <VoteButtonToolkit
+              seasonLabel={nominationWindow.seasonLabel}
+              buttonImagePath={`${SITE_URL}/assets/images/button/topshop_vote_button.png`}
+              buttonDownloadName={`top-shop-${nominationWindow.seasonLabel.toLowerCase()}-vote-button.png`}
+              generatedBaseUrl={`${SITE_URL}/submit_nomination.html`}
+              companyOptions={NOMINATION_COMPANY_SUGGESTIONS}
+            />
           </div>
         </article>
       </div>

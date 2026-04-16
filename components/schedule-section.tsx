@@ -9,8 +9,8 @@ const highlights = [
     label: 'Nominations',
     value: nominationWindow.isOpen ? 'Open' : 'Closed',
     note: nominationWindow.isOpen
-      ? `Accepting submissions for ${nominationWindow.seasonLabel}`
-      : `Finalized for ${nominationWindow.seasonLabel} cycle`,
+      ? `Open through ${nominationWindow.nominationEndLabel}`
+      : `Window: ${nominationWindow.nominationDateRangeLabel}`,
   },
   { label: 'Finalists', value: 'Published', note: 'Visible on finalist section' },
   { label: 'Winners', value: 'Announced', note: 'Presented at MRO Americas' },
@@ -21,7 +21,7 @@ export function ScheduleSection() {
     <section id="schedule" className="schedule-section section-pad">
       <div className="content-wrap">
         <header className="schedule-header">
-          <p className="schedule-eyebrow">2026 Top Shop</p>
+          <p className="schedule-eyebrow">{nominationWindow.seasonLabel} Top Shop</p>
           <h2>Schedule</h2>
           <p className="schedule-header-copy">
             Track the awards cycle from nomination intake to finalist publication and winner
@@ -67,8 +67,8 @@ export function ScheduleSection() {
 
           <div className="schedule-image-card">
             <Image
-              src="/assets/images/about/topshop_schedule_2026.png"
-              alt="Top Shop Awards 2026 schedule"
+              src={nominationWindow.scheduleImageSrc}
+              alt={`Top Shop Awards ${nominationWindow.seasonLabel} schedule`}
               width={1920}
               height={1080}
               className="schedule-image"

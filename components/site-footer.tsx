@@ -5,6 +5,13 @@ import {
   LATEST_FINALISTS_ROUTE,
   LATEST_WINNERS_ROUTE,
 } from '@/lib/awards-route-map';
+import {
+  CONTACT_EMAIL,
+  CONTACT_MAILTO_HREF,
+  CONTACT_PHONE_LABEL,
+  CONTACT_TEL_HREF,
+  CONTACT_WEBSITE_URL,
+} from '@/lib/contact';
 import { nominationWindow } from '@/lib/nomination-window';
 
 const services = [
@@ -19,6 +26,7 @@ const exploreLinks = [
   { href: '/#welcome', label: 'Welcome' },
   { href: LATEST_WINNERS_ROUTE.href, label: LATEST_WINNERS_ROUTE.label },
   { href: LATEST_FINALISTS_ROUTE.href, label: LATEST_FINALISTS_ROUTE.label },
+  { href: '/assets.html', label: 'Assets' },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About Us' },
 ];
@@ -30,6 +38,8 @@ const legalLinks = [
 ];
 
 export function SiteFooter() {
+  const copyrightYear = new Date().getFullYear();
+
   return (
     <footer id="footer" className="site-footer section-pad">
       <div className="content-wrap footer-feature-strip">
@@ -66,14 +76,14 @@ export function SiteFooter() {
           <div className="footer-contact-mini">
             <p>
               <Phone size={13} aria-hidden="true" />
-              <a href="tel:+18888208551">+1 (888) 820-8551</a>
+              <a href={CONTACT_TEL_HREF}>{CONTACT_PHONE_LABEL}</a>
             </p>
             <p>
               <Mail size={13} aria-hidden="true" />
-              <a href="mailto:support@the145.com">support@the145.com</a>
+              <a href={CONTACT_MAILTO_HREF}>{CONTACT_EMAIL}</a>
             </p>
           </div>
-          <Link href="https://the145.com" target="_blank" rel="noopener noreferrer">
+          <Link href={CONTACT_WEBSITE_URL} target="_blank" rel="noopener noreferrer">
             Visit the145.com
           </Link>
         </section>
@@ -112,8 +122,19 @@ export function SiteFooter() {
             Sign up for industry alerts, latest news, and insights from The145. You may withdraw
             consent at any time.
           </p>
-          <form className="footer-newsletter-form" action="#">
-            <input type="email" placeholder="Your Email Address" aria-label="Your Email Address" />
+          <form
+            className="footer-newsletter-form"
+            action={CONTACT_MAILTO_HREF}
+            method="post"
+            encType="text/plain"
+          >
+            <input type="hidden" name="source" value="Top Shop Awards Newsletter" />
+            <input
+              type="email"
+              name="newsletterEmail"
+              placeholder="Your Email Address"
+              aria-label="Your Email Address"
+            />
             <button type="submit">Join</button>
           </form>
           <p className="footer-newsletter-note">
@@ -131,7 +152,7 @@ export function SiteFooter() {
 
       <div className="content-wrap footer-bottom-bar">
         <p>
-          <span>&copy; 2025 The145. All Rights Reserved.</span>{' '}
+          <span>&copy; {copyrightYear} The145. All Rights Reserved.</span>{' '}
           <Link href="http://topshopawards.com">TopShopAwards.com</Link>
         </p>
       </div>

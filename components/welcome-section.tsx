@@ -35,7 +35,7 @@ const updates = [
     summary:
       'The pre-event awards ceremony remains a key moment, and we wanted to add more visibility for winners.',
     detail:
-      'A dedicated 20x20 booth in Orlando will feature The145 and 2026 Top Shop winners across three full expo days.',
+      `A dedicated 20x20 booth in Orlando will feature The145 and ${nominationWindow.seasonLabel} Top Shop winners across three full expo days.`,
   },
 ];
 
@@ -107,7 +107,7 @@ export function WelcomeSection() {
             <div className="welcome-update-head">
               <span className="ui-badge ui-badge--secondary welcome-update-badge">
                 <Sparkles size={12} aria-hidden="true" />
-                New For 2026
+                New For {nominationWindow.seasonLabel}
               </span>
             </div>
 

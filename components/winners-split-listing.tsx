@@ -2,9 +2,25 @@
 
 import { Trophy } from 'lucide-react';
 import { SplitResultsListing } from '@/components/split-results-listing';
+import {
+  WINNERS_SPLIT_CARD_NAMESPACE,
+  WINNERS_SPLIT_RESULTS_NAMESPACE,
+} from '@/lib/results-namespaces';
 import type { WinnerSplitCard } from '@/lib/results-types';
 
-export function Winners2026Listing({ cards }: { cards: WinnerSplitCard[] }) {
+type WinnersSplitListingProps = {
+  cards: WinnerSplitCard[];
+  seasonLabel: string;
+  namespace?: string;
+  cardNamespace?: string;
+};
+
+export function WinnersSplitListing({
+  cards,
+  seasonLabel,
+  namespace = WINNERS_SPLIT_RESULTS_NAMESPACE,
+  cardNamespace = WINNERS_SPLIT_CARD_NAMESPACE,
+}: WinnersSplitListingProps) {
   return (
     <SplitResultsListing
       cards={cards.map((card) => ({
@@ -13,9 +29,9 @@ export function Winners2026Listing({ cards }: { cards: WinnerSplitCard[] }) {
         singleEntity: card.singleEntity,
         items: card.winners,
       }))}
-      seasonLabel="2026"
-      namespace="winners-2026"
-      cardNamespace="winner-2026"
+      seasonLabel={seasonLabel}
+      namespace={namespace}
+      cardNamespace={cardNamespace}
       icon={Trophy}
       searchLabel="Search categories and winner names"
       searchPlaceholder="Search category or winner name..."

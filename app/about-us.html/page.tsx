@@ -123,8 +123,8 @@ export default function AboutUsPage() {
                 </p>
 
                 <blockquote className="about-quote">
-                  Kudos to the 2026 Top Shop winners for their outstanding achievements and
-                  excellence.
+                  Kudos to the {nominationWindow.seasonLabel} Top Shop winners for their
+                  outstanding achievements and excellence.
                   <cite>Justin Spaulding, The145</cite>
                 </blockquote>
 

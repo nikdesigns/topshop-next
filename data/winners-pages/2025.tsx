@@ -37,7 +37,7 @@ export const WINNERS_2025_PAGE_CONFIG = {
         Congratulations to all winners. Reaching Top Shop status reflects outstanding excellence and
         consistency.
       </p>
-      <p className="winners-2025-callout">Below are the 2025 winners by repair category:</p>
+      <p className="winners-results-callout">Below are the 2025 winners by repair category:</p>
     </>
   ),
   cardsFile: 'topshop_2025_winners_cards.html',

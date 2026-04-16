@@ -22,7 +22,7 @@ export const FINALISTS_2021_PAGE_CONFIG = {
         Phase two opened for airlines and suppliers to vote for their preferred repair shops through
         The145.
       </p>
-      <p className="finalists-2026-callout">Below is the list of 2021 finalists by repair category:</p>
+      <p className="finalists-results-callout">Below is the list of 2021 finalists by repair category:</p>
     </>
   ),
 } as const satisfies FinalistsPageConfig;

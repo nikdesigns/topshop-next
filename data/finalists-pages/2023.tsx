@@ -27,7 +27,7 @@ export const FINALISTS_2023_PAGE_CONFIG = {
         Thank you to everyone who submitted nominations, and congratulations to all 2023 finalists.
       </p>
 
-      <div className="finalists-2026-important">
+      <div className="finalists-results-important">
         <p>
           <strong>IMPORTANT:</strong> Beginning Friday, January 6, airlines and suppliers selected
           winners via The145 voting pop-up.
@@ -37,7 +37,7 @@ export const FINALISTS_2023_PAGE_CONFIG = {
         </p>
       </div>
 
-      <p className="finalists-2026-callout">Below are the 2023 finalists by repair category:</p>
+      <p className="finalists-results-callout">Below are the 2023 finalists by repair category:</p>
     </>
   ),
 } as const satisfies FinalistsPageConfig;

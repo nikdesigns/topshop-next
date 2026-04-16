@@ -1,9 +1,17 @@
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import type { WinnerCard } from '@/lib/parse-winners-cards';
 import type { WinnerSplitCard } from '@/lib/results-types';
 import { AwardsResultsPageShell } from '@/components/awards-results-page-shell';
-import { Winners2026Listing } from '@/components/winners-2026-listing';
+import { WinnersSplitListing } from '@/components/winners-split-listing';
 import { WinnersLegacyListing } from '@/components/winners-legacy-listing';
+import { SITE_URL } from '@/lib/site';
+import {
+  WINNERS_LEGACY_PAGE_NAMESPACE,
+  WINNERS_LEGACY_PAGE_SHELL_CLASS,
+  WINNERS_SPLIT_CARD_NAMESPACE,
+  WINNERS_SPLIT_PAGE_SHELL_CLASS,
+  WINNERS_SPLIT_RESULTS_NAMESPACE,
+} from '@/lib/results-namespaces';
 
 export type WinnersLogoConfig = {
   heading: string;
@@ -16,6 +24,8 @@ export type WinnersLogoConfig = {
 type BaseWinnersPageTemplateProps = {
   year: string;
   titleImageSrc: string;
+  description: string;
+  canonicalPath: string;
   introContent: ReactNode;
   logo?: WinnersLogoConfig;
   singleIntroColumn?: boolean;
@@ -37,22 +47,52 @@ export type WinnersPageTemplateProps =
 
 export function WinnersPageTemplate(props: WinnersPageTemplateProps) {
   const isSplit = props.variant === 'split';
-  const namespace = isSplit ? 'winners-2026' : 'winners-2025';
-  const shellClass = isSplit ? 'winners-2026-page-shell' : 'winners-2025-page-shell';
+  const namespace = isSplit
+    ? WINNERS_SPLIT_RESULTS_NAMESPACE
+    : WINNERS_LEGACY_PAGE_NAMESPACE;
+  const splitCardNamespace = WINNERS_SPLIT_CARD_NAMESPACE;
+  const shellClass = isSplit
+    ? WINNERS_SPLIT_PAGE_SHELL_CLASS
+    : WINNERS_LEGACY_PAGE_SHELL_CLASS;
+  const title = `${props.year} Top Shop Winners`;
+  const url = `${SITE_URL}${props.canonicalPath}`;
+  const image = props.titleImageSrc.startsWith('http')
+    ? props.titleImageSrc
+    : `${SITE_URL}${props.titleImageSrc}`;
+  const pageJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title,
+    description: props.description,
+    url,
+    image,
+    about: {
+      '@type': 'Award',
+      name: 'Top Shop Awards',
+    },
+  };
 
   return (
     <AwardsResultsPageShell
       shellClass={shellClass}
       namespace={namespace}
-      title={`${props.year} Top Shop Winners`}
+      title={title}
       breadcrumbLabel={`${props.year} Winners`}
       titleImageSrc={props.titleImageSrc}
       logo={props.logo}
       singleIntroColumn={props.singleIntroColumn}
       introContent={props.introContent}
+      structuredData={pageJsonLd}
       listingContent={
         isSplit ? (
-          <Winners2026Listing cards={props.cards} />
+          <Suspense fallback={<section className={`${namespace}-listing section-pad`} />}>
+            <WinnersSplitListing
+              cards={props.cards}
+              seasonLabel={props.year}
+              namespace={namespace}
+              cardNamespace={splitCardNamespace}
+            />
+          </Suspense>
         ) : (
           <WinnersLegacyListing cards={props.cards} seasonLabel={props.year} />
         )
