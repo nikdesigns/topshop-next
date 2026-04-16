@@ -148,51 +148,7 @@ export const YEAR_ASSET_BUNDLES: YearAssetBundle[] = ASSET_YEARS.map((year) => {
   const finalistAsset = FINALIST_ASSETS_BY_YEAR[year];
   const winnerAsset = WINNER_ASSETS_BY_YEAR[year] ?? LEGACY_WINNER_ASSET;
   const hasDedicatedWinnerAsset = Boolean(WINNER_ASSETS_BY_YEAR[year]);
-  const cards: YearAssetCard[] = [];
-
-  if (finalistAsset) {
-    cards.push({
-      kind: 'download',
-      protection: 'protected',
-      id: `${year}-finalist-logo`,
-      title: `${year} Finalist Logo`,
-      description: `Official finalist logo for the ${year} Top Shop Awards cycle.`,
-      src: finalistAsset.src,
-      width: finalistAsset.width,
-      height: finalistAsset.height,
-      dimensionsLabel: finalistAsset.dimensionsLabel,
-      downloadName: `top-shop-finalist-${year}.png`,
-      previewMode: finalistAsset.previewMode,
-      variants: buildLogoVariants(finalistAsset, `top-shop-finalist-${year}`),
-    });
-  } else {
-    cards.push({
-      kind: 'request',
-      protection: 'protected',
-      id: `${year}-finalist-request`,
-      title: `${year} Finalist Logo`,
-      description:
-        'This legacy finalist file is managed manually. Request the certified logo pack from support.',
-      requestHref: LEGACY_FINALIST_REQUEST_HREF,
-      requestLabel: 'Request Finalist Pack',
-    });
-  }
-
-  cards.push({
-    kind: 'download',
-    protection: 'public',
-    id: `${year}-vote-button`,
-    title: `${year} Vote For Us Button`,
-    description: `Voting CTA button used for the ${year} campaign.`,
-    src: VOTE_BUTTON_ASSET.src,
-    width: VOTE_BUTTON_ASSET.width,
-    height: VOTE_BUTTON_ASSET.height,
-    dimensionsLabel: VOTE_BUTTON_ASSET.dimensionsLabel,
-    downloadName: `top-shop-vote-button-${year}.png`,
-    previewMode: VOTE_BUTTON_ASSET.previewMode,
-  });
-
-  cards.push({
+  const winnerCard: YearAssetCard = {
     kind: 'download',
     protection: 'protected',
     id: `${year}-winner-logo`,
@@ -207,7 +163,49 @@ export const YEAR_ASSET_BUNDLES: YearAssetBundle[] = ASSET_YEARS.map((year) => {
     downloadName: `top-shop-winner-${year}.png`,
     previewMode: winnerAsset.previewMode,
     variants: buildLogoVariants(winnerAsset, `top-shop-winner-${year}`),
-  });
+  };
+
+  const finalistCard: YearAssetCard = finalistAsset
+    ? {
+        kind: 'download',
+        protection: 'protected',
+        id: `${year}-finalist-logo`,
+        title: `${year} Finalist Logo`,
+        description: `Official finalist logo for the ${year} Top Shop Awards cycle.`,
+        src: finalistAsset.src,
+        width: finalistAsset.width,
+        height: finalistAsset.height,
+        dimensionsLabel: finalistAsset.dimensionsLabel,
+        downloadName: `top-shop-finalist-${year}.png`,
+        previewMode: finalistAsset.previewMode,
+        variants: buildLogoVariants(finalistAsset, `top-shop-finalist-${year}`),
+      }
+    : {
+        kind: 'request',
+        protection: 'protected',
+        id: `${year}-finalist-request`,
+        title: `${year} Finalist Logo`,
+        description:
+          'This legacy finalist file is managed manually. Request the certified logo pack from support.',
+        requestHref: LEGACY_FINALIST_REQUEST_HREF,
+        requestLabel: 'Request Finalist Pack',
+      };
+
+  const voteCard: YearAssetCard = {
+    kind: 'download',
+    protection: 'public',
+    id: `${year}-vote-button`,
+    title: `${year} Vote For Us Button`,
+    description: `Voting CTA button used for the ${year} campaign.`,
+    src: VOTE_BUTTON_ASSET.src,
+    width: VOTE_BUTTON_ASSET.width,
+    height: VOTE_BUTTON_ASSET.height,
+    dimensionsLabel: VOTE_BUTTON_ASSET.dimensionsLabel,
+    downloadName: `top-shop-vote-button-${year}.png`,
+    previewMode: VOTE_BUTTON_ASSET.previewMode,
+  };
+
+  const cards: YearAssetCard[] = [winnerCard, finalistCard, voteCard];
 
   const isLegacy = !finalistAsset || !hasDedicatedWinnerAsset;
 

@@ -59,7 +59,9 @@ const nominationCategoriesSorted = [...nominationCategories].sort((a, b) =>
   a.label.localeCompare(b.label),
 );
 
-const categoryChunkSize = Math.ceil(nominationCategoriesSorted.length / CATEGORY_COLUMN_COUNT);
+const categoryChunkSize = Math.ceil(
+  nominationCategoriesSorted.length / CATEGORY_COLUMN_COUNT,
+);
 
 const nominationCategoryColumns = Array.from(
   { length: CATEGORY_COLUMN_COUNT },
@@ -124,7 +126,11 @@ export default function SubmitNominationPage() {
               encType="text/plain"
               className="nomination-form nomination-form-rich"
             >
-              <input type="hidden" name="source" value="Top Shop Awards Nomination" />
+              <input
+                type="hidden"
+                name="source"
+                value="Top Shop Awards Nomination"
+              />
               <Card className="nomination-company-card nomination-company-card-rich">
                 <CardHeader>
                   <CardTitle>Company Name</CardTitle>
@@ -141,8 +147,8 @@ export default function SubmitNominationPage() {
                     maxSuggestions={14}
                   />
                   <p className="nomination-company-note">
-                    Autocomplete includes {companySuggestionsCount} known companies from past
-                    Top Shop finalists and winners.
+                    Autocomplete includes {companySuggestionsCount} known
+                    companies from past Top Shop finalists and winners.
                   </p>
                 </CardContent>
               </Card>
@@ -156,16 +162,24 @@ export default function SubmitNominationPage() {
                 <header className="nomination-category-shell-head">
                   <div>
                     <h3>Category Directory</h3>
-                    <p>Categories are listed alphabetically. Select all that apply.</p>
+                    <p>
+                      Categories are listed alphabetically. Select all that
+                      apply.
+                    </p>
                   </div>
-                  <p className="nomination-category-total">{totalCategories} Categories</p>
+                  <p className="nomination-category-total">
+                    {totalCategories} Categories
+                  </p>
                 </header>
 
                 <fieldset className="nomination-category-fieldset">
                   <legend className="sr-only">Nomination Categories</legend>
                   <div className="nomination-category-columns">
                     {nominationCategoryColumns.map((column, columnIndex) => (
-                      <div key={`column-${columnIndex}`} className="nomination-category-column">
+                      <div
+                        key={`column-${columnIndex}`}
+                        className="nomination-category-column"
+                      >
                         {column.map((category) => (
                           <label
                             key={category.id}
@@ -190,13 +204,13 @@ export default function SubmitNominationPage() {
                 <Button type="submit" size="lg">
                   Submit Nomination
                 </Button>
-                <p>
-                  This form opens your default email client and pre-fills the nomination details
-                  to send to {CONTACT_EMAIL}.
-                </p>
+
                 <p className="nomination-actions-note">
                   <ShieldCheck size={14} aria-hidden="true" />
-                  <span>Your category selections remain visible for review before submit.</span>
+                  <span>
+                    Your category selections remain visible for review before
+                    submit.
+                  </span>
                 </p>
               </div>
             </form>

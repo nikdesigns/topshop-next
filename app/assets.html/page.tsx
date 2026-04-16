@@ -51,10 +51,10 @@ export default function AssetsPage() {
                 <ShieldCheck size={12} aria-hidden="true" />
                 <span>Official Assets Center</span>
               </Badge>
-              <h2>Download By Year (2019 Onward)</h2>
+              <h2>Download Brand Assets</h2>
               <p>
-                Vote button assets remain public. Finalist and winner logos now require permission
-                code access before download.
+                Enterprise-ready asset hub with year filters, permission-aware access controls,
+                and production export formats for winner, finalist, and vote campaigns.
               </p>
             </header>
 

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { sha256Hex } from '@/lib/crypto-client';
+import { ASSET_YEARS, type AssetYear } from '@/lib/assets-downloads';
 
 const GENERATOR_PASSWORD = 'topshop';
 
@@ -27,10 +28,12 @@ export function AccessCodeGeneratorPanel() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [selectedYear, setSelectedYear] = useState<AssetYear>(ASSET_YEARS[0]);
   const [plainCode, setPlainCode] = useState('');
   const [hashValue, setHashValue] = useState('');
   const [generatorError, setGeneratorError] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedAt, setGeneratedAt] = useState('');
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedHash, setCopiedHash] = useState(false);
   const [copiedSnippet, setCopiedSnippet] = useState(false);
@@ -40,8 +43,22 @@ export function AccessCodeGeneratorPanel() {
       return '';
     }
 
-    return `export const ASSET_ACCESS_CODE_HASHES = [\n  '${hashValue}',\n];`;
-  }, [hashValue]);
+    return `{
+  hash: '${hashValue}',
+  years: [${selectedYear}],
+},`;
+  }, [hashValue, selectedYear]);
+
+  const generatedAtLabel = useMemo(() => {
+    if (!generatedAt) {
+      return 'Not generated yet';
+    }
+
+    return new Date(generatedAt).toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    });
+  }, [generatedAt]);
 
   const generateAccessPair = async () => {
     const nextCode = buildRandomCode();
@@ -60,6 +77,7 @@ export function AccessCodeGeneratorPanel() {
     }
 
     setHashValue(hash);
+    setGeneratedAt(new Date().toISOString());
     setIsGenerating(false);
   };
 
@@ -83,6 +101,7 @@ export function AccessCodeGeneratorPanel() {
     setPlainCode('');
     setHashValue('');
     setGeneratorError('');
+    setGeneratedAt('');
     setCopiedCode(false);
     setCopiedHash(false);
     setCopiedSnippet(false);
@@ -176,20 +195,45 @@ export function AccessCodeGeneratorPanel() {
       ) : (
         <div className="codegen-tools">
           <div className="codegen-auto-actions">
-            <p className="codegen-status">
-              {isGenerating
-                ? 'Generating a new access code...'
-                : 'A fresh access code is ready.'}
-            </p>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => void generateAccessPair()}
-            >
-              <RefreshCw size={14} aria-hidden="true" />
-              Generate New Code
-            </Button>
+            <div className="codegen-status-wrap">
+              <p className="codegen-status">
+                {isGenerating
+                  ? 'Generating a new access code...'
+                  : 'A fresh access code is ready.'}
+              </p>
+              <p className="codegen-status-sub">
+                Select year scope, generate code, then paste the rule snippet into
+                `lib/assets-access.ts`.
+              </p>
+            </div>
+            <div className="codegen-toolbar">
+              <label className="codegen-year-control" htmlFor="generatorYearScope">
+                <span>Year Scope</span>
+                <select
+                  id="generatorYearScope"
+                  className="codegen-year-select"
+                  value={selectedYear}
+                  onChange={(event) => {
+                    setSelectedYear(Number(event.target.value) as AssetYear);
+                  }}
+                >
+                  {ASSET_YEARS.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => void generateAccessPair()}
+              >
+                <RefreshCw size={14} aria-hidden="true" />
+                Generate New Code
+              </Button>
+            </div>
           </div>
 
           {generatorError ? (
@@ -199,7 +243,23 @@ export function AccessCodeGeneratorPanel() {
           ) : null}
 
           {hashValue ? (
-            <div className="codegen-result">
+            <>
+              <div className="codegen-kpi-strip">
+                <div className="codegen-kpi">
+                  <p>Year Scope</p>
+                  <strong>{selectedYear}</strong>
+                </div>
+                <div className="codegen-kpi">
+                  <p>Generated</p>
+                  <strong>{generatedAtLabel}</strong>
+                </div>
+                <div className="codegen-kpi">
+                  <p>Hash Prefix</p>
+                  <strong>{hashValue.slice(0, 12)}...</strong>
+                </div>
+              </div>
+
+              <div className="codegen-result">
               <div className="codegen-result-block">
                 <p>Access Code</p>
                 <code>{plainCode}</code>
@@ -253,7 +313,8 @@ export function AccessCodeGeneratorPanel() {
                   {copiedSnippet ? 'Copied' : 'Copy Snippet'}
                 </Button>
               </div>
-            </div>
+              </div>
+            </>
           ) : null}
         </div>
       )}

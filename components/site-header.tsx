@@ -140,16 +140,20 @@ export function SiteHeader() {
 
           <nav className="rich-desktop-nav" aria-label="Main navigation">
             <ul className="rich-nav-list">
-              {primaryLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    className={`rich-nav-link${isLinkActive(link.href) ? ' is-active' : ''}`}
-                    href={link.href}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
+              {primaryLinks.map((link) => {
+                const isActive = isLinkActive(link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      className={`rich-nav-link${isActive ? ' is-active' : ''}`}
+                      href={link.href}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
 
               <li className={`rich-nav-group${isFinalistsMenuActive ? ' is-active' : ''}`}>
                 <button
@@ -160,16 +164,20 @@ export function SiteHeader() {
                 </button>
                 <div className="rich-nav-dropdown">
                   <ul>
-                    {finalistLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className={isLinkActive(link.href) ? 'is-active' : undefined}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {finalistLinks.map((link) => {
+                      const isActive = isLinkActive(link.href);
+                      return (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className={isActive ? 'is-active' : undefined}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </li>
@@ -183,16 +191,20 @@ export function SiteHeader() {
                 </button>
                 <div className="rich-nav-dropdown">
                   <ul>
-                    {winnerLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className={isLinkActive(link.href) ? 'is-active' : undefined}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {winnerLinks.map((link) => {
+                      const isActive = isLinkActive(link.href);
+                      return (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className={isActive ? 'is-active' : undefined}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </li>
@@ -242,48 +254,60 @@ export function SiteHeader() {
                 <div className="rich-mobile-section">
                   <h3>Primary</h3>
                   <ul>
-                    {primaryLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className={isLinkActive(link.href) ? 'is-active' : undefined}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {primaryLinks.map((link) => {
+                      const isActive = isLinkActive(link.href);
+                      return (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className={isActive ? 'is-active' : undefined}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
                 <div className="rich-mobile-section">
                   <h3>Finalists</h3>
                   <ul>
-                    {finalistLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className={isLinkActive(link.href) ? 'is-active' : undefined}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {finalistLinks.map((link) => {
+                      const isActive = isLinkActive(link.href);
+                      return (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className={isActive ? 'is-active' : undefined}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 
                 <div className="rich-mobile-section">
                   <h3>Hall of Fame</h3>
                   <ul>
-                    {winnerLinks.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className={isLinkActive(link.href) ? 'is-active' : undefined}
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
+                    {winnerLinks.map((link) => {
+                      const isActive = isLinkActive(link.href);
+                      return (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            className={isActive ? 'is-active' : undefined}
+                            aria-current={isActive ? 'page' : undefined}
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
 

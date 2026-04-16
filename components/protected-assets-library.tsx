@@ -1,9 +1,19 @@
 'use client';
 
-import { FormEvent, useState, useSyncExternalStore } from 'react';
+import { FormEvent, useMemo, useState, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Download, ExternalLink, Lock, Mail, ShieldCheck, Unlock } from 'lucide-react';
+import {
+  Download,
+  ExternalLink,
+  Filter,
+  Lock,
+  Mail,
+  Search,
+  ShieldCheck,
+  Unlock,
+  X,
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,10 +32,38 @@ type ProtectedAssetsLibraryProps = {
   bundles: YearAssetBundle[];
 };
 
+type AssetTypeFilter = 'all' | 'winner' | 'finalist' | 'vote';
+type AccessFilter = 'all' | 'public' | 'protected' | 'locked' | 'unlocked';
+type YearFilter = 'all' | AssetYear;
+
 const EMPTY_GRANTED_YEARS: AssetYear[] = [];
 const ASSET_ACCESS_CHANGE_EVENT = 'topshop-asset-access-change';
 let cachedGrantedYearsKey = '__server__';
 let cachedGrantedYearsSnapshot: AssetYear[] = EMPTY_GRANTED_YEARS;
+
+function getAssetType(assetId: string): Exclude<AssetTypeFilter, 'all'> {
+  if (assetId.includes('winner')) {
+    return 'winner';
+  }
+
+  if (assetId.includes('finalist')) {
+    return 'finalist';
+  }
+
+  return 'vote';
+}
+
+function getAssetTypeLabel(assetType: Exclude<AssetTypeFilter, 'all'>) {
+  if (assetType === 'winner') {
+    return 'Winner';
+  }
+
+  if (assetType === 'finalist') {
+    return 'Finalist';
+  }
+
+  return 'Vote';
+}
 
 function parseGrantedYears(rawYears: string | null): AssetYear[] {
   if (!rawYears) {
@@ -126,8 +164,85 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [isChecking, setIsChecking] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [yearFilter, setYearFilter] = useState<YearFilter>('all');
+  const [typeFilter, setTypeFilter] = useState<AssetTypeFilter>('all');
+  const [accessFilter, setAccessFilter] = useState<AccessFilter>('all');
   const isUnlocked = grantedYears.length > 0;
   const grantedYearsLabel = [...grantedYears].sort((a, b) => b - a).join(', ');
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+
+  const filteredBundles = useMemo(() => {
+    return bundles.reduce<YearAssetBundle[]>((accumulator, bundle) => {
+      if (yearFilter !== 'all' && bundle.year !== yearFilter) {
+        return accumulator;
+      }
+
+      const cards = bundle.cards.filter((asset) => {
+        const assetType = getAssetType(asset.id);
+        const isYearAllowed = grantedYears.includes(bundle.year);
+        const isLocked = asset.protection === 'protected' && !isYearAllowed;
+
+        if (typeFilter !== 'all' && assetType !== typeFilter) {
+          return false;
+        }
+
+        if (accessFilter === 'public' && asset.protection !== 'public') {
+          return false;
+        }
+
+        if (accessFilter === 'protected' && asset.protection !== 'protected') {
+          return false;
+        }
+
+        if (accessFilter === 'locked' && !isLocked) {
+          return false;
+        }
+
+        if (accessFilter === 'unlocked' && isLocked) {
+          return false;
+        }
+
+        if (!normalizedSearch) {
+          return true;
+        }
+
+        const searchableText = `${bundle.year} ${asset.title} ${asset.description} ${asset.id}`.toLowerCase();
+        return searchableText.includes(normalizedSearch);
+      });
+
+      if (!cards.length) {
+        return accumulator;
+      }
+
+      accumulator.push({
+        ...bundle,
+        cards,
+      });
+      return accumulator;
+    }, []);
+  }, [accessFilter, bundles, grantedYears, normalizedSearch, typeFilter, yearFilter]);
+
+  const totalAssetCount = useMemo(
+    () => bundles.reduce((total, bundle) => total + bundle.cards.length, 0),
+    [bundles],
+  );
+  const visibleAssetCount = useMemo(
+    () => filteredBundles.reduce((total, bundle) => total + bundle.cards.length, 0),
+    [filteredBundles],
+  );
+  const hasActiveFilters =
+    Boolean(normalizedSearch) ||
+    yearFilter !== 'all' ||
+    typeFilter !== 'all' ||
+    accessFilter !== 'all';
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setYearFilter('all');
+    setTypeFilter('all');
+    setAccessFilter('all');
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -208,7 +323,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
             browser session.
           </p>
         ) : (
-          <form className="assets-access-form" onSubmit={handleSubmit}>
+          <form className="assets-access-form" onSubmit={handleSubmit} aria-busy={isChecking}>
             <label htmlFor="assetsAccessCode" className="sr-only">
               Protected asset access code
             </label>
@@ -219,10 +334,13 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
               placeholder="Enter access code"
               autoComplete="one-time-code"
             />
-            <Button type="submit" size="sm" disabled={isChecking}>
+            <Button type="submit" size="sm" disabled={isChecking || !code.trim()} aria-busy={isChecking}>
               <ShieldCheck size={14} aria-hidden="true" />
               {isChecking ? 'Checking...' : 'Unlock Assets'}
             </Button>
+            <p className="assets-access-helper">
+              Codes are scoped by year. One code can unlock only approved cycles.
+            </p>
           </form>
         )}
 
@@ -233,15 +351,108 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
         ) : null}
       </section>
 
-      <nav className="assets-quick-links" aria-label="Asset years">
-        {bundles.map((bundle) => (
+      <section className="assets-filter-panel" aria-label="Asset filter controls">
+        <div className="assets-filter-head">
+          <p className="assets-filter-title">
+            <Filter size={14} aria-hidden="true" />
+            Filter Assets
+          </p>
+          <p className="assets-filter-results" aria-live="polite">
+            Showing {visibleAssetCount} of {totalAssetCount} assets across {filteredBundles.length}{' '}
+            years
+          </p>
+        </div>
+        <div className="assets-filter-controls">
+          <label className="assets-filter-field assets-filter-search" htmlFor="assetsSearchInput">
+            <span>Search</span>
+            <div className="assets-filter-search-wrap">
+              <Search size={14} aria-hidden="true" />
+              <Input
+                id="assetsSearchInput"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search by title, year, or file type"
+                autoComplete="off"
+              />
+            </div>
+          </label>
+
+          <label className="assets-filter-field" htmlFor="assetsYearFilter">
+            <span>Year</span>
+            <select
+              id="assetsYearFilter"
+              className="assets-filter-select"
+              value={yearFilter}
+              onChange={(event) => {
+                const value = event.target.value;
+                setYearFilter(value === 'all' ? 'all' : Number(value) as AssetYear);
+              }}
+            >
+              <option value="all">All years</option>
+              {ASSET_YEARS.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="assets-filter-field" htmlFor="assetsTypeFilter">
+            <span>Asset Type</span>
+            <select
+              id="assetsTypeFilter"
+              className="assets-filter-select"
+              value={typeFilter}
+              onChange={(event) => {
+                setTypeFilter(event.target.value as AssetTypeFilter);
+              }}
+            >
+              <option value="all">All types</option>
+              <option value="winner">Winner</option>
+              <option value="finalist">Finalist</option>
+              <option value="vote">Vote</option>
+            </select>
+          </label>
+
+          <label className="assets-filter-field" htmlFor="assetsAccessFilter">
+            <span>Access</span>
+            <select
+              id="assetsAccessFilter"
+              className="assets-filter-select"
+              value={accessFilter}
+              onChange={(event) => {
+                setAccessFilter(event.target.value as AccessFilter);
+              }}
+            >
+              <option value="all">All access</option>
+              <option value="public">Public</option>
+              <option value="protected">Protected</option>
+              <option value="locked">Locked only</option>
+              <option value="unlocked">Unlocked only</option>
+            </select>
+          </label>
+        </div>
+        {hasActiveFilters ? (
+          <div className="assets-filter-actions">
+            <Button type="button" variant="ghost" size="sm" onClick={clearFilters}>
+              <X size={14} aria-hidden="true" />
+              Reset Filters
+            </Button>
+          </div>
+        ) : null}
+      </section>
+
+      <nav className="assets-quick-links" aria-label="Filtered asset years">
+        {filteredBundles.map((bundle) => (
           <Link key={bundle.year} href={`#asset-year-${bundle.year}`}>
-            {bundle.year}
+            <span>{bundle.year}</span>
+            <span className="assets-quick-link-count">{bundle.cards.length}</span>
           </Link>
         ))}
       </nav>
 
-      {bundles.map((bundle) => (
+      {filteredBundles.length ? (
+        filteredBundles.map((bundle) => (
         <section key={bundle.year} id={`asset-year-${bundle.year}`} className="assets-group">
           <div className="assets-group-head">
             <div className="assets-group-head-top">
@@ -257,6 +468,8 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
             {bundle.cards.map((asset) => {
               const isYearAllowed = grantedYears.includes(bundle.year);
               const isLocked = asset.protection === 'protected' && !isYearAllowed;
+              const assetType = getAssetType(asset.id);
+              const assetTypeLabel = getAssetTypeLabel(assetType);
 
               return (
                 <article key={asset.id} className={`assets-card${isLocked ? ' is-locked' : ''}`}>
@@ -302,6 +515,16 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
                   )}
 
                   <div className="assets-card-copy">
+                    <div className="assets-card-tags">
+                      <Badge variant="subtle">{assetTypeLabel}</Badge>
+                      {asset.protection === 'public' ? (
+                        <Badge variant="secondary">Public</Badge>
+                      ) : isLocked ? (
+                        <Badge variant="danger">Locked</Badge>
+                      ) : (
+                        <Badge variant="success">Unlocked</Badge>
+                      )}
+                    </div>
                     <h4>{asset.title}</h4>
                     <p>{asset.description}</p>
                     {asset.kind === 'download' ? (
@@ -363,7 +586,16 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
             })}
           </div>
         </section>
-      ))}
+        ))
+      ) : (
+        <section className="assets-empty-state" aria-live="polite">
+          <h3>No assets matched your filters.</h3>
+          <p>Try changing search text, year, asset type, or access scope.</p>
+          <Button type="button" variant="outline" onClick={clearFilters}>
+            Clear Filters
+          </Button>
+        </section>
+      )}
 
       <section className="assets-usage-note">
         <h3>Usage Guidelines</h3>
