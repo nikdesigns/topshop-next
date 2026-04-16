@@ -6,6 +6,7 @@ import { nominationWindow } from '@/lib/nomination-window';
 
 const HIGHLIGHTS_VIDEO_URL = 'https://player.vimeo.com/video/1075212605';
 
+//test
 export function BannerFeatureSection() {
   return (
     <section id="banner1" className="banner-feature-section">
@@ -33,7 +34,11 @@ export function BannerFeatureSection() {
             className="banner-video-play"
             aria-label="Play Top Shop Awards 2025 Highlights"
           >
-            <PlayCircle size={28} className="banner-play-icon" aria-hidden="true" />
+            <PlayCircle
+              size={28}
+              className="banner-play-icon"
+              aria-hidden="true"
+            />
           </Link>
 
           <div className="banner-video-cta">
@@ -46,7 +51,10 @@ export function BannerFeatureSection() {
             />
             <div className="banner-video-cta-content">
               <h4>Top Shop Awards 2025 Highlights</h4>
-              <p>Watch key moments from the winner celebration and awards presentation.</p>
+              <p>
+                Watch key moments from the winner celebration and awards
+                presentation.
+              </p>
               <Link
                 href={HIGHLIGHTS_VIDEO_URL}
                 target="_blank"
@@ -74,9 +82,9 @@ export function BannerFeatureSection() {
             </Badge>
             <h3>Why We Created The TOP SHOP Awards</h3>
             <p>
-              Aviation is a zero-error industry and flying is the safest means of transportation
-              because we make it so. In aviation maintenance, perfection is not abstract, it is the
-              daily target.
+              Aviation is a zero-error industry and flying is the safest means
+              of transportation because we make it so. In aviation maintenance,
+              perfection is not abstract, it is the daily target.
             </p>
             <Link href="/about-us.html" className="banner-outline-link">
               Know More
@@ -88,16 +96,23 @@ export function BannerFeatureSection() {
               </p>
               <h4>Nominate your favorite shops for a Top Shop Award!</h4>
               <p>
-                If you use aviation component repair centers, nominate your favorite shops for the
-                category they deserve most and help honor the best in the industry.
+                If you use aviation component repair centers, nominate your
+                favorite shops for the category they deserve most and help honor
+                the best in the industry.
               </p>
               <p className="banner-hash">#TopShopAwards2026</p>
               {nominationWindow.isOpen ? (
-                <Link href="/submit_nomination.html" className="banner-primary-link">
+                <Link
+                  href="/submit_nomination.html"
+                  className="banner-primary-link"
+                >
                   Submit Nominations
                 </Link>
               ) : (
-                <p className="banner-status-chip banner-status-chip--closed" role="status">
+                <p
+                  className="banner-status-chip banner-status-chip--closed"
+                  role="status"
+                >
                   <XCircle size={16} aria-hidden="true" />
                   Nominations Closed for {nominationWindow.seasonLabel}
                 </p>
