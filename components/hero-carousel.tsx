@@ -21,21 +21,22 @@ const slides: Slide[] = [
   {
     title: LATEST_WINNERS_LINK.label,
     subtitle: 'Celebrating the shops setting the benchmark for excellence.',
-    image: '/assets/images/banners/ts_winner_2026_1.jpg',
+    image: '/assets/images/banners/ts_winner_2026.jpg',
     href: LATEST_WINNERS_LINK.href,
     ctaLabel: 'View winners',
   },
   {
     title: LATEST_FINALISTS_LINK.label,
-    subtitle: "Explore this year's finalists across aviation maintenance categories.",
-    image: '/assets/images/banners/145_finalist_2026.jpg',
+    subtitle:
+      "Explore this year's finalists across aviation maintenance categories.",
+    image: '/assets/images/banners/ts_finalist_2026.jpg',
     href: LATEST_FINALISTS_LINK.href,
     ctaLabel: 'View finalists',
   },
   {
     title: '2025 Event Recap',
     subtitle: 'Watch the event highlights from the Top Shop Awards.',
-    image: '/assets/images/banners/ts_slide_2025_1.jpg',
+    image: '/assets/images/banners/ts_recap_2025.jpg',
     href: 'https://vimeo.com/1075212605/dbaa994485?share=copy',
     ctaLabel: 'Watch video',
   },
@@ -63,15 +64,24 @@ export function HeroCarousel() {
   }
 
   return (
-    <section className="hero-carousel hero-carousel-rich" aria-label="Top Shop highlights">
+    <section
+      className="hero-carousel hero-carousel-rich"
+      aria-label="Top Shop highlights"
+    >
       <div className="hero-viewport hero-viewport-rich">
         {slides.map((slide, index) => (
           <Link
             key={slide.title}
             href={slide.href}
-            className={index === activeSlide ? 'hero-slide active' : 'hero-slide'}
+            className={
+              index === activeSlide ? 'hero-slide active' : 'hero-slide'
+            }
             target={slide.href.startsWith('https://') ? '_blank' : undefined}
-            rel={slide.href.startsWith('https://') ? 'noopener noreferrer' : undefined}
+            rel={
+              slide.href.startsWith('https://')
+                ? 'noopener noreferrer'
+                : undefined
+            }
             aria-hidden={index !== activeSlide}
             tabIndex={index === activeSlide ? 0 : -1}
           >
@@ -110,7 +120,9 @@ export function HeroCarousel() {
                   <Link
                     href={currentSlide.href}
                     target={currentSlideIsExternal ? '_blank' : undefined}
-                    rel={currentSlideIsExternal ? 'noopener noreferrer' : undefined}
+                    rel={
+                      currentSlideIsExternal ? 'noopener noreferrer' : undefined
+                    }
                   >
                     Learn more
                   </Link>
@@ -119,7 +131,9 @@ export function HeroCarousel() {
                   <Link
                     href={currentSlide.href}
                     target={currentSlideIsExternal ? '_blank' : undefined}
-                    rel={currentSlideIsExternal ? 'noopener noreferrer' : undefined}
+                    rel={
+                      currentSlideIsExternal ? 'noopener noreferrer' : undefined
+                    }
                   >
                     {currentSlide.ctaLabel}
                   </Link>
@@ -130,16 +144,29 @@ export function HeroCarousel() {
         </div>
 
         <div className="hero-arrow-controls" aria-label="Slide controls">
-          <Button variant="outline" size="icon" onClick={showPrevSlide} aria-label="Previous slide">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={showPrevSlide}
+            aria-label="Previous slide"
+          >
             <ArrowLeft size={16} />
           </Button>
-          <Button variant="outline" size="icon" onClick={showNextSlide} aria-label="Next slide">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={showNextSlide}
+            aria-label="Next slide"
+          >
             <ArrowRight size={16} />
           </Button>
         </div>
       </div>
 
-      <div className="hero-controls hero-controls-rich" aria-label="Slide controls">
+      <div
+        className="hero-controls hero-controls-rich"
+        aria-label="Slide controls"
+      >
         {slides.map((slide, index) => (
           <button
             key={slide.title}

@@ -711,7 +711,7 @@
       rgba(10, 18, 34, 0.2) 56%,
       rgba(10, 18, 34, 0.7) 100%
     ),
-    radial-gradient(circle at 20% 20%, rgba(0, 114, 255, 0.28), transparent 42%);
+    radial-gradient(circle at 20% 20%, rgba(0, 114, 255, 0.28), transparent 10%);
   z-index: 1;
 }
 
