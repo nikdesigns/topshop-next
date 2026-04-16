@@ -5,6 +5,7 @@ import { ArrowRight, Compass, ShieldCheck, Sparkles, TimerReset } from 'lucide-r
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { Badge } from '@/components/ui/badge';
+import { LATEST_FINALISTS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
 
@@ -157,13 +158,13 @@ export default function AboutUsPage() {
                     href={
                       nominationWindow.isOpen
                         ? '/submit_nomination.html'
-                        : '/topshop_2026_finalist.html'
+                        : LATEST_FINALISTS_ROUTE.href
                     }
                     className="about-nomination-btn"
                   >
                     {nominationWindow.isOpen
                       ? `Submit ${nominationWindow.seasonLabel} Nominations`
-                      : `View ${nominationWindow.seasonLabel} Finalists`}
+                      : `View ${LATEST_FINALISTS_ROUTE.label}`}
                     <ArrowRight size={14} aria-hidden="true" />
                   </Link>
                 </div>

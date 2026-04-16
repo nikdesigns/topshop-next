@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, Trophy } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { LATEST_FINALISTS_LINK, LATEST_WINNERS_LINK } from '@/lib/awards-links';
 
 type Slide = {
   title: string;
@@ -18,17 +19,17 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    title: '2026 Winners',
+    title: LATEST_WINNERS_LINK.label,
     subtitle: 'Celebrating the shops setting the benchmark for excellence.',
     image: '/assets/images/banners/ts_winner_2026_1.jpg',
-    href: '/topshop_2026_winners.html',
+    href: LATEST_WINNERS_LINK.href,
     ctaLabel: 'View winners',
   },
   {
-    title: '2026 Finalists',
+    title: LATEST_FINALISTS_LINK.label,
     subtitle: "Explore this year's finalists across aviation maintenance categories.",
     image: '/assets/images/banners/145_finalist_2026.jpg',
-    href: '/topshop_2026_finalist.html',
+    href: LATEST_FINALISTS_LINK.href,
     ctaLabel: 'View finalists',
   },
   {

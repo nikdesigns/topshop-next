@@ -3,6 +3,13 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import {
+  getFinalistsMetadata,
+  getFinalistsPage,
+  getWinnersMetadata,
+  getWinnersPage,
+} from '@/lib/awards-page-bundles';
+import { AWARDS_ROUTE_MAP, AWARDS_ROUTE_SLUGS } from '@/lib/awards-route-map';
 import { LEGACY_ALIAS_MAP, LEGACY_ALIAS_SLUGS } from '@/lib/legacy-aliases';
 import { SITE_URL } from '@/lib/site';
 
@@ -13,11 +20,20 @@ type LegacyPageProps = {
 };
 
 export function generateStaticParams() {
-  return LEGACY_ALIAS_SLUGS.map((legacy) => ({ legacy }));
+  const allSlugs = Array.from(new Set([...LEGACY_ALIAS_SLUGS, ...AWARDS_ROUTE_SLUGS]));
+  return allSlugs.map((legacy) => ({ legacy }));
 }
 
 export async function generateMetadata({ params }: LegacyPageProps): Promise<Metadata> {
   const { legacy } = await params;
+  const awardsConfig = AWARDS_ROUTE_MAP[legacy];
+
+  if (awardsConfig) {
+    return awardsConfig.kind === 'winners'
+      ? getWinnersMetadata(awardsConfig.year)
+      : getFinalistsMetadata(awardsConfig.year);
+  }
+
   const config = LEGACY_ALIAS_MAP[legacy];
 
   if (!config) {
@@ -43,6 +59,14 @@ export async function generateMetadata({ params }: LegacyPageProps): Promise<Met
 
 export default async function LegacyAliasPage({ params }: LegacyPageProps) {
   const { legacy } = await params;
+  const awardsConfig = AWARDS_ROUTE_MAP[legacy];
+
+  if (awardsConfig) {
+    return awardsConfig.kind === 'winners'
+      ? getWinnersPage(awardsConfig.year)
+      : getFinalistsPage(awardsConfig.year);
+  }
+
   const config = LEGACY_ALIAS_MAP[legacy];
 
   if (!config) {

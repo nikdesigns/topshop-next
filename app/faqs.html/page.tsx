@@ -8,6 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LATEST_FINALISTS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
 
@@ -269,12 +270,12 @@ export default function FaqsPage() {
                         href={
                           nominationWindow.isOpen
                             ? '/submit_nomination.html'
-                            : '/topshop_2026_finalist.html'
+                            : LATEST_FINALISTS_ROUTE.href
                         }
                       >
                         {nominationWindow.isOpen
                           ? 'Go To Submission Page'
-                          : 'View 2026 Finalists'}
+                          : `View ${LATEST_FINALISTS_ROUTE.label}`}
                       </Link>
                     </Button>
                   </CardContent>

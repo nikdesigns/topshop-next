@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Mail, Phone } from 'lucide-react';
+import {
+  LATEST_FINALISTS_ROUTE,
+  LATEST_WINNERS_ROUTE,
+} from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 
 const services = [
@@ -13,8 +17,8 @@ const services = [
 
 const exploreLinks = [
   { href: '/#welcome', label: 'Welcome' },
-  { href: '/topshop_2026_winners.html', label: '2026 Winners' },
-  { href: '/topshop_2026_finalist.html', label: '2026 Finalists' },
+  { href: LATEST_WINNERS_ROUTE.href, label: LATEST_WINNERS_ROUTE.label },
+  { href: LATEST_FINALISTS_ROUTE.href, label: LATEST_FINALISTS_ROUTE.label },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About Us' },
 ];
@@ -38,9 +42,7 @@ export function SiteFooter() {
             Browse FAQs
           </Link>
           <Link
-            href={
-              nominationWindow.isOpen ? '/submit_nomination.html' : '/topshop_2026_finalist.html'
-            }
+            href={nominationWindow.isOpen ? '/submit_nomination.html' : LATEST_FINALISTS_ROUTE.href}
             className="footer-feature-link footer-feature-link--primary"
           >
             {nominationWindow.isOpen ? 'Submit Nominations' : 'View Finalists'}

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, Trophy } from 'lucide-react';
+import { LATEST_FINALISTS_ROUTE, LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 
 const highlights = [
@@ -45,15 +46,17 @@ export function ScheduleSection() {
                 href={
                   nominationWindow.isOpen
                     ? '/submit_nomination.html'
-                    : '/topshop_2026_finalist.html'
+                    : LATEST_FINALISTS_ROUTE.href
                 }
                 className="schedule-action schedule-action--primary"
               >
                 <CalendarClock size={15} aria-hidden="true" />
-                {nominationWindow.isOpen ? 'Submit Nominations' : 'View 2026 Finalists'}
+                {nominationWindow.isOpen
+                  ? 'Submit Nominations'
+                  : `View ${LATEST_FINALISTS_ROUTE.label}`}
               </Link>
               <Link
-                href="/topshop_2026_winners.html"
+                href={LATEST_WINNERS_ROUTE.href}
                 className="schedule-action schedule-action--ghost"
               >
                 <Trophy size={15} aria-hidden="true" />

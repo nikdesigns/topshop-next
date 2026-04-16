@@ -3,6 +3,5 @@ export const nominationWindow = {
   seasonLabel: '2026',
   openMessage: 'Nominations are open. Submit your nominations now.',
   closedMessage:
-    'Nominations are closed. Winner voting windows are published on each finalists page.',
+    'Nominations have ended! Check out the winners for the 2026 Topshop Awards.',
 } as const;
-

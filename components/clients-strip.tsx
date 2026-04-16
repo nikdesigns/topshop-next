@@ -6,6 +6,7 @@ import { ArrowRight, Pause, Play, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { LATEST_WINNERS_LINK } from '@/lib/awards-links';
 
 type Client = {
   name: string;
@@ -110,7 +111,7 @@ export function ClientsStrip() {
               <Sparkles size={12} aria-hidden="true" />
               Hall of Fame
             </Badge>
-            <h3>Top Shops 2026</h3>
+            <h3>Top Shops {LATEST_WINNERS_LINK.year}</h3>
             <p>
               Browse 20 standout shops recognized by operators and suppliers across the
               awards cycle.
@@ -134,7 +135,7 @@ export function ClientsStrip() {
               {isPaused ? 'Resume' : 'Pause'}
             </Button>
             <Button asChild size="sm" className="clients-action-link">
-              <Link href="/topshop_2026_winners.html">
+              <Link href={LATEST_WINNERS_LINK.href}>
                 View Winners <ArrowRight size={14} aria-hidden="true" />
               </Link>
             </Button>

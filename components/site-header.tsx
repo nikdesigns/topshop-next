@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ChevronDown, Menu, TriangleAlert } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { AWARDS_FINALIST_LINKS, AWARDS_WINNER_LINKS, LATEST_WINNERS_LINK } from '@/lib/awards-links';
 import { nominationWindow } from '@/lib/nomination-window';
 import {
   Sheet,
@@ -22,28 +23,18 @@ type NavLink = {
   label: string;
 };
 
-const winnerLinks: NavLink[] = [
-  { href: '/topshop_2025_winners.html', label: '2025 Winners' },
-  { href: '/topshop_2024_winners.html', label: '2024 Winners' },
-  { href: '/topshop_2023_winners.html', label: '2023 Winners' },
-  { href: '/topshop_2022_winners.html', label: '2022 Winners' },
-  { href: '/topshop-2021-winners_new.html', label: '2021 Winners' },
-  { href: '/topshop-2020-winners.html', label: '2020 Winners' },
-  { href: '/topshop-2019-winners.html', label: '2019 Winners' },
-];
+const winnerLinks: NavLink[] = AWARDS_WINNER_LINKS.filter(
+  (link) => link.year !== LATEST_WINNERS_LINK.year,
+).map((link) => ({ href: link.href, label: link.label }));
 
-const finalistLinks: NavLink[] = [
-  { href: '/topshop_2026_finalist.html', label: '2026 Finalists' },
-  { href: '/topshop_2025_finalist.html', label: '2025 Finalists' },
-  { href: '/topshop_2024_finalist.html', label: '2024 Finalists' },
-  { href: '/topshop_2023_finalist.html', label: '2023 Finalists' },
-  { href: '/topshop_2022_finalist.html', label: '2022 Finalists' },
-  { href: '/topshop_2021_finalist.html', label: '2021 Finalists' },
-];
+const finalistLinks: NavLink[] = AWARDS_FINALIST_LINKS.map((link) => ({
+  href: link.href,
+  label: link.label,
+}));
 
 const primaryLinks: NavLink[] = [
   { href: '/#welcome', label: 'Welcome' },
-  { href: '/topshop_2026_winners.html', label: '2026 Winners' },
+  { href: LATEST_WINNERS_LINK.href, label: LATEST_WINNERS_LINK.label },
   { href: '/#schedule', label: 'Schedule' },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About' },
