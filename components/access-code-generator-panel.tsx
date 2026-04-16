@@ -1,18 +1,16 @@
 'use client';
-
 import { FormEvent, useMemo, useState } from 'react';
 import { Check, Copy, KeyRound, Lock, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { sha256Hex } from '@/lib/crypto-client';
-import { ASSET_YEARS, type AssetYear } from '@/lib/assets-downloads';
 
 const GENERATOR_PASSWORD = 'topshop';
 
-function buildRandomCode(year: AssetYear) {
+function buildRandomCode() {
   if (typeof window === 'undefined' || !window.crypto?.getRandomValues) {
-    return `TS-ASSET-${year}-ACCESS`;
+    return `TOPSHOP-${new Date().getFullYear()}-ACCESS`;
   }
 
   const randomBytes = new Uint8Array(4);
@@ -22,7 +20,7 @@ function buildRandomCode(year: AssetYear) {
     .join('')
     .toUpperCase();
 
-  return `TS-ASSET-${year}-${suffix}`;
+  return `TOPSHOP-${new Date().getFullYear()}-${suffix}`;
 }
 
 export function AccessCodeGeneratorPanel() {
@@ -31,7 +29,6 @@ export function AccessCodeGeneratorPanel() {
   const [passwordError, setPasswordError] = useState('');
   const [plainCode, setPlainCode] = useState('');
   const [hashValue, setHashValue] = useState('');
-  const [targetYear, setTargetYear] = useState<AssetYear>(2026);
   const [generatorError, setGeneratorError] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
@@ -43,11 +40,11 @@ export function AccessCodeGeneratorPanel() {
       return '';
     }
 
-    return `{\n  hash: '${hashValue}',\n  years: [${targetYear}],\n},`;
-  }, [hashValue, targetYear]);
+    return `export const ASSET_ACCESS_CODE_HASHES = [\n  '${hashValue}',\n];`;
+  }, [hashValue]);
 
   const generateAccessPair = async () => {
-    const nextCode = buildRandomCode(targetYear);
+    const nextCode = buildRandomCode();
     setIsGenerating(true);
     setGeneratorError('');
     setCopiedHash(false);
@@ -91,7 +88,10 @@ export function AccessCodeGeneratorPanel() {
     setCopiedSnippet(false);
   };
 
-  const copyText = async (value: string, target: 'code' | 'hash' | 'snippet') => {
+  const copyText = async (
+    value: string,
+    target: 'code' | 'hash' | 'snippet',
+  ) => {
     if (!value || !navigator.clipboard) {
       return;
     }
@@ -118,18 +118,32 @@ export function AccessCodeGeneratorPanel() {
     <section className="codegen-panel">
       <div className="codegen-head">
         <div className="codegen-title-wrap">
-          <Badge variant={isUnlocked ? 'success' : 'danger'} className="assets-library-badge">
-            {isUnlocked ? <KeyRound size={12} aria-hidden="true" /> : <Lock size={12} aria-hidden="true" />}
-            <span>{isUnlocked ? 'Generator Unlocked' : 'Generator Locked'}</span>
+          <Badge
+            variant={isUnlocked ? 'success' : 'danger'}
+            className="assets-library-badge"
+          >
+            {isUnlocked ? (
+              <KeyRound size={12} aria-hidden="true" />
+            ) : (
+              <Lock size={12} aria-hidden="true" />
+            )}
+            <span>
+              {isUnlocked ? 'Generator Unlocked' : 'Generator Locked'}
+            </span>
           </Badge>
           <h3>Access Code Generator</h3>
           <p>
-            Unlock once and the page automatically generates a new access code and matching
-            SHA-256 hash for the selected year.
+            Unlock once and the page automatically generates a new access code
+            and matching SHA-256 hash.
           </p>
         </div>
         {isUnlocked ? (
-          <Button type="button" variant="outline" size="sm" onClick={handleLock}>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleLock}
+          >
             <Lock size={14} aria-hidden="true" />
             Lock Page
           </Button>
@@ -163,45 +177,16 @@ export function AccessCodeGeneratorPanel() {
         <div className="codegen-tools">
           <div className="codegen-auto-actions">
             <p className="codegen-status">
-              {isGenerating ? 'Generating a new access code...' : 'A fresh access code is ready.'}
+              {isGenerating
+                ? 'Generating a new access code...'
+                : 'A fresh access code is ready.'}
             </p>
-            <label className="codegen-year-control">
-              <span>Year</span>
-              <select
-                value={targetYear}
-                onChange={(event) => {
-                  const nextYear = Number(event.target.value) as AssetYear;
-                  setTargetYear(nextYear);
-                  setHashValue('');
-                  setGeneratorError('');
-                  setCopiedCode(false);
-                  setCopiedHash(false);
-                  setCopiedSnippet(false);
-                  void (async () => {
-                    const nextCode = buildRandomCode(nextYear);
-                    setIsGenerating(true);
-                    setPlainCode(nextCode);
-                    const hash = await sha256Hex(nextCode);
-                    if (!hash) {
-                      setGeneratorError('Secure hash API is unavailable in this browser.');
-                      setHashValue('');
-                      setIsGenerating(false);
-                      return;
-                    }
-                    setHashValue(hash);
-                    setIsGenerating(false);
-                  })();
-                }}
-                className="ui-input"
-              >
-                {ASSET_YEARS.map((year) => (
-                  <option key={year} value={year}>
-                    {year}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <Button type="button" variant="outline" size="sm" onClick={() => void generateAccessPair()}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void generateAccessPair()}
+            >
               <RefreshCw size={14} aria-hidden="true" />
               Generate New Code
             </Button>
@@ -218,8 +203,17 @@ export function AccessCodeGeneratorPanel() {
               <div className="codegen-result-block">
                 <p>Access Code</p>
                 <code>{plainCode}</code>
-                <Button type="button" variant="outline" size="sm" onClick={() => copyText(plainCode, 'code')}>
-                  {copiedCode ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => copyText(plainCode, 'code')}
+                >
+                  {copiedCode ? (
+                    <Check size={14} aria-hidden="true" />
+                  ) : (
+                    <Copy size={14} aria-hidden="true" />
+                  )}
                   {copiedCode ? 'Copied' : 'Copy Code'}
                 </Button>
               </div>
@@ -227,8 +221,17 @@ export function AccessCodeGeneratorPanel() {
               <div className="codegen-result-block">
                 <p>SHA-256 Hash</p>
                 <code>{hashValue}</code>
-                <Button type="button" variant="outline" size="sm" onClick={() => copyText(hashValue, 'hash')}>
-                  {copiedHash ? <Check size={14} aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => copyText(hashValue, 'hash')}
+                >
+                  {copiedHash ? (
+                    <Check size={14} aria-hidden="true" />
+                  ) : (
+                    <Copy size={14} aria-hidden="true" />
+                  )}
                   {copiedHash ? 'Copied' : 'Copy Hash'}
                 </Button>
               </div>
