@@ -26,6 +26,7 @@ const exploreLinks = [
   { href: '/#welcome', label: 'Welcome' },
   { href: LATEST_WINNERS_ROUTE.href, label: LATEST_WINNERS_ROUTE.label },
   { href: LATEST_FINALISTS_ROUTE.href, label: LATEST_FINALISTS_ROUTE.label },
+  { href: '/gallery.html', label: 'Gallery' },
   { href: '/assets.html', label: 'Assets' },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About Us' },
@@ -45,17 +46,17 @@ export function SiteFooter() {
       <div className="content-wrap footer-feature-strip">
         <p>
           Need help with Top Shop Awards {nominationWindow.seasonLabel}? Our team can guide you
-          through nominations, finalists, and winner visibility.
+          through nominations, winner visibility, and finalist publishing.
         </p>
         <div className="footer-feature-actions">
           <Link href="/faqs.html" className="footer-feature-link footer-feature-link--ghost">
             Browse FAQs
           </Link>
           <Link
-            href={nominationWindow.isOpen ? '/submit_nomination.html' : LATEST_FINALISTS_ROUTE.href}
+            href={nominationWindow.isOpen ? '/submit_nomination.html' : LATEST_WINNERS_ROUTE.href}
             className="footer-feature-link footer-feature-link--primary"
           >
-            {nominationWindow.isOpen ? 'Submit Nominations' : 'View Finalists'}
+            {nominationWindow.isOpen ? 'Submit Nominations' : `View ${LATEST_WINNERS_ROUTE.label}`}
             <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>

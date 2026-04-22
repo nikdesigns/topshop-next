@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { LATEST_FINALISTS_ROUTE } from '@/lib/awards-route-map';
+import { LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 
 const stats = [
@@ -131,13 +131,13 @@ export function WelcomeSection() {
                 href={
                   nominationWindow.isOpen
                     ? '/submit_nomination.html'
-                    : LATEST_FINALISTS_ROUTE.href
+                    : LATEST_WINNERS_ROUTE.href
                 }
                 className="welcome-action-link"
               >
                 {nominationWindow.isOpen
                   ? 'Submit Nominations'
-                  : `View ${LATEST_FINALISTS_ROUTE.label}`}
+                  : `View ${LATEST_WINNERS_ROUTE.label}`}
                 <ArrowRight size={14} aria-hidden="true" />
               </Link>
             </div>

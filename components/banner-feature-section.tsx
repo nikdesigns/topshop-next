@@ -119,13 +119,15 @@ export function BannerFeatureSection() {
               )}
             </div>
 
-            <VoteButtonToolkit
-              seasonLabel={nominationWindow.seasonLabel}
-              buttonImagePath={`${SITE_URL}/assets/images/button/topshop_vote_button.png`}
-              buttonDownloadName={`top-shop-${nominationWindow.seasonLabel.toLowerCase()}-vote-button.png`}
-              generatedBaseUrl={`${SITE_URL}/submit_nomination.html`}
-              companyOptions={NOMINATION_COMPANY_SUGGESTIONS}
-            />
+            {nominationWindow.isOpen ? (
+              <VoteButtonToolkit
+                seasonLabel={nominationWindow.seasonLabel}
+                buttonImagePath={`${SITE_URL}/assets/images/button/topshop_vote_button.png`}
+                buttonDownloadName={`top-shop-${nominationWindow.seasonLabel.toLowerCase()}-vote-button.png`}
+                generatedBaseUrl={`${SITE_URL}/submit_nomination.html`}
+                companyOptions={NOMINATION_COMPANY_SUGGESTIONS}
+              />
+            ) : null}
           </div>
         </article>
       </div>

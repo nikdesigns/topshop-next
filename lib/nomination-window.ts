@@ -1,5 +1,25 @@
 import { ACTIVE_AWARDS_SEASON } from '@/data/awards-cycle';
 
+type NominationStatusMode = 'auto' | 'open' | 'closed';
+
+function resolveNominationStatusMode(value: string | undefined): NominationStatusMode {
+  if (value === 'open' || value === 'closed') {
+    return value;
+  }
+
+  return 'auto';
+}
+
+// Single switch to control nomination visibility across the whole site.
+// Set to:
+// - undefined -> date-driven behavior (default)
+// - 'open'    -> force nominations open
+// - 'closed'  -> force nominations closed
+const MANUAL_NOMINATION_STATUS_MODE: string | undefined = undefined;
+const nominationStatusMode = resolveNominationStatusMode(
+  MANUAL_NOMINATION_STATUS_MODE ?? process.env.NEXT_PUBLIC_NOMINATION_STATUS_MODE,
+);
+
 function parseDateUtc(date: string, endOfDay = false): Date {
   const [year, month, day] = date.split('-').map((part) => Number(part));
   const hour = endOfDay ? 23 : 0;
@@ -21,7 +41,13 @@ const season = ACTIVE_AWARDS_SEASON;
 const nominationStart = parseDateUtc(season.nominationStartDate);
 const nominationEnd = parseDateUtc(season.nominationEndDate, true);
 const now = new Date();
-const isOpen = now >= nominationStart && now <= nominationEnd;
+const isWithinNominationWindow = now >= nominationStart && now <= nominationEnd;
+const isOpen =
+  nominationStatusMode === 'open'
+    ? true
+    : nominationStatusMode === 'closed'
+      ? false
+      : isWithinNominationWindow;
 const openOnLabel = formatDateLong(season.nominationStartDate);
 const closeOnLabel = formatDateLong(season.nominationEndDate);
 

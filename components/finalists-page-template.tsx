@@ -1,6 +1,7 @@
 import { Suspense, type ReactNode } from 'react';
 import { AwardsResultsPageShell } from '@/components/awards-results-page-shell';
 import { FinalistsSplitListing } from '@/components/finalists-split-listing';
+import { ResultsListingFallback } from '@/components/results-listing-fallback';
 import type { FinalistCard } from '@/lib/parse-finalists-cards';
 import { SITE_URL } from '@/lib/site';
 import {
@@ -68,7 +69,14 @@ export function FinalistsPageTemplate({
       introContent={introContent}
       structuredData={pageJsonLd}
       listingContent={
-        <Suspense fallback={<section className={`${namespace}-listing section-pad`} />}>
+        <Suspense
+          fallback={
+            <ResultsListingFallback
+              namespace={namespace}
+              label={`Loading ${year} finalists...`}
+            />
+          }
+        >
           <FinalistsSplitListing
             cards={cards}
             seasonLabel={year}

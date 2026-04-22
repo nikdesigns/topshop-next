@@ -11,7 +11,9 @@ function normalizeBasePath(value: string | undefined) {
   }
 
   const withoutTrailingSlash = trimmed.replace(/\/+$/, '');
-  return withoutTrailingSlash.startsWith('/') ? withoutTrailingSlash : `/${withoutTrailingSlash}`;
+  return withoutTrailingSlash.startsWith('/')
+    ? withoutTrailingSlash
+    : `/${withoutTrailingSlash}`;
 }
 
 const basePath = normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH);

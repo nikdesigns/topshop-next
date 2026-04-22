@@ -11,7 +11,7 @@ import {
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { Badge } from '@/components/ui/badge';
-import { LATEST_FINALISTS_ROUTE } from '@/lib/awards-route-map';
+import { LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
 
@@ -168,23 +168,25 @@ export default function AboutUsPage() {
                     width={165}
                     height={52}
                   />
-                  <Link
-                    href="/#votebutton"
-                    className="about-vote-btn about-vote-btn-rich"
-                  >
-                    Download Vote Button
-                  </Link>
+                  {nominationWindow.isOpen ? (
+                    <Link
+                      href="/#votebutton"
+                      className="about-vote-btn about-vote-btn-rich"
+                    >
+                      Download Vote Button
+                    </Link>
+                  ) : null}
                   <Link
                     href={
                       nominationWindow.isOpen
                         ? '/submit_nomination.html'
-                        : LATEST_FINALISTS_ROUTE.href
+                        : LATEST_WINNERS_ROUTE.href
                     }
                     className="about-nomination-btn"
                   >
                     {nominationWindow.isOpen
                       ? `Submit ${nominationWindow.seasonLabel} Nominations`
-                      : `View ${LATEST_FINALISTS_ROUTE.label}`}
+                      : `View ${LATEST_WINNERS_ROUTE.label}`}
                     <ArrowRight size={14} aria-hidden="true" />
                   </Link>
                 </div>

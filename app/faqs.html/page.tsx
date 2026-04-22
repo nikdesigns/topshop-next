@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LATEST_FINALISTS_ROUTE } from '@/lib/awards-route-map';
+import { LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
 
@@ -259,7 +259,7 @@ export default function FaqsPage() {
                     <p>
                       {nominationWindow.isOpen
                         ? `Nominations are open for ${nominationWindow.seasonLabel}. If you need category guidance, our team can help.`
-                        : `Nominations are closed for ${nominationWindow.seasonLabel}. You can still review finalists and prepare your next cycle plan.`}
+                        : `Nominations are closed for ${nominationWindow.seasonLabel}. You can still review winners and prepare your next cycle plan.`}
                     </p>
                     <p className="faq-assist-chip">
                       <ShieldCheck size={14} aria-hidden="true" />
@@ -270,12 +270,12 @@ export default function FaqsPage() {
                         href={
                           nominationWindow.isOpen
                             ? '/submit_nomination.html'
-                            : LATEST_FINALISTS_ROUTE.href
+                            : LATEST_WINNERS_ROUTE.href
                         }
                       >
                         {nominationWindow.isOpen
                           ? 'Go To Submission Page'
-                          : `View ${LATEST_FINALISTS_ROUTE.label}`}
+                          : `View ${LATEST_WINNERS_ROUTE.label}`}
                       </Link>
                     </Button>
                   </CardContent>

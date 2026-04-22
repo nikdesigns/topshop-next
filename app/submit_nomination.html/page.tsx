@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { NominationCompanyAutocomplete } from '@/components/nomination-company-autocomplete';
-import { CONTACT_EMAIL, CONTACT_MAILTO_HREF } from '@/lib/contact';
+import { CONTACT_MAILTO_HREF } from '@/lib/contact';
 import { NOMINATION_COMPANY_SUGGESTIONS } from '@/lib/company-suggestions';
 import { SITE_URL } from '@/lib/site';
 

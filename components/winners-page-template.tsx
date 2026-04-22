@@ -1,14 +1,12 @@
-import { Suspense, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { WinnerCard } from '@/lib/parse-winners-cards';
 import type { WinnerSplitCard } from '@/lib/results-types';
 import { AwardsResultsPageShell } from '@/components/awards-results-page-shell';
-import { WinnersSplitListing } from '@/components/winners-split-listing';
-import { WinnersLegacyListing } from '@/components/winners-legacy-listing';
+import { Winners2026Listing } from '@/components/winners-2026-listing';
 import { SITE_URL } from '@/lib/site';
 import {
   WINNERS_LEGACY_PAGE_NAMESPACE,
   WINNERS_LEGACY_PAGE_SHELL_CLASS,
-  WINNERS_SPLIT_CARD_NAMESPACE,
   WINNERS_SPLIT_PAGE_SHELL_CLASS,
   WINNERS_SPLIT_RESULTS_NAMESPACE,
 } from '@/lib/results-namespaces';
@@ -50,10 +48,15 @@ export function WinnersPageTemplate(props: WinnersPageTemplateProps) {
   const namespace = isSplit
     ? WINNERS_SPLIT_RESULTS_NAMESPACE
     : WINNERS_LEGACY_PAGE_NAMESPACE;
-  const splitCardNamespace = WINNERS_SPLIT_CARD_NAMESPACE;
   const shellClass = isSplit
     ? WINNERS_SPLIT_PAGE_SHELL_CLASS
     : WINNERS_LEGACY_PAGE_SHELL_CLASS;
+  const listingCards: WinnerSplitCard[] = isSplit
+    ? props.cards
+    : props.cards.map((card) => ({
+        category: card.category,
+        winners: card.winners.map((winner) => winner.name),
+      }));
   const title = `${props.year} Top Shop Winners`;
   const url = `${SITE_URL}${props.canonicalPath}`;
   const image = props.titleImageSrc.startsWith('http')
@@ -83,20 +86,7 @@ export function WinnersPageTemplate(props: WinnersPageTemplateProps) {
       singleIntroColumn={props.singleIntroColumn}
       introContent={props.introContent}
       structuredData={pageJsonLd}
-      listingContent={
-        isSplit ? (
-          <Suspense fallback={<section className={`${namespace}-listing section-pad`} />}>
-            <WinnersSplitListing
-              cards={props.cards}
-              seasonLabel={props.year}
-              namespace={namespace}
-              cardNamespace={splitCardNamespace}
-            />
-          </Suspense>
-        ) : (
-          <WinnersLegacyListing cards={props.cards} seasonLabel={props.year} />
-        )
-      }
+      listingContent={<Winners2026Listing cards={listingCards} seasonLabel={props.year} />}
     />
   );
 }
