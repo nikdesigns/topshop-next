@@ -4821,6 +4821,12 @@ img {
   background: #0f0f10;
 }
 
+.hero-viewport.hero-viewport-rich {
+  height: clamp(220px, 25vw, 480px);
+  min-height: 0;
+  max-height: none;
+}
+
 .hero-slide {
   display: block;
   position: absolute;
