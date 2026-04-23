@@ -3,8 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "node scripts/clean-output.mjs",
     "dev": "next dev",
+    "gallery:optimize": "node scripts/optimize-gallery-images.mjs",
+    "prebuild": "npm run gallery:optimize",
     "build": "next build",
+    "prebuild:root": "npm run gallery:optimize",
     "build:root": "NEXT_PUBLIC_BASE_PATH= next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
@@ -36,6 +40,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.3",
     "shadcn": "^4.2.0",
+    "sharp": "^0.34.5",
     "typescript": "^5"
   }
 }

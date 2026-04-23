@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { AwardsGallerySection } from '@/components/awards-gallery-section';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
+import { getAwardsGalleryPhotos } from '@/lib/awards-gallery-source';
 import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -16,6 +17,8 @@ export const metadata: Metadata = {
 };
 
 export default function GalleryPage() {
+  const galleryPhotos = getAwardsGalleryPhotos();
+
   return (
     <div className="app-shell assets-page-shell">
       <SiteHeader />
@@ -41,7 +44,7 @@ export default function GalleryPage() {
           </div>
         </section>
 
-        <AwardsGallerySection />
+        <AwardsGallerySection photos={galleryPhotos} />
       </main>
       <SiteFooter />
     </div>

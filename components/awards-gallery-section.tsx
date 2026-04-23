@@ -8,29 +8,53 @@ import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
 import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import { AWARDS_GALLERY_PHOTOS, type AwardsGalleryYear } from '@/lib/awards-gallery';
+import type { AwardsGalleryPhoto } from '@/lib/awards-gallery';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-type YearFilter = 'all' | AwardsGalleryYear;
+type YearFilter = 'all' | string;
+type YearGroup = {
+  year: string;
+  photos: AwardsGalleryPhoto[];
+};
 
-const YEAR_FILTERS: YearFilter[] = ['all', '2026', '2025', '2024'];
+function getPhotoKey(photo: AwardsGalleryPhoto) {
+  return `${photo.year}::${photo.src}`;
+}
 
 function getYearLabel(year: YearFilter) {
   return year === 'all' ? 'All Years' : year;
 }
 
-export function AwardsGallerySection() {
+function getGalleryCardVariant(index: number, total: number) {
+  if (index === 0 && total >= 3) {
+    return 'is-hero';
+  }
+
+  if (index === 1 && total >= 4) {
+    return 'is-wide';
+  }
+
+  return (index + 1) % 7 === 0 ? 'is-wide' : '';
+}
+
+export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] }) {
   const [yearFilter, setYearFilter] = useState<YearFilter>('all');
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const yearFilters = useMemo<YearFilter[]>(() => {
+    const years = Array.from(new Set(photos.map((photo) => photo.year))).sort(
+      (a, b) => Number(b) - Number(a),
+    );
+    return ['all', ...years];
+  }, [photos]);
 
   const filteredPhotos = useMemo(() => {
     if (yearFilter === 'all') {
-      return AWARDS_GALLERY_PHOTOS;
+      return photos;
     }
 
-    return AWARDS_GALLERY_PHOTOS.filter((photo) => photo.year === yearFilter);
-  }, [yearFilter]);
+    return photos.filter((photo) => photo.year === yearFilter);
+  }, [photos, yearFilter]);
 
   const slides = useMemo(
     () =>
@@ -38,20 +62,43 @@ export function AwardsGallerySection() {
         src: photo.src,
         width: photo.width,
         height: photo.height,
-        title: photo.companyName,
-        description: `${photo.winnerCategory} • ${photo.year}`,
+        title: `${photo.year} Top Shop Awards`,
+        description: photo.title,
       })),
     [filteredPhotos],
   );
 
   const stats = useMemo(() => {
     const years = new Set(filteredPhotos.map((photo) => photo.year));
-    const categories = new Set(filteredPhotos.map((photo) => photo.category));
     return {
       photos: filteredPhotos.length,
-      years: years.size,
-      categories: categories.size,
+      albums: years.size,
     };
+  }, [filteredPhotos]);
+
+  const groupedPhotos = useMemo<YearGroup[]>(() => {
+    const groups = new Map<string, AwardsGalleryPhoto[]>();
+    for (const photo of filteredPhotos) {
+      const existing = groups.get(photo.year);
+      if (existing) {
+        existing.push(photo);
+      } else {
+        groups.set(photo.year, [photo]);
+      }
+    }
+
+    return Array.from(groups.entries()).map(([year, items]) => ({
+      year,
+      photos: items,
+    }));
+  }, [filteredPhotos]);
+
+  const indexByPhotoKey = useMemo(() => {
+    const indexMap = new Map<string, number>();
+    filteredPhotos.forEach((photo, index) => {
+      indexMap.set(getPhotoKey(photo), index);
+    });
+    return indexMap;
   }, [filteredPhotos]);
 
   return (
@@ -75,18 +122,14 @@ export function AwardsGallerySection() {
             <p className="awards-gallery-summary-value">{stats.photos}</p>
           </article>
           <article className="awards-gallery-summary-card">
-            <p className="awards-gallery-summary-label">Seasons</p>
-            <p className="awards-gallery-summary-value">{stats.years}</p>
-          </article>
-          <article className="awards-gallery-summary-card">
-            <p className="awards-gallery-summary-label">Categories</p>
-            <p className="awards-gallery-summary-value">{stats.categories}</p>
+            <p className="awards-gallery-summary-label">Albums</p>
+            <p className="awards-gallery-summary-value">{stats.albums}</p>
           </article>
         </div>
 
         <div className="awards-gallery-toolbar">
           <div className="awards-gallery-filters" role="tablist" aria-label="Filter gallery by year">
-            {YEAR_FILTERS.map((year) => {
+            {yearFilters.map((year) => {
               const isActive = yearFilter === year;
               return (
                 <button
@@ -109,33 +152,45 @@ export function AwardsGallerySection() {
         </div>
 
         {filteredPhotos.length ? (
-          <div className="awards-gallery-grid">
-            {filteredPhotos.map((photo, index) => (
-              <button
-                key={`${photo.src}-${photo.year}`}
-                type="button"
-                className={`awards-gallery-card${index % 7 === 0 ? ' is-wide' : ''}`}
-                onClick={() => setSelectedIndex(index)}
-              >
-                <Image
-                  src={photo.src}
-                  alt={`${photo.title} (${photo.year})`}
-                  width={photo.width}
-                  height={photo.height}
-                  className="awards-gallery-card-image"
-                />
-                <span className="awards-gallery-card-overlay" aria-hidden="true" />
-                <span className="awards-gallery-year-badge">{photo.year}</span>
-                <span className="awards-gallery-card-content">
-                  <strong>{photo.companyName}</strong>
-                  <small className="awards-gallery-winner-category">
-                    Winner Category: {photo.winnerCategory}
-                  </small>
-                  <small>
-                    {photo.year} • {photo.category}
-                  </small>
-                </span>
-              </button>
+          <div className="awards-gallery-groups">
+            {groupedPhotos.map((group) => (
+              <section className="awards-gallery-year-group" key={group.year}>
+                {yearFilter === 'all' ? (
+                  <header className="awards-gallery-year-head">
+                    <h3 className="awards-gallery-year-title">{group.year}</h3>
+                    <p className="awards-gallery-year-count">{group.photos.length} photos</p>
+                  </header>
+                ) : null}
+
+                <div className="awards-gallery-grid">
+                  {group.photos.map((photo, index) => {
+                    const variantClass = getGalleryCardVariant(index, group.photos.length);
+                    const imageIndex = indexByPhotoKey.get(getPhotoKey(photo)) ?? 0;
+
+                    return (
+                      <button
+                        key={getPhotoKey(photo)}
+                        type="button"
+                        className={`awards-gallery-card${variantClass ? ` ${variantClass}` : ''}`}
+                        onClick={() => setSelectedIndex(imageIndex)}
+                        aria-label={`Open ${photo.year} gallery image ${imageIndex + 1}`}
+                      >
+                        <div className="awards-gallery-card-media">
+                          <Image
+                            src={photo.thumbnailSrc ?? photo.src}
+                            alt={`${photo.title} (${photo.year})`}
+                            fill
+                            sizes="(max-width: 560px) 100vw, (max-width: 860px) 50vw, (max-width: 1100px) 67vw, 25vw"
+                            className="awards-gallery-card-image"
+                          />
+                          <span className="awards-gallery-card-overlay" aria-hidden="true" />
+                          <span className="awards-gallery-year-badge">{photo.year}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </section>
             ))}
           </div>
         ) : (

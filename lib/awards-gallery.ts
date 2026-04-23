@@ -1,7 +1,8 @@
-export type AwardsGalleryYear = '2026' | '2025' | '2024';
+export type AwardsGalleryYear = string;
 
 export type AwardsGalleryPhoto = {
   src: string;
+  thumbnailSrc?: string;
   title: string;
   companyName: string;
   winnerCategory: string;
@@ -12,7 +13,7 @@ export type AwardsGalleryPhoto = {
   height: number;
 };
 
-export const AWARDS_GALLERY_PHOTOS: AwardsGalleryPhoto[] = [
+export const DEFAULT_AWARDS_GALLERY_PHOTOS: AwardsGalleryPhoto[] = [
   {
     src: '/assets/images/banners/ts_winner_2026.jpg',
     title: 'Top Shop Winners Stage Reveal',
