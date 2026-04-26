@@ -9,7 +9,7 @@ export const WINNERS_2026_PAGE_CONFIG = {
   canonicalPath: '/topshop_2026_winners.html',
   titleImageSrc: '/assets/images/page-titles/333.jpg',
   logo: {
-    heading: 'Top Shops 2026 Winners',
+    heading: 'Top Shop Awards 2026',
     imageSrc: '/assets/images/logo/top_shop_logo_2026.png',
     imageAlt: 'Top Shops 2026 Winners badge',
     width: 226,
@@ -17,7 +17,7 @@ export const WINNERS_2026_PAGE_CONFIG = {
   },
   introContent: (
     <>
-      <p>
+      <p className="winners-results-lead">
         We are thrilled to announce the 2026 winners of The145 Top Shop Awards. This year&apos;s
         voting season was another remarkable success, showcasing the strength, skill, and dedication
         of the global repair community.

@@ -80,7 +80,7 @@ export default async function LegacyAliasPage({ params }: LegacyPageProps) {
       <SiteHeader />
       <main className="legacy-bridge-page">
         <script dangerouslySetInnerHTML={{ __html: redirectScript }} />
-        <section className="legacy-bridge-card">
+        <section className="legacy-bridge-card site-prose">
           {config.badge ? <p className="legacy-bridge-badge">{config.badge}</p> : null}
           <h1>{config.title}</h1>
           <p>{config.description}</p>

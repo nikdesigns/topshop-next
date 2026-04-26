@@ -84,7 +84,7 @@ export const ACTIVE_AWARDS_SEASON: AwardsSeasonConfig = {
     scheduleImageSrc: '/assets/images/about/topshop_schedule_2026.png',
     socialCardImageSrc: '/assets/images/banners/ts_winner_2026_1.jpg',
     heroWinnersImageSrc: '/assets/images/banners/ts_slide_2025_1.jpg',
-    heroFinalistsImageSrc: '/assets/images/banners/145_finalist_2026.jpg',
+    heroFinalistsImageSrc: '/assets/images/banners/ts_winner_2026_1.jpg',
     heroRecapImageSrc: '/assets/images/banners/ts_finalist_2026.jpg',
     winnersShowcaseYear: '2025',
     winnersShowcaseLocation: 'MRO Americas in Atlanta, Georgia, USA',

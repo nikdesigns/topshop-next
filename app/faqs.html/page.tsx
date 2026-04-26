@@ -188,7 +188,7 @@ export default function FaqsPage() {
                       {faqItemsLeft.map((item) => (
                         <AccordionItem key={item.id} value={item.id}>
                           <AccordionTrigger>{item.question}</AccordionTrigger>
-                          <AccordionContent>
+                          <AccordionContent className="site-prose">
                             <p>{item.answer}</p>
                             {item.question === 'How many award categories are there?' ? (
                               <ul className="faq-categories-list">
@@ -220,7 +220,7 @@ export default function FaqsPage() {
                       {faqItemsRight.map((item) => (
                         <AccordionItem key={item.id} value={item.id}>
                           <AccordionTrigger>{item.question}</AccordionTrigger>
-                          <AccordionContent>
+                          <AccordionContent className="site-prose">
                             <p>{item.answer}</p>
                           </AccordionContent>
                         </AccordionItem>

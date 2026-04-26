@@ -145,7 +145,7 @@ export function AccessCodeGeneratorPanel() {
   return (
     <section className="codegen-panel">
       <div className="codegen-head">
-        <div className="codegen-title-wrap">
+        <div className="codegen-title-wrap site-prose">
           <Badge
             variant={isUnlocked ? 'success' : 'danger'}
             className="assets-library-badge"
@@ -204,7 +204,7 @@ export function AccessCodeGeneratorPanel() {
       ) : (
         <div className="codegen-tools">
           <div className="codegen-auto-actions">
-            <div className="codegen-status-wrap">
+            <div className="codegen-status-wrap site-prose">
               <p className="codegen-status">
                 {isGenerating
                   ? 'Generating a new access code...'

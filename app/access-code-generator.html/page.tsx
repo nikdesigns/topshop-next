@@ -49,7 +49,7 @@ export default function AccessCodeGeneratorPage() {
 
         <section className="assets-library section-pad">
           <div className="content-wrap assets-library-wrap">
-            <header className="assets-library-header">
+            <header className="assets-library-header site-prose">
               <Badge variant="secondary" className="assets-library-badge">
                 <ShieldCheck size={12} aria-hidden="true" />
                 <span>Internal Utility</span>

@@ -113,6 +113,19 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
   );
 
   const activeStep = stepMeta[currentIndex];
+  const nextStep = stepMeta[(currentIndex + 1) % stepMeta.length];
+  const progressPercent =
+    stepMeta.length <= 1 ? 100 : Math.round((currentIndex / (stepMeta.length - 1)) * 100);
+
+  const selectStep = useCallback(
+    (index: number, disableAuto = true) => {
+      setCurrentIndex(clampActiveIndex(index, stepMeta.length));
+      if (disableAuto) {
+        setIsAutoPlay(false);
+      }
+    },
+    [stepMeta.length],
+  );
 
   const goToNext = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % stepMeta.length);
@@ -166,10 +179,7 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
                   <button
                     type="button"
                     className={`schedule-roadmap-rail-btn ${isActive ? 'is-active' : ''} ${isCompleted ? 'is-complete' : ''}`.trim()}
-                    onClick={() => {
-                      setCurrentIndex(step.index);
-                      setIsAutoPlay(false);
-                    }}
+                    onClick={() => selectStep(step.index)}
                   >
                     <span className="schedule-roadmap-rail-node" aria-hidden="true">
                       <step.Icon size={14} />
@@ -178,7 +188,7 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
                     <span className="schedule-roadmap-rail-copy">
                       <span className="schedule-roadmap-rail-step">Step {step.stepNumber}</span>
                       <strong>{step.title}</strong>
-                      <small>{step.dateLabel}</small>
+                      <span className="schedule-roadmap-rail-date">{step.dateLabel}</span>
                     </span>
 
                     <span className="schedule-roadmap-rail-state">
@@ -191,7 +201,28 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
           </ol>
         </aside>
 
-        <section className="schedule-roadmap-stage" aria-live="polite">
+        <section
+          className="schedule-roadmap-stage"
+          aria-live="polite"
+          tabIndex={0}
+          onKeyDown={(event) => {
+            if (event.key === 'ArrowRight') {
+              event.preventDefault();
+              goToNext();
+              setIsAutoPlay(false);
+            } else if (event.key === 'ArrowLeft') {
+              event.preventDefault();
+              goToPrevious();
+              setIsAutoPlay(false);
+            } else if (event.key === 'Home') {
+              event.preventDefault();
+              selectStep(0);
+            } else if (event.key === 'End') {
+              event.preventDefault();
+              selectStep(stepMeta.length - 1);
+            }
+          }}
+        >
           <div className="schedule-roadmap-stage-head">
             <div className="schedule-roadmap-stage-meta">
               <p>Interactive Schedule Explorer</p>
@@ -226,6 +257,52 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
             </div>
           </div>
 
+          <div className="schedule-roadmap-progress" aria-label="Roadmap progress controls">
+            <div className="schedule-roadmap-progress-head">
+              <p>Cycle Progress</p>
+              <strong>{progressPercent}%</strong>
+            </div>
+            <input
+              className="schedule-roadmap-progress-track"
+              type="range"
+              min={0}
+              max={Math.max(stepMeta.length - 1, 0)}
+              step={1}
+              value={currentIndex}
+              onChange={(event) => {
+                selectStep(Number(event.target.value));
+              }}
+              aria-label="Scrub schedule milestones"
+            />
+            <div className="schedule-roadmap-progress-notes">
+              <small>
+                <span>Now:</span> {activeStep.title}
+              </small>
+              <small>
+                <span>Next:</span> {nextStep.title}
+              </small>
+            </div>
+            <div className="schedule-roadmap-jump-row">
+              <button type="button" className="schedule-roadmap-jump-btn" onClick={() => selectStep(0)}>
+                Start
+              </button>
+              <button
+                type="button"
+                className="schedule-roadmap-jump-btn"
+                onClick={() => selectStep((currentIndex + 1) % stepMeta.length)}
+              >
+                Next
+              </button>
+              <button
+                type="button"
+                className="schedule-roadmap-jump-btn"
+                onClick={() => selectStep(stepMeta.length - 1)}
+              >
+                Finale
+              </button>
+            </div>
+          </div>
+
           <AnimatePresence mode="wait">
             <motion.article
               key={`${activeStep.title}-${activeStep.stepNumber}`}
@@ -236,7 +313,10 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
               transition={{ duration: 0.24, ease: 'easeOut' }}
             >
               <header className="schedule-roadmap-panel-head">
-                <p className="schedule-roadmap-panel-chip">{activeStep.phaseLabel}</p>
+                <div className="schedule-roadmap-panel-meta">
+                  <p className="schedule-roadmap-panel-chip">{activeStep.phaseLabel}</p>
+                  <p className="schedule-roadmap-panel-date">{activeStep.dateLabel}</p>
+                </div>
                 <h3>{activeStep.title}</h3>
                 <p className="schedule-roadmap-panel-subtitle">{activeStep.subtitle}</p>
                 <p className="schedule-roadmap-panel-details">{activeStep.details}</p>
@@ -268,10 +348,7 @@ export function ScheduleRoadmap({ steps, activeIndex = 0 }: ScheduleRoadmapProps
                     key={`${step.stepNumber}-dot`}
                     type="button"
                     className={`schedule-roadmap-dot ${step.index === currentIndex ? 'is-active' : ''}`.trim()}
-                    onClick={() => {
-                      setCurrentIndex(step.index);
-                      setIsAutoPlay(false);
-                    }}
+                    onClick={() => selectStep(step.index)}
                     aria-label={`Go to step ${step.stepNumber}: ${step.title}`}
                   />
                 ))}

@@ -366,7 +366,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
     <>
       <section className="assets-access-panel">
         <div className="assets-access-top">
-          <div className="assets-access-copy">
+          <div className="assets-access-copy site-prose">
             <Badge variant={isUnlocked ? 'success' : 'danger'} className="assets-library-badge">
               {isUnlocked ? <Unlock size={12} aria-hidden="true" /> : <Lock size={12} aria-hidden="true" />}
               <span>{isUnlocked ? 'Protected Assets Unlocked' : 'Protected Assets Locked'}</span>
@@ -657,7 +657,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
         </section>
         ))
       ) : (
-        <section className="assets-empty-state" aria-live="polite">
+        <section className="assets-empty-state site-prose" aria-live="polite">
           <h3>No assets matched your filters.</h3>
           <p>Try changing search text, year, asset type, or access scope.</p>
           <Button type="button" variant="outline" onClick={clearFilters}>
@@ -666,7 +666,7 @@ export function ProtectedAssetsLibrary({ bundles }: ProtectedAssetsLibraryProps)
         </section>
       )}
 
-      <section className="assets-usage-note">
+      <section className="assets-usage-note site-prose">
         <h3>Usage Guidelines</h3>
         <p>
           Use these files only for your approved season status. Do not alter logo proportions,

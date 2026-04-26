@@ -120,7 +120,7 @@ export function VoteButtonToolkit({
 
   return (
     <section className="vote-toolkit" aria-label="Vote button setup">
-      <header className="vote-toolkit-head">
+      <header className="vote-toolkit-head site-prose">
         <p className="vote-toolkit-kicker">Vote Button Setup</p>
         <h5>Download and configure your branded vote button</h5>
         <p>Generate a unique link by company name and embed the button on your website or email signature.</p>
@@ -203,7 +203,7 @@ export function VoteButtonToolkit({
                   : 'Type a company name to generate a unique voting link.'}
               </p>
 
-              <article className="vote-toolkit-step-card">
+              <article className="vote-toolkit-step-card site-prose">
                 <p>1) Copy this unique URL and use it as the link behind your vote button:</p>
                 <div className="vote-toolkit-copy-row">
                   <input
@@ -225,7 +225,7 @@ export function VoteButtonToolkit({
                 </div>
               </article>
 
-              <article className="vote-toolkit-step-card">
+              <article className="vote-toolkit-step-card site-prose">
                 <p>2) Download the official button image and insert it in your website/email:</p>
                 <a
                   href={buttonImagePath}
@@ -237,7 +237,7 @@ export function VoteButtonToolkit({
                 </a>
               </article>
 
-              <article className="vote-toolkit-step-card">
+              <article className="vote-toolkit-step-card site-prose">
                 <p>3) Use ready-made embed snippets:</p>
                 <div className="vote-toolkit-snippet-grid">
                   <div className="vote-toolkit-snippet-block">

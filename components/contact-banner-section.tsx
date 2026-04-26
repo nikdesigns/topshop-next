@@ -100,7 +100,7 @@ export function ContactBannerSection() {
               }
             }}
           >
-            <header className="contact-form-header">
+            <header className="contact-form-header site-prose">
               <p className="contact-form-eyebrow">
                 <Sparkles size={12} aria-hidden="true" />
                 Contact Team

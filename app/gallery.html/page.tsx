@@ -8,9 +8,9 @@ import { getAwardsGalleryPhotos } from '@/lib/awards-gallery-source';
 import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'Awards Gallery | Top Shop Awards',
+  title: 'Top Shop Winners Gallery | The145',
   description:
-    'Browse official Top Shop Awards winner presentation photos and ceremony highlights by year.',
+    'Explore official Top Shop Awards winner moments and ceremony highlights from each year.',
   alternates: {
     canonical: `${SITE_URL}/gallery.html`,
   },
@@ -36,7 +36,7 @@ export default function GalleryPage() {
           </div>
           <div className="section-pad">
             <div className="content-wrap assets-page-title-content">
-              <h1>Awards Gallery</h1>
+              <h1>Top Shop Winners Gallery</h1>
               <p>
                 <Link href="/">Home</Link> / <span>Gallery</span>
               </p>

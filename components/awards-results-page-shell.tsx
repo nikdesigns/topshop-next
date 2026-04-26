@@ -19,6 +19,8 @@ export function AwardsResultsPageShell({
   breadcrumbLabel,
   titleImageSrc,
   logo,
+  hideLogo = false,
+  fullWidthIntro = false,
   singleIntroColumn = false,
   introContent,
   structuredData,
@@ -30,11 +32,17 @@ export function AwardsResultsPageShell({
   breadcrumbLabel: string;
   titleImageSrc: string;
   logo?: LogoConfig;
+  hideLogo?: boolean;
+  fullWidthIntro?: boolean;
   singleIntroColumn?: boolean;
   introContent: ReactNode;
   structuredData?: Record<string, unknown>;
   listingContent: ReactNode;
 }) {
+  const shouldRenderLogo = Boolean(logo) && !hideLogo;
+  const isSingleColumn = singleIntroColumn || !shouldRenderLogo;
+  const introGridClassName = `${namespace}-intro-grid${isSingleColumn ? ' is-single' : ''}`;
+
   return (
     <div className={`app-shell ${shellClass}`}>
       <SiteHeader />
@@ -68,22 +76,41 @@ export function AwardsResultsPageShell({
         </section>
 
         <section className={`${namespace}-intro section-pad`}>
-          <div className={`content-wrap ${namespace}-intro-grid${singleIntroColumn ? ' is-single' : ''}`}>
-            {logo ? (
-              <aside className={`${namespace}-logo-card`}>
-                <h2>{logo.heading}</h2>
-                <Image
-                  src={logo.imageSrc}
-                  alt={logo.imageAlt}
-                  width={logo.width}
-                  height={logo.height}
-                  className={`${namespace}-logo`}
-                />
-              </aside>
-            ) : null}
+          {fullWidthIntro ? (
+            <div className={introGridClassName}>
+              {shouldRenderLogo && logo ? (
+                <aside className={`${namespace}-logo-card`}>
+                  <h2>{logo.heading}</h2>
+                  <Image
+                    src={logo.imageSrc}
+                    alt={logo.imageAlt}
+                    width={logo.width}
+                    height={logo.height}
+                    className={`${namespace}-logo`}
+                  />
+                </aside>
+              ) : null}
 
-            <article className={`${namespace}-copy`}>{introContent}</article>
-          </div>
+              <article className={`${namespace}-copy site-prose`}>{introContent}</article>
+            </div>
+          ) : (
+            <div className={`content-wrap ${introGridClassName}`}>
+              {shouldRenderLogo && logo ? (
+                <aside className={`${namespace}-logo-card`}>
+                  <h2>{logo.heading}</h2>
+                  <Image
+                    src={logo.imageSrc}
+                    alt={logo.imageAlt}
+                    width={logo.width}
+                    height={logo.height}
+                    className={`${namespace}-logo`}
+                  />
+                </aside>
+              ) : null}
+
+              <article className={`${namespace}-copy site-prose`}>{introContent}</article>
+            </div>
+          )}
         </section>
 
         {listingContent}

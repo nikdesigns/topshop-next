@@ -65,6 +65,7 @@ export function FinalistsPageTemplate({
       breadcrumbLabel={`${year} Finalists`}
       titleImageSrc={titleImageSrc}
       logo={logo}
+      hideLogo
       singleIntroColumn={singleIntroColumn}
       introContent={introContent}
       structuredData={pageJsonLd}

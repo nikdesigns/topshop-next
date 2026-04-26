@@ -83,6 +83,7 @@ export function WinnersPageTemplate(props: WinnersPageTemplateProps) {
       breadcrumbLabel={`${props.year} Winners`}
       titleImageSrc={props.titleImageSrc}
       logo={props.logo}
+      hideLogo
       singleIntroColumn={props.singleIntroColumn}
       introContent={props.introContent}
       structuredData={pageJsonLd}

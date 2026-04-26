@@ -90,19 +90,21 @@ export function WelcomeSection() {
           </aside>
 
           <article className="welcome-copy">
-            <p>
-              Nineteen years ago, we set out to recognize component repair
-              facilities that consistently deliver results exceeding industry
-              standards. Our goal was to honor companies that drive innovation,
-              embrace cutting-edge technologies, and provide unparalleled
-              customer support within the aviation maintenance sector.
-            </p>
-            <p>
-              Over the years, the Top Shop Awards have evolved into one of the
-              most prestigious distinctions in aviation maintenance. To date,
-              414 awards have been presented across as many as thirty different
-              repair categories.
-            </p>
+            <div className="site-prose">
+              <p>
+                Nineteen years ago, we set out to recognize component repair
+                facilities that consistently deliver results exceeding industry
+                standards. Our goal was to honor companies that drive innovation,
+                embrace cutting-edge technologies, and provide unparalleled
+                customer support within the aviation maintenance sector.
+              </p>
+              <p>
+                Over the years, the Top Shop Awards have evolved into one of the
+                most prestigious distinctions in aviation maintenance. To date,
+                414 awards have been presented across as many as thirty different
+                repair categories.
+              </p>
+            </div>
 
             <div className="welcome-update-head">
               <span className="ui-badge ui-badge--secondary welcome-update-badge">

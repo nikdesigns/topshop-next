@@ -26,16 +26,19 @@ function getYearLabel(year: YearFilter) {
   return year === 'all' ? 'All Years' : year;
 }
 
-function getGalleryCardVariant(index: number, total: number) {
-  if (index === 0 && total >= 3) {
-    return 'is-hero';
-  }
+function getGalleryCardVariant(index: number) {
+  const pattern = [
+    'is-tall',
+    'is-square',
+    'is-tall',
+    'is-wide',
+    'is-square',
+    'is-landscape',
+    'is-portrait',
+    'is-wide',
+  ] as const;
 
-  if (index === 1 && total >= 4) {
-    return 'is-wide';
-  }
-
-  return (index + 1) % 7 === 0 ? 'is-wide' : '';
+  return pattern[index % pattern.length];
 }
 
 export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] }) {
@@ -62,8 +65,6 @@ export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] 
         src: photo.src,
         width: photo.width,
         height: photo.height,
-        title: `${photo.year} Top Shop Awards`,
-        description: photo.title,
       })),
     [filteredPhotos],
   );
@@ -105,12 +106,12 @@ export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] 
     <section id="gallery" className="awards-gallery-section section-pad">
       <div className="awards-gallery-bg" aria-hidden="true" />
       <div className="content-wrap awards-gallery-wrap">
-        <header className="awards-gallery-header">
+        <header className="awards-gallery-header site-prose">
           <Badge variant="secondary" className="awards-gallery-badge">
             <Camera size={12} aria-hidden="true" />
             <span>Awards Gallery</span>
           </Badge>
-          <h2>Winner Recognition Gallery</h2>
+          <h2>Award Moments by Year</h2>
           <p>
             A curated visual archive of award presentations across recent Top Shop seasons.
           </p>
@@ -164,7 +165,7 @@ export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] 
 
                 <div className="awards-gallery-grid">
                   {group.photos.map((photo, index) => {
-                    const variantClass = getGalleryCardVariant(index, group.photos.length);
+                    const variantClass = getGalleryCardVariant(index);
                     const imageIndex = indexByPhotoKey.get(getPhotoKey(photo)) ?? 0;
 
                     return (
@@ -173,7 +174,7 @@ export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] 
                         type="button"
                         className={`awards-gallery-card${variantClass ? ` ${variantClass}` : ''}`}
                         onClick={() => setSelectedIndex(imageIndex)}
-                        aria-label={`Open ${photo.year} gallery image ${imageIndex + 1}`}
+                        aria-label={`Open ${photo.companyName} winner photo for ${photo.year}`}
                       >
                         <div className="awards-gallery-card-media">
                           <Image
