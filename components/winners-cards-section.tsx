@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { MapPin, Phone, RotateCcw, Search, Sparkles } from 'lucide-react';
+import { MapPin, Phone, Sparkles } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -11,7 +11,8 @@ import {
 import { nominationWindow } from '@/lib/nomination-window';
 
 type WinnerGroup = 'Engine' | 'Avionics' | 'Airframe' | 'Cabin' | 'Components';
-type WinnerFilter = 'All' | WinnerGroup;
+type WinnerEntityType = 'multi' | 'single';
+type WinnerEntityFilter = 'all' | 'single' | 'multi';
 
 type WinnerCard = {
   id: string;
@@ -21,6 +22,23 @@ type WinnerCard = {
   phone: string;
   image: string;
   group: WinnerGroup;
+  entityType: WinnerEntityType;
+};
+
+type WinnerCategoryCard = {
+  id: string;
+  category: string;
+  group: WinnerGroup;
+  multiEntries: WinnerCard[];
+  singleEntries: WinnerCard[];
+};
+
+type WinnerDisplayCard = {
+  id: string;
+  category: string;
+  group: WinnerGroup;
+  winner: WinnerCard;
+  entityType: WinnerEntityType;
 };
 
 const winnersShowcaseRequestYear = nominationWindow.winnersShowcaseYear;
@@ -70,31 +88,73 @@ function inferWinnerGroup(category: string): WinnerGroup {
   return 'Components';
 }
 
+function toCategoryId(category: string) {
+  return category
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
 const winnersShowcase: WinnerCard[] = winnerSeeds.map((winner: WinnerShowcaseSeed, index) => ({
   id: `winner-${index + 1}`,
   group: inferWinnerGroup(winner.category),
+  entityType: winner.entityType ?? 'single',
   ...winner,
 }));
 
-const filters: WinnerFilter[] = ['All', 'Engine', 'Avionics', 'Airframe', 'Cabin', 'Components'];
+const winnerCategoryCards: WinnerCategoryCard[] = (() => {
+  const byCategory = new Map<string, WinnerCategoryCard>();
 
-const spotlightOrder = new Set(['winner-1', 'winner-10', 'winner-18']);
-const INITIAL_COMPACT_VISIBLE = 9;
-const WINNERS_QUERY_PARAM = 'winners-q';
-const WINNERS_FILTER_PARAM = 'winners-group';
-const WINNERS_QUERY_STORAGE_KEY = 'home:winners:query';
-const WINNERS_FILTER_STORAGE_KEY = 'home:winners:group';
+  for (const winner of winnersShowcase) {
+    const categoryId = toCategoryId(winner.category);
+    let categoryCard = byCategory.get(categoryId);
 
-function parseWinnerFilter(value: string | null): WinnerFilter | null {
+    if (!categoryCard) {
+      categoryCard = {
+        id: categoryId,
+        category: winner.category,
+        group: winner.group,
+        multiEntries: [],
+        singleEntries: [],
+      };
+      byCategory.set(categoryId, categoryCard);
+    }
+
+    if (winner.entityType === 'multi') {
+      categoryCard.multiEntries.push(winner);
+    } else {
+      categoryCard.singleEntries.push(winner);
+    }
+  }
+
+  return Array.from(byCategory.values());
+})();
+
+const INITIAL_VISIBLE = 12;
+const WINNERS_ENTITY_PARAM = 'winners-entity';
+const WINNERS_ENTITY_STORAGE_KEY = 'home:winners:entity';
+const entityFilters: Array<{ value: WinnerEntityFilter; label: string }> = [
+  { value: 'all', label: 'All' },
+  { value: 'single', label: 'Single' },
+  { value: 'multi', label: 'Multi' },
+];
+
+function parseWinnerEntityFilter(value: string | null): WinnerEntityFilter | null {
   if (!value) {
     return null;
   }
 
-  const normalized = value.toLowerCase();
-  for (const filter of filters) {
-    if (filter.toLowerCase() === normalized) {
-      return filter;
-    }
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'all') {
+    return 'all';
+  }
+
+  if (normalized === 'single' || normalized === 'single-entity') {
+    return 'single';
+  }
+
+  if (normalized === 'multi' || normalized === 'multi-entity') {
+    return 'multi';
   }
 
   return null;
@@ -107,33 +167,28 @@ export function WinnersCardsSection() {
   const hasHydratedState = useRef(false);
   const showcaseYear = winnersShowcaseYear;
   const showcaseLocation = nominationWindow.winnersShowcaseLocation;
-  const [activeFilter, setActiveFilter] = useState<WinnerFilter>('All');
-  const [query, setQuery] = useState('');
-  const [visibleCompactCount, setVisibleCompactCount] = useState(INITIAL_COMPACT_VISIBLE);
+
+  const [activeEntityFilter, setActiveEntityFilter] = useState<WinnerEntityFilter>('all');
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
 
   useEffect(() => {
     if (hasHydratedState.current) {
       return;
     }
 
-    const urlQuery = searchParams.get(WINNERS_QUERY_PARAM) ?? '';
-    const urlFilter = parseWinnerFilter(searchParams.get(WINNERS_FILTER_PARAM));
+    const urlFilter = parseWinnerEntityFilter(searchParams.get(WINNERS_ENTITY_PARAM));
 
-    let persistedQuery = '';
-    let persistedFilter: WinnerFilter = 'All';
+    let persistedFilter: WinnerEntityFilter = 'all';
     if (typeof window !== 'undefined') {
-      persistedQuery = window.localStorage.getItem(WINNERS_QUERY_STORAGE_KEY) ?? '';
       persistedFilter =
-        parseWinnerFilter(window.localStorage.getItem(WINNERS_FILTER_STORAGE_KEY)) ?? 'All';
+        parseWinnerEntityFilter(window.localStorage.getItem(WINNERS_ENTITY_STORAGE_KEY)) ?? 'all';
     }
 
-    const nextQuery = urlQuery || persistedQuery;
     const nextFilter = urlFilter ?? persistedFilter;
 
     const initialize = () => {
-      setQuery(nextQuery);
-      setActiveFilter(nextFilter);
-      setVisibleCompactCount(INITIAL_COMPACT_VISIBLE);
+      setActiveEntityFilter(nextFilter);
+      setVisibleCount(INITIAL_VISIBLE);
       hasHydratedState.current = true;
     };
 
@@ -150,95 +205,71 @@ export function WinnersCardsSection() {
       return;
     }
 
-    const normalizedQuery = query.trim();
-    const normalizedFilter = activeFilter === 'All' ? null : activeFilter.toLowerCase();
     const nextParams = new URLSearchParams(searchParams.toString());
 
-    if (normalizedQuery) {
-      nextParams.set(WINNERS_QUERY_PARAM, normalizedQuery);
+    if (activeEntityFilter === 'all') {
+      nextParams.delete(WINNERS_ENTITY_PARAM);
     } else {
-      nextParams.delete(WINNERS_QUERY_PARAM);
-    }
-
-    if (normalizedFilter) {
-      nextParams.set(WINNERS_FILTER_PARAM, normalizedFilter);
-    } else {
-      nextParams.delete(WINNERS_FILTER_PARAM);
+      nextParams.set(WINNERS_ENTITY_PARAM, activeEntityFilter);
     }
 
     if (typeof window !== 'undefined') {
-      if (normalizedQuery) {
-        window.localStorage.setItem(WINNERS_QUERY_STORAGE_KEY, normalizedQuery);
+      if (activeEntityFilter === 'all') {
+        window.localStorage.removeItem(WINNERS_ENTITY_STORAGE_KEY);
       } else {
-        window.localStorage.removeItem(WINNERS_QUERY_STORAGE_KEY);
-      }
-
-      if (normalizedFilter) {
-        window.localStorage.setItem(WINNERS_FILTER_STORAGE_KEY, normalizedFilter);
-      } else {
-        window.localStorage.removeItem(WINNERS_FILTER_STORAGE_KEY);
+        window.localStorage.setItem(WINNERS_ENTITY_STORAGE_KEY, activeEntityFilter);
       }
     }
 
     const currentParamsString = searchParams.toString();
     const nextParamsString = nextParams.toString();
+
     if (nextParamsString !== currentParamsString) {
       const nextHref = nextParamsString ? `${pathname}?${nextParamsString}` : pathname;
       router.replace(nextHref, { scroll: false });
     }
-  }, [activeFilter, pathname, query, router, searchParams]);
+  }, [activeEntityFilter, pathname, router, searchParams]);
 
-  const filterCounts = useMemo(() => {
-    const counts: Record<WinnerFilter, number> = {
-      All: winnersShowcase.length,
-      Engine: 0,
-      Avionics: 0,
-      Airframe: 0,
-      Cabin: 0,
-      Components: 0,
-    };
+  const filteredWinnerCards = useMemo(() => {
+    const cards: WinnerDisplayCard[] = [];
 
-    for (const winner of winnersShowcase) {
-      counts[winner.group] += 1;
+    for (const categoryCard of winnerCategoryCards) {
+      if (activeEntityFilter === 'all' || activeEntityFilter === 'multi') {
+        categoryCard.multiEntries.forEach((winner, index) => {
+          cards.push({
+            id: `${categoryCard.id}-multi-${index + 1}`,
+            category: categoryCard.category,
+            group: categoryCard.group,
+            winner,
+            entityType: 'multi',
+          });
+        });
+      }
+
+      if (activeEntityFilter === 'all' || activeEntityFilter === 'single') {
+        categoryCard.singleEntries.forEach((winner, index) => {
+          cards.push({
+            id: `${categoryCard.id}-single-${index + 1}`,
+            category: categoryCard.category,
+            group: categoryCard.group,
+            winner,
+            entityType: 'single',
+          });
+        });
+      }
     }
 
-    return counts;
-  }, []);
-
-  const normalizedQuery = query.trim().toLowerCase();
-
-  const filteredWinners = useMemo(() => {
-    return winnersShowcase.filter((winner) => {
-      const matchesFilter = activeFilter === 'All' ? true : winner.group === activeFilter;
-      if (!matchesFilter) {
-        return false;
-      }
-
-      if (!normalizedQuery) {
-        return true;
-      }
-
-      const searchable = `${winner.category} ${winner.company} ${winner.address} ${winner.phone} ${winner.group}`;
-      return searchable.toLowerCase().includes(normalizedQuery);
-    });
-  }, [activeFilter, normalizedQuery]);
-
-  const orderedWinners = useMemo(() => {
-    return [...filteredWinners].sort((a, b) => {
-      const aSpotlight = spotlightOrder.has(a.id) ? 0 : 1;
-      const bSpotlight = spotlightOrder.has(b.id) ? 0 : 1;
-      return aSpotlight - bSpotlight;
-    });
-  }, [filteredWinners]);
+    return cards;
+  }, [activeEntityFilter]);
 
   const groupSummary = useMemo(() => {
-    if (filteredWinners.length === 0) {
+    if (filteredWinnerCards.length === 0) {
       return null;
     }
 
-    const counts = filteredWinners.reduce<Record<WinnerGroup, number>>(
-      (acc, winner) => {
-        acc[winner.group] += 1;
+    const counts = filteredWinnerCards.reduce<Record<WinnerGroup, number>>(
+      (acc, card) => {
+        acc[card.group] += 1;
         return acc;
       },
       {
@@ -258,12 +289,14 @@ export function WinnersCardsSection() {
       group: topGroup,
       count: counts[topGroup],
     };
-  }, [filteredWinners]);
+  }, [filteredWinnerCards]);
 
-  const featuredWinners = orderedWinners.slice(0, 3);
-  const compactWinners = orderedWinners.slice(3);
-  const visibleCompactWinners = compactWinners.slice(0, visibleCompactCount);
-  const hasMoreCompact = visibleCompactCount < compactWinners.length;
+  const categoriesShown = useMemo(() => {
+    return new Set(filteredWinnerCards.map((card) => card.category)).size;
+  }, [filteredWinnerCards]);
+
+  const visibleCards = filteredWinnerCards.slice(0, visibleCount);
+  const hasMoreCards = visibleCount < filteredWinnerCards.length;
 
   return (
     <section id="servicesCarousel" className="winners-cards-section section-pad">
@@ -277,8 +310,7 @@ export function WinnersCardsSection() {
             {showcaseLocation}
           </h2>
           <p className="winners-header-copy">
-            Explore award-winning shops by service group and quickly search companies or
-            categories.
+            Explore award-winning shops by service group and view Single or Multi-Entity results.
           </p>
         </header>
 
@@ -288,10 +320,8 @@ export function WinnersCardsSection() {
             <p className="winners-summary-value">{showcaseYear}</p>
           </article>
           <article className="winners-summary-card">
-            <p className="winners-summary-label">Showing</p>
-            <p className="winners-summary-value">
-              {filteredWinners.length} / {winnersShowcase.length}
-            </p>
+            <p className="winners-summary-label">Categories Showing</p>
+            <p className="winners-summary-value">{categoriesShown}</p>
           </article>
           <article className="winners-summary-card">
             <p className="winners-summary-label">Leading Group</p>
@@ -305,164 +335,91 @@ export function WinnersCardsSection() {
           <div className="winners-toolbar-main">
             <p className="winners-result">
               <Sparkles size={14} aria-hidden="true" />
-              {filteredWinners.length} winners shown
+              {filteredWinnerCards.length} winners shown
             </p>
-
-            <label className="winners-search-control">
-              <Search size={14} aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => {
-                  setQuery(event.target.value);
-                  setVisibleCompactCount(INITIAL_COMPACT_VISIBLE);
-                }}
-                placeholder="Search winners, categories, location"
-                className="winners-search-input"
-                aria-label="Search winners"
-              />
-            </label>
-
-            {activeFilter !== 'All' || normalizedQuery ? (
-              <button
-                type="button"
-                className="winners-reset-btn"
-                onClick={() => {
-                  setActiveFilter('All');
-                  setQuery('');
-                  setVisibleCompactCount(INITIAL_COMPACT_VISIBLE);
-                }}
-              >
-                <RotateCcw size={14} aria-hidden="true" />
-                Reset
-              </button>
-            ) : null}
           </div>
 
-          <div className="winners-filters" role="tablist" aria-label="Filter winners by category group">
-            {filters.map((filter) => (
+          <div className="winners-filters" role="tablist" aria-label="Filter winners by entity type">
+            {entityFilters.map((filter) => (
               <button
-                key={filter}
+                key={filter.value}
                 type="button"
                 role="tab"
-                aria-selected={activeFilter === filter}
+                aria-selected={activeEntityFilter === filter.value}
                 className={
-                  activeFilter === filter
+                  activeEntityFilter === filter.value
                     ? 'winners-filter-chip active'
                     : 'winners-filter-chip'
                 }
                 onClick={() => {
-                  setActiveFilter(filter);
-                  setVisibleCompactCount(INITIAL_COMPACT_VISIBLE);
+                  setActiveEntityFilter(filter.value);
+                  setVisibleCount(INITIAL_VISIBLE);
                 }}
               >
-                <span>{filter}</span>
-                <span className="chip-count">{filterCounts[filter]}</span>
+                <span>{filter.label}</span>
               </button>
             ))}
           </div>
         </div>
 
-        {orderedWinners.length > 0 ? (
+        {filteredWinnerCards.length > 0 ? (
           <>
-            <div className="winners-featured-grid">
-              {featuredWinners.map((winner) => (
-                <article key={winner.id} className="winner-featured-card">
-                  <div className="winner-featured-media">
-                    <Image
-                      src={winner.image}
-                      alt={winner.company}
-                      width={900}
-                      height={600}
-                      className="winner-featured-image"
-                    />
-                    <div className="winner-featured-overlay">
-                      <span className="winner-group-pill">{winner.group}</span>
-                      <p className="winner-featured-category">{winner.category}</p>
+            <div className="winners-compact-grid">
+              {visibleCards.map((card) => (
+                <article key={card.id} className="winner-card">
+                  <div className="winner-image-wrap">
+                    <div className="winner-category-head">
+                      <p className="winner-category">{card.category}</p>
+                      <p className="winner-entity-pill">
+                        {card.entityType === 'multi' ? 'Multi' : 'Single'}
+                      </p>
                     </div>
+
+                    <Image
+                      src={card.winner.image}
+                      alt={card.winner.company}
+                      width={700}
+                      height={466}
+                      className="winner-image"
+                    />
                   </div>
 
-                  <div className="winner-featured-copy">
-                    <h3>{winner.company}</h3>
+                  <div className="winner-copy">
+                    <h3>{card.winner.company}</h3>
                     <p className="winner-meta">
                       <MapPin size={14} aria-hidden="true" />
-                      <span>{winner.address}</span>
+                      <span>{card.winner.address}</span>
                     </p>
                     <p className="winner-meta">
                       <Phone size={14} aria-hidden="true" />
-                      <span>{winner.phone}</span>
+                      <span>{card.winner.phone}</span>
                     </p>
                   </div>
                 </article>
               ))}
             </div>
 
-            {compactWinners.length > 0 ? (
-              <>
-                <div className="winners-compact-grid">
-                  {visibleCompactWinners.map((winner) => (
-                    <article key={winner.id} className="winner-card">
-                      <div className="winner-image-wrap">
-                        <p className="winner-category">{winner.category}</p>
-                        <Image
-                          src={winner.image}
-                          alt={winner.company}
-                          width={700}
-                          height={466}
-                          className="winner-image"
-                        />
-                      </div>
-
-                      <div className="winner-copy">
-                        <h3>{winner.company}</h3>
-                        <p className="winner-meta">
-                          <MapPin size={14} aria-hidden="true" />
-                          <span>{winner.address}</span>
-                        </p>
-                        <p className="winner-meta">
-                          <Phone size={14} aria-hidden="true" />
-                          <span>{winner.phone}</span>
-                        </p>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-
-                {hasMoreCompact ? (
-                  <div className="winners-loadmore">
-                    <button
-                      type="button"
-                      className="winners-loadmore-btn"
-                      onClick={() => {
-                        setVisibleCompactCount((current) =>
-                          Math.min(current + INITIAL_COMPACT_VISIBLE, compactWinners.length),
-                        );
-                      }}
-                    >
-                      Load More Winners
-                    </button>
-                    <p>{compactWinners.length - visibleCompactCount} remaining</p>
-                  </div>
-                ) : null}
-              </>
+            {hasMoreCards ? (
+              <div className="winners-loadmore">
+                <button
+                  type="button"
+                  className="winners-loadmore-btn"
+                  onClick={() => {
+                    setVisibleCount((current) =>
+                      Math.min(current + INITIAL_VISIBLE, filteredWinnerCards.length),
+                    );
+                  }}
+                >
+                  Load More Winners
+                </button>
+                <p>{filteredWinnerCards.length - visibleCount} remaining</p>
+              </div>
             ) : null}
           </>
         ) : (
           <div className="winners-empty" role="status">
-            <h3>No winners match these filters</h3>
-            <p>Try clearing search text or selecting a different service group.</p>
-            <button
-              type="button"
-              className="winners-reset-btn"
-              onClick={() => {
-                setActiveFilter('All');
-                setQuery('');
-                setVisibleCompactCount(INITIAL_COMPACT_VISIBLE);
-              }}
-            >
-              <RotateCcw size={14} aria-hidden="true" />
-              Clear Filters
-            </button>
+            <h3>No winners found for this filter</h3>
+            <p>Try switching to another winner type.</p>
           </div>
         )}
       </div>

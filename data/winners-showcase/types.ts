@@ -4,4 +4,5 @@ export type WinnerShowcaseSeed = {
   address: string;
   phone: string;
   image: string;
+  entityType?: 'multi' | 'single';
 };

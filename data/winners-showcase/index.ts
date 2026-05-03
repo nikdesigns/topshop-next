@@ -1,9 +1,11 @@
+import { WINNERS_SHOWCASE_2026 } from '@/data/winners-showcase/2026';
 import { WINNERS_SHOWCASE_2025 } from '@/data/winners-showcase/2025';
 import type { WinnerShowcaseSeed } from '@/data/winners-showcase/types';
 
 export { type WinnerShowcaseSeed } from '@/data/winners-showcase/types';
 
 export const WINNERS_SHOWCASE_BY_YEAR = {
+  '2026': WINNERS_SHOWCASE_2026,
   '2025': WINNERS_SHOWCASE_2025,
 } as const satisfies Record<string, WinnerShowcaseSeed[]>;
 

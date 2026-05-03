@@ -1,8 +1,8 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, Trophy } from 'lucide-react';
 import { LATEST_FINALISTS_ROUTE, LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
-import { ScheduleRoadmap } from '@/components/schedule-roadmap';
 
 const highlights = [
   {
@@ -15,50 +15,6 @@ const highlights = [
   { label: 'Winners', value: 'Announced', note: 'Presented at MRO Americas' },
   { label: 'Finalists', value: 'Published', note: 'Visible on finalist section' },
 ];
-
-const roadmapSteps = [
-  {
-    dateLabel: nominationWindow.nominationStartLabel,
-    title: 'Nominations Open',
-    subtitle: 'Submission Intake',
-    details:
-      'Operators and suppliers submit nominations across all award categories.',
-  },
-  {
-    dateLabel: nominationWindow.nominationEndLabel,
-    title: 'Nominations Close',
-    subtitle: 'Entry Lock',
-    details:
-      'The intake window closes and all submitted nominations move into validation.',
-  },
-  {
-    dateLabel: `February ${nominationWindow.seasonLabel}`,
-    title: 'Eligibility Review',
-    subtitle: 'Compliance Screening',
-    details:
-      'The awards team verifies company data and category alignment for each nomination.',
-  },
-  {
-    dateLabel: `March ${nominationWindow.seasonLabel}`,
-    title: 'Finalists Published',
-    subtitle: 'Shortlist Release',
-    details:
-      'Qualified finalists are published for market visibility and outreach.',
-  },
-  {
-    dateLabel: `March-April ${nominationWindow.seasonLabel}`,
-    title: 'Industry Voting',
-    subtitle: 'Peer Validation',
-    details:
-      'Industry professionals review finalists and cast votes in each category.',
-  },
-  {
-    dateLabel: `April ${nominationWindow.seasonLabel}`,
-    title: 'Winners Announced',
-    subtitle: 'Awards Presentation',
-    details: 'Final winners are announced at MRO Americas and featured across Top Shop channels.',
-  },
-] as const;
 
 export function ScheduleSection() {
   return (
@@ -110,7 +66,14 @@ export function ScheduleSection() {
           </div>
 
           <div className="schedule-roadmap-card">
-            <ScheduleRoadmap steps={roadmapSteps} />
+            <Image
+              src={nominationWindow.scheduleImageSrc}
+              alt={`${nominationWindow.seasonLabel} Top Shop Awards schedule timeline`}
+              width={2200}
+              height={900}
+              className="schedule-roadmap-image"
+              priority={false}
+            />
           </div>
         </div>
       </div>
