@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, PlayCircle, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { HighlightsVideoModalTrigger } from '@/components/highlights-video-modal-trigger';
 import { VoteButtonToolkit } from '@/components/vote-button-toolkit';
 import { NOMINATION_COMPANY_SUGGESTIONS } from '@/lib/company-suggestions';
 import { nominationWindow } from '@/lib/nomination-window';
@@ -27,19 +28,18 @@ export function BannerFeatureSection() {
             <p>MRO Americas Highlights</p>
           </div>
 
-          <Link
-            href={nominationWindow.highlightsVideoEmbedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="banner-video-play"
-            aria-label={`Play ${nominationWindow.highlightsTitle}`}
+          <HighlightsVideoModalTrigger
+            videoSrc={nominationWindow.highlightsVideoEmbedUrl}
+            title={nominationWindow.highlightsTitle}
+            triggerClassName="banner-video-play"
+            triggerAriaLabel={`Play ${nominationWindow.highlightsTitle}`}
           >
             <PlayCircle
               size={28}
               className="banner-play-icon"
               aria-hidden="true"
             />
-          </Link>
+          </HighlightsVideoModalTrigger>
 
           <div className="banner-video-cta">
             <Image
@@ -55,14 +55,14 @@ export function BannerFeatureSection() {
                 Watch key moments from the winner celebration and awards
                 presentation.
               </p>
-              <Link
-                href={nominationWindow.highlightsVideoEmbedUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="banner-video-cta-link"
+              <HighlightsVideoModalTrigger
+                videoSrc={nominationWindow.highlightsVideoEmbedUrl}
+                title={nominationWindow.highlightsTitle}
+                triggerClassName="banner-video-cta-link"
+                triggerAriaLabel={`Watch ${nominationWindow.highlightsTitle}`}
               >
                 Watch recap <ArrowRight size={14} aria-hidden="true" />
-              </Link>
+              </HighlightsVideoModalTrigger>
             </div>
           </div>
         </article>
@@ -122,7 +122,7 @@ export function BannerFeatureSection() {
             {nominationWindow.isOpen ? (
               <VoteButtonToolkit
                 seasonLabel={nominationWindow.seasonLabel}
-                buttonImagePath={`${SITE_URL}/assets/images/button/topshop_vote_button.png`}
+                buttonImagePath="/assets/images/button/ts_vote_2026.png"
                 buttonDownloadName={`top-shop-${nominationWindow.seasonLabel.toLowerCase()}-vote-button.png`}
                 generatedBaseUrl={`${SITE_URL}/submit_nomination.html`}
                 companyOptions={NOMINATION_COMPANY_SUGGESTIONS}

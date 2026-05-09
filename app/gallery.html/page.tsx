@@ -4,20 +4,20 @@ import Link from 'next/link';
 import { AwardsGallerySection } from '@/components/awards-gallery-section';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
-import { getAwardsGalleryPhotos } from '@/lib/awards-gallery-source';
+import { getAwardsGalleryVideos } from '@/lib/awards-gallery-source';
 import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Top Shop Winners Gallery | The145',
   description:
-    'Explore official Top Shop Awards winner moments and ceremony highlights from each year.',
+    'Watch official Top Shop Awards yearly recap videos and ceremony highlights by season.',
   alternates: {
     canonical: `${SITE_URL}/gallery.html`,
   },
 };
 
 export default function GalleryPage() {
-  const galleryPhotos = getAwardsGalleryPhotos();
+  const galleryVideos = getAwardsGalleryVideos();
 
   return (
     <div className="app-shell assets-page-shell">
@@ -44,7 +44,7 @@ export default function GalleryPage() {
           </div>
         </section>
 
-        <AwardsGallerySection photos={galleryPhotos} />
+        <AwardsGallerySection videos={galleryVideos} />
       </main>
       <SiteFooter />
     </div>

@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CalendarClock, HelpCircle, Lightbulb, ListChecks, ShieldCheck } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarClock,
+  HelpCircle,
+  Lightbulb,
+  ListChecks,
+  ShieldCheck,
+} from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -161,7 +173,10 @@ export default function FaqsPage() {
                 <span>Need Clarity?</span>
               </Badge>
               <h2>Frequently Asked Questions</h2>
-              <p>Everything you need to know to position your organization as a Top Shop.</p>
+              <p>
+                Everything you need to know to position your organization as a
+                Top Shop.
+              </p>
             </header>
 
             <div className="faq-stat-strip" aria-label="Awards FAQ highlights">
@@ -183,14 +198,17 @@ export default function FaqsPage() {
                     <Accordion
                       type="single"
                       collapsible
-                      defaultValue={faqItemsLeft.find((item) => item.openByDefault)?.id}
+                      defaultValue={
+                        faqItemsLeft.find((item) => item.openByDefault)?.id
+                      }
                     >
                       {faqItemsLeft.map((item) => (
                         <AccordionItem key={item.id} value={item.id}>
                           <AccordionTrigger>{item.question}</AccordionTrigger>
                           <AccordionContent className="site-prose">
                             <p>{item.answer}</p>
-                            {item.question === 'How many award categories are there?' ? (
+                            {item.question ===
+                            'How many award categories are there?' ? (
                               <ul className="faq-categories-list">
                                 {awardCategories.map((category) => (
                                   <li key={category}>{category}</li>
@@ -230,7 +248,10 @@ export default function FaqsPage() {
                 </Card>
               </div>
 
-              <aside className="faq-side-panel" aria-label="FAQ quick navigation and support">
+              <aside
+                className="faq-side-panel"
+                aria-label="FAQ quick navigation and support"
+              >
                 <Card className="faq-side-card">
                   <CardHeader>
                     <CardTitle>
@@ -240,7 +261,11 @@ export default function FaqsPage() {
                   </CardHeader>
                   <CardContent className="faq-side-links">
                     {faqQuickLinks.map((item) => (
-                      <Link key={item.href} href={item.href} className="faq-side-link">
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="faq-side-link"
+                      >
                         <span>{item.label}</span>
                         <ArrowRight size={13} aria-hidden="true" />
                       </Link>
@@ -265,7 +290,11 @@ export default function FaqsPage() {
                       <ShieldCheck size={14} aria-hidden="true" />
                       Support responses are typically shared within 24 hours.
                     </p>
-                    <Button asChild size="sm" variant={nominationWindow.isOpen ? 'default' : 'outline'}>
+                    <Button
+                      asChild
+                      size="sm"
+                      variant={nominationWindow.isOpen ? 'default' : 'outline'}
+                    >
                       <Link
                         href={
                           nominationWindow.isOpen
@@ -294,7 +323,8 @@ export default function FaqsPage() {
               </Badge>
               <h2>How to Increase Your Chances</h2>
               <p className="tips-subdesc">
-                Three practical tactics that consistently improve nomination momentum.
+                Three practical tactics that consistently improve nomination
+                momentum.
               </p>
             </header>
             <div className="tips-grid">
@@ -308,14 +338,16 @@ export default function FaqsPage() {
                     {tip.title === 'Download the "Vote for Us" Link' ? (
                       <div className="tip-vote-row">
                         <Image
-                          src="/assets/images/button/topshop_vote_button.png"
+                          src="/assets/images/button/ts_vote_2026.png"
                           alt="Vote for us button"
                           width={160}
                           height={53}
                           className="tip-vote-image"
                         />
                         <Button asChild size="sm" variant="outline">
-                          <Link href="/#votebutton">Open Nomination Section</Link>
+                          <Link href="/#votebutton">
+                            Open Nomination Section
+                          </Link>
                         </Button>
                       </div>
                     ) : null}

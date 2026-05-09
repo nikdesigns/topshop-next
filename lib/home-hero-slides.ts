@@ -1,7 +1,4 @@
-import {
-  LATEST_FINALISTS_LINK,
-  LATEST_WINNERS_LINK,
-} from '@/lib/awards-links';
+import { LATEST_FINALISTS_LINK } from '@/lib/awards-links';
 import { nominationWindow } from '@/lib/nomination-window';
 
 export type HomeHeroSlide = {
@@ -10,15 +7,17 @@ export type HomeHeroSlide = {
   image: string;
   href: string;
   ctaLabel: string;
+  videoSrc?: string;
 };
 
 export const HOME_HERO_SLIDES: HomeHeroSlide[] = [
   {
-    title: LATEST_WINNERS_LINK.label,
-    subtitle: 'Celebrating the shops setting the benchmark for excellence.',
-    image: nominationWindow.heroWinnersImageSrc,
-    href: LATEST_WINNERS_LINK.href,
-    ctaLabel: 'View winners',
+    title: `${nominationWindow.highlightsYear} Event Recap`,
+    subtitle: 'Watch the event highlights from the Top Shop Awards.',
+    image: nominationWindow.heroRecapImageSrc,
+    href: nominationWindow.highlightsVideoShareUrl,
+    ctaLabel: 'Watch video',
+    videoSrc: nominationWindow.highlightsVideoEmbedUrl,
   },
   {
     title: LATEST_FINALISTS_LINK.label,
@@ -27,12 +26,5 @@ export const HOME_HERO_SLIDES: HomeHeroSlide[] = [
     image: nominationWindow.heroFinalistsImageSrc,
     href: LATEST_FINALISTS_LINK.href,
     ctaLabel: 'View finalists',
-  },
-  {
-    title: `${nominationWindow.highlightsYear} Event Recap`,
-    subtitle: 'Watch the event highlights from the Top Shop Awards.',
-    image: nominationWindow.heroRecapImageSrc,
-    href: nominationWindow.highlightsVideoShareUrl,
-    ctaLabel: 'Watch video',
   },
 ];

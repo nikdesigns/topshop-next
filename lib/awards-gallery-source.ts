@@ -1,20 +1,35 @@
 import 'server-only';
 
 import { existsSync, readdirSync } from 'node:fs';
-import { join, extname, basename } from 'node:path';
+import { basename, extname, join } from 'node:path';
 import {
-  DEFAULT_AWARDS_GALLERY_PHOTOS,
-  type AwardsGalleryPhoto,
+  AWARDS_GALLERY_YEARS,
+  DEFAULT_AWARDS_GALLERY_VIDEOS,
+  type AwardsGalleryVideo,
 } from '@/lib/awards-gallery';
 
-const GALLERY_ROOT = join(process.cwd(), 'public', 'assets', 'images', 'gallery');
-const GALLERY_OPTIMIZED_ROOT = join(GALLERY_ROOT, '_optimized');
-const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
-const DEFAULT_WIDTH = 1600;
-const DEFAULT_HEIGHT = 1067;
+const VIDEO_ROOT = join(process.cwd(), 'public', 'assets', 'videos', 'gallery');
+const IMAGE_ROOT = join(process.cwd(), 'public', 'assets', 'images', 'gallery');
+const VIDEO_EXTENSIONS = new Set([
+  '.m3u8',
+  '.mp4',
+  '.webm',
+  '.mov',
+  '.m4v',
+  '.ogv',
+]);
+const PREFERRED_VIDEO_EXTENSIONS = [
+  '.m3u8',
+  '.mp4',
+  '.webm',
+  '.m4v',
+  '.mov',
+  '.ogv',
+];
+const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.avif'];
 
-function isImageFile(fileName: string) {
-  return IMAGE_EXTENSIONS.has(extname(fileName).toLowerCase());
+function isVideoFile(fileName: string) {
+  return VIDEO_EXTENSIONS.has(extname(fileName).toLowerCase());
 }
 
 function toTitleCase(value: string) {
@@ -29,70 +44,117 @@ function humanize(value: string) {
   return toTitleCase(value.replace(/[_-]+/g, ' ').trim());
 }
 
-function parseFileMetadata(fileName: string) {
-  const fileBase = basename(fileName, extname(fileName));
-  const [companyRaw, categoryRaw, titleRaw] = fileBase.split('__');
-  const companyName = humanize(companyRaw || fileBase);
-  const winnerCategory = categoryRaw ? humanize(categoryRaw) : 'Winner Category';
-  const title = titleRaw ? humanize(titleRaw) : `${companyName} Recognition`;
-
-  return { companyName, winnerCategory, title };
-}
-
-function getOptimizedFileName(sourceFileName: string) {
-  const sourceExtension = extname(sourceFileName).toLowerCase().slice(1);
-  const fileBase = basename(sourceFileName, extname(sourceFileName));
-  return `${fileBase}-${sourceExtension}.webp`;
-}
-
-function listYearFolders() {
-  if (!existsSync(GALLERY_ROOT)) {
+function getYearFolders() {
+  if (!existsSync(VIDEO_ROOT)) {
     return [];
   }
 
-  return readdirSync(GALLERY_ROOT, { withFileTypes: true })
+  return readdirSync(VIDEO_ROOT, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && /^\d{4}$/.test(entry.name))
     .map((entry) => entry.name)
     .sort((a, b) => Number(b) - Number(a));
 }
 
-function loadPhotosFromFolders(): AwardsGalleryPhoto[] {
-  const photos: AwardsGalleryPhoto[] = [];
-
-  for (const year of listYearFolders()) {
-    const yearDir = join(GALLERY_ROOT, year);
-    const files = readdirSync(yearDir)
-      .filter((fileName) => isImageFile(fileName))
-      .sort((a, b) => a.localeCompare(b));
-
-    for (const fileName of files) {
-      const { companyName, winnerCategory, title } = parseFileMetadata(fileName);
-      const fullSrc = `/assets/images/gallery/${year}/${fileName}`;
-      const optimizedFileName = getOptimizedFileName(fileName);
-      const optimizedPath = join(GALLERY_OPTIMIZED_ROOT, year, optimizedFileName);
-      const thumbnailSrc = existsSync(optimizedPath)
-        ? `/assets/images/gallery/_optimized/${year}/${optimizedFileName}`
-        : fullSrc;
-
-      photos.push({
-        src: fullSrc,
-        thumbnailSrc,
-        title,
-        companyName,
-        winnerCategory,
-        year,
-        category: 'Winner Presentation',
-        location: 'MRO Americas',
-        width: DEFAULT_WIDTH,
-        height: DEFAULT_HEIGHT,
-      });
+function getPosterPath(year: string, fileBase: string) {
+  for (const extension of IMAGE_EXTENSIONS) {
+    const imageFsPath = join(IMAGE_ROOT, year, `${fileBase}${extension}`);
+    if (existsSync(imageFsPath)) {
+      return `/assets/images/gallery/${year}/${fileBase}${extension}`;
     }
   }
 
-  return photos;
+  return undefined;
 }
 
-export function getAwardsGalleryPhotos(): AwardsGalleryPhoto[] {
-  const photosFromFolders = loadPhotosFromFolders();
-  return photosFromFolders.length ? photosFromFolders : DEFAULT_AWARDS_GALLERY_PHOTOS;
+function parseVideoTitle(fileName: string) {
+  const fileBase = basename(fileName, extname(fileName));
+  const [titleRaw, descriptorRaw] = fileBase.split('__');
+
+  const title = titleRaw ? humanize(titleRaw) : humanize(fileBase);
+  const description = descriptorRaw
+    ? humanize(descriptorRaw)
+    : `${title} from the Top Shop Awards ceremony.`;
+
+  return { fileBase, title, description };
 }
+
+function preferredVideoFileName(fileNames: string[]) {
+  return [...fileNames].sort((a, b) => {
+    const extensionA = extname(a).toLowerCase();
+    const extensionB = extname(b).toLowerCase();
+
+    const priorityA = PREFERRED_VIDEO_EXTENSIONS.indexOf(extensionA);
+    const priorityB = PREFERRED_VIDEO_EXTENSIONS.indexOf(extensionB);
+
+    const safePriorityA =
+      priorityA === -1 ? PREFERRED_VIDEO_EXTENSIONS.length : priorityA;
+    const safePriorityB =
+      priorityB === -1 ? PREFERRED_VIDEO_EXTENSIONS.length : priorityB;
+
+    if (safePriorityA !== safePriorityB) {
+      return safePriorityA - safePriorityB;
+    }
+
+    return a.localeCompare(b);
+  })[0];
+}
+
+function loadVideosFromFolders(): AwardsGalleryVideo[] {
+  const videos: AwardsGalleryVideo[] = [];
+
+  for (const year of getYearFolders()) {
+    const yearDir = join(VIDEO_ROOT, year);
+    const files = readdirSync(yearDir)
+      .filter((fileName) => isVideoFile(fileName))
+      .sort((a, b) => a.localeCompare(b));
+
+    const filesByBaseName = files.reduce<Record<string, string[]>>(
+      (accumulator, fileName) => {
+        const fileBase = basename(fileName, extname(fileName));
+        if (!accumulator[fileBase]) {
+          accumulator[fileBase] = [];
+        }
+
+        accumulator[fileBase].push(fileName);
+        return accumulator;
+      },
+      {},
+    );
+
+    Object.keys(filesByBaseName)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach((fileBaseName, index) => {
+      const selectedFileName = preferredVideoFileName(
+        filesByBaseName[fileBaseName],
+      );
+      if (!selectedFileName) {
+        return;
+      }
+
+      const fileName = selectedFileName;
+      const { fileBase, title, description } = parseVideoTitle(fileName);
+      videos.push({
+        id: `${year}-${fileBase}-${index + 1}`,
+        src: `/assets/videos/gallery/${year}/${fileName}`,
+        year,
+        title,
+        description,
+        posterSrc: getPosterPath(year, fileBase),
+        location: 'MRO Americas',
+      });
+      });
+  }
+
+  return videos;
+}
+
+export function getAwardsGalleryVideos(): AwardsGalleryVideo[] {
+  const videosFromFolders = loadVideosFromFolders();
+  return videosFromFolders.length ? videosFromFolders : DEFAULT_AWARDS_GALLERY_VIDEOS;
+}
+
+export function getAwardsGalleryYears(): AwardsGalleryYear[] {
+  return AWARDS_GALLERY_YEARS;
+}
+
+type AwardsGalleryYear = string;

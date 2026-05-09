@@ -1,6 +1,8 @@
 import { CONTACT_MAILTO_HREF } from '@/lib/contact';
 
-export const ASSET_YEARS = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019] as const;
+export const ASSET_YEARS = [
+  2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019,
+] as const;
 
 export type AssetYear = (typeof ASSET_YEARS)[number];
 
@@ -68,7 +70,10 @@ function formatDimensions(width: number, height: number) {
   return `${width} x ${height}`;
 }
 
-function buildLogoVariants(seed: AssetSeed, baseDownloadName: string): AssetSizeVariant[] {
+function buildLogoVariants(
+  seed: AssetSeed,
+  baseDownloadName: string,
+): AssetSizeVariant[] {
   return LOGO_SIZE_VARIANTS.map((variant) => {
     const width = Math.max(1, Math.round(seed.width * variant.scale));
     const height = Math.max(1, Math.round(seed.height * variant.scale));
@@ -133,7 +138,7 @@ const LEGACY_WINNER_ASSET: AssetSeed = {
 };
 
 const VOTE_BUTTON_ASSET: AssetSeed = {
-  src: '/assets/images/button/topshop_vote_button.png',
+  src: '/assets/images/button/ts_vote_2026.png',
   width: 326,
   height: 88,
   dimensionsLabel: '326 x 88',
@@ -152,7 +157,9 @@ export const YEAR_ASSET_BUNDLES: YearAssetBundle[] = ASSET_YEARS.map((year) => {
     kind: 'download',
     protection: 'protected',
     id: `${year}-winner-logo`,
-    title: hasDedicatedWinnerAsset ? `${year} Winner Logo` : `${year} Winner Logo (Legacy)`,
+    title: hasDedicatedWinnerAsset
+      ? `${year} Winner Logo`
+      : `${year} Winner Logo (Legacy)`,
     description: hasDedicatedWinnerAsset
       ? `Official winner logo for the ${year} Top Shop Awards cycle.`
       : `Legacy winner logo package for ${year}.`,

@@ -139,7 +139,7 @@ export function SiteFooter() {
             <button type="submit">Join</button>
           </form>
           <p className="footer-newsletter-note">
-            Static export mode: connect this form to your preferred email provider endpoint.
+            Newsletter requests are handled via email. We will share confirmation and next steps.
           </p>
           <div className="footer-links">
             {legalLinks.map((item) => (
@@ -154,7 +154,7 @@ export function SiteFooter() {
       <div className="content-wrap footer-bottom-bar">
         <p>
           <span>&copy; {copyrightYear} The145. All Rights Reserved.</span>{' '}
-          <Link href="http://topshopawards.com">TopShopAwards.com</Link>
+          <Link href="https://topshopawards.com">TopShopAwards.com</Link>
         </p>
       </div>
     </footer>

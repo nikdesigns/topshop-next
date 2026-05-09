@@ -2,7 +2,9 @@ import { ACTIVE_AWARDS_SEASON } from '@/data/awards-cycle';
 
 type NominationStatusMode = 'auto' | 'open' | 'closed';
 
-function resolveNominationStatusMode(value: string | undefined): NominationStatusMode {
+function resolveNominationStatusMode(
+  value: string | undefined,
+): NominationStatusMode {
   if (value === 'open' || value === 'closed') {
     return value;
   }
@@ -17,7 +19,8 @@ function resolveNominationStatusMode(value: string | undefined): NominationStatu
 // - 'closed'  -> force nominations closed
 const MANUAL_NOMINATION_STATUS_MODE: string | undefined = undefined;
 const nominationStatusMode = resolveNominationStatusMode(
-  MANUAL_NOMINATION_STATUS_MODE ?? process.env.NEXT_PUBLIC_NOMINATION_STATUS_MODE,
+  MANUAL_NOMINATION_STATUS_MODE ??
+    process.env.NEXT_PUBLIC_NOMINATION_STATUS_MODE,
 );
 
 function parseDateUtc(date: string, endOfDay = false): Date {
@@ -25,7 +28,9 @@ function parseDateUtc(date: string, endOfDay = false): Date {
   const hour = endOfDay ? 23 : 0;
   const minute = endOfDay ? 59 : 0;
   const second = endOfDay ? 59 : 0;
-  return new Date(Date.UTC(year, month - 1, day, hour, minute, second, endOfDay ? 999 : 0));
+  return new Date(
+    Date.UTC(year, month - 1, day, hour, minute, second, endOfDay ? 999 : 0),
+  );
 }
 
 function formatDateLong(date: string): string {
@@ -51,7 +56,8 @@ const isOpen =
 const openOnLabel = formatDateLong(season.nominationStartDate);
 const closeOnLabel = formatDateLong(season.nominationEndDate);
 
-const closedMessagePrefix = now < nominationStart ? 'Nominations open on' : 'Nominations closed on';
+const closedMessagePrefix =
+  now < nominationStart ? 'Nominations open on' : 'Nominations closed on';
 const closedMessageDate = now < nominationStart ? openOnLabel : closeOnLabel;
 const closedMessageSuffix =
   now < nominationStart

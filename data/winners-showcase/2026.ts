@@ -39,7 +39,7 @@ const companyImageByName: Record<string, string> = {
   'HRD Aero Systems, Inc': `${winnersShowcaseImageDir}/hrd.png`,
   'AAR Corporation': `${winnersShowcaseImageDir}/aar.png`,
   'Allflight Corporation': `${winnersShowcaseImageDir}/allflight.png`,
-  'B&W Aviation Corp': `${winnersShowcaseImageDir}/bmw.png`,
+  'B&W Aviation Corp': '/assets/images/clients/b&w_logo.svg',
 };
 
 const companyContactByName: Record<string, { address: string; phone: string }> = {

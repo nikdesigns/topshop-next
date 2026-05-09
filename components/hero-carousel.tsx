@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { HighlightsVideoModalTrigger } from '@/components/highlights-video-modal-trigger';
 import { Button } from '@/components/ui/button';
 import { HOME_HERO_SLIDES } from '@/lib/home-hero-slides';
 
@@ -35,30 +36,51 @@ export function HeroCarousel() {
     >
       <div className="hero-viewport hero-viewport-rich">
         {slides.map((slide, index) => (
-          <Link
-            key={slide.title}
-            href={slide.href}
-            className={
-              index === activeSlide ? 'hero-slide active' : 'hero-slide'
-            }
-            target={slide.href.startsWith('https://') ? '_blank' : undefined}
-            rel={
-              slide.href.startsWith('https://')
-                ? 'noopener noreferrer'
-                : undefined
-            }
-            aria-hidden={index !== activeSlide}
-            tabIndex={index === activeSlide ? 0 : -1}
-          >
-            <Image
-              src={slide.image}
-              alt={slide.title}
-              fill
-              sizes="100vw"
-              priority={index === 0}
-              className="hero-image"
-            />
-          </Link>
+          slide.videoSrc ? (
+            <HighlightsVideoModalTrigger
+              key={slide.title}
+              videoSrc={slide.videoSrc}
+              title={slide.title}
+              triggerClassName={
+                index === activeSlide ? 'hero-slide active' : 'hero-slide'
+              }
+              triggerAriaLabel={`Play ${slide.title}`}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                sizes="100vw"
+                priority={index === 0}
+                className="hero-image"
+              />
+            </HighlightsVideoModalTrigger>
+          ) : (
+            <Link
+              key={slide.title}
+              href={slide.href}
+              className={
+                index === activeSlide ? 'hero-slide active' : 'hero-slide'
+              }
+              target={slide.href.startsWith('https://') ? '_blank' : undefined}
+              rel={
+                slide.href.startsWith('https://')
+                  ? 'noopener noreferrer'
+                  : undefined
+              }
+              aria-hidden={index !== activeSlide}
+              tabIndex={index === activeSlide ? 0 : -1}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                sizes="100vw"
+                priority={index === 0}
+                className="hero-image"
+              />
+            </Link>
+          )
         ))}
 
         <div className="hero-arrow-controls" aria-label="Slide controls">

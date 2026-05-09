@@ -1,106 +1,64 @@
 'use client';
 
-import Image from 'next/image';
-import { Camera, Images } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Film, Video } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import Lightbox from 'yet-another-react-lightbox';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import 'yet-another-react-lightbox/styles.css';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
-import type { AwardsGalleryPhoto } from '@/lib/awards-gallery';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import type { AwardsGalleryVideo } from '@/lib/awards-gallery';
+
+const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
+const PLAYER_CONFIG = {
+  hls: {
+    lowLatencyMode: true,
+    backBufferLength: 90,
+    maxBufferLength: 60,
+  },
+} as const;
 
 type YearFilter = 'all' | string;
-type YearGroup = {
-  year: string;
-  photos: AwardsGalleryPhoto[];
-};
-
-function getPhotoKey(photo: AwardsGalleryPhoto) {
-  return `${photo.year}::${photo.src}`;
-}
 
 function getYearLabel(year: YearFilter) {
   return year === 'all' ? 'All Years' : year;
 }
 
-function getGalleryCardVariant(index: number) {
-  const pattern = [
-    'is-tall',
-    'is-square',
-    'is-tall',
-    'is-wide',
-    'is-square',
-    'is-landscape',
-    'is-portrait',
-    'is-wide',
-  ] as const;
-
-  return pattern[index % pattern.length];
-}
-
-export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] }) {
+export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] }) {
   const [yearFilter, setYearFilter] = useState<YearFilter>('all');
-  const [selectedIndex, setSelectedIndex] = useState<number>(-1);
-  const yearFilters = useMemo<YearFilter[]>(() => {
-    const years = Array.from(new Set(photos.map((photo) => photo.year))).sort(
+
+  const sortedVideos = useMemo(() => {
+    return [...videos].sort((a, b) => {
+      const yearDelta = Number(b.year) - Number(a.year);
+      if (yearDelta !== 0) {
+        return yearDelta;
+      }
+      return a.title.localeCompare(b.title);
+    });
+  }, [videos]);
+
+  const availableYears = useMemo(() => {
+    return Array.from(new Set(sortedVideos.map((video) => video.year))).sort(
       (a, b) => Number(b) - Number(a),
     );
-    return ['all', ...years];
-  }, [photos]);
+  }, [sortedVideos]);
 
-  const filteredPhotos = useMemo(() => {
+  const yearFilters = useMemo<YearFilter[]>(() => {
+    return ['all', ...availableYears];
+  }, [availableYears]);
+
+  const filteredVideos = useMemo(() => {
     if (yearFilter === 'all') {
-      return photos;
+      return sortedVideos;
     }
 
-    return photos.filter((photo) => photo.year === yearFilter);
-  }, [photos, yearFilter]);
-
-  const slides = useMemo(
-    () =>
-      filteredPhotos.map((photo) => ({
-        src: photo.src,
-        width: photo.width,
-        height: photo.height,
-      })),
-    [filteredPhotos],
-  );
+    return sortedVideos.filter((video) => video.year === yearFilter);
+  }, [sortedVideos, yearFilter]);
 
   const stats = useMemo(() => {
-    const years = new Set(filteredPhotos.map((photo) => photo.year));
     return {
-      photos: filteredPhotos.length,
-      albums: years.size,
+      videos: sortedVideos.length,
+      seasons: availableYears.length,
+      latestSeason: availableYears[0] ?? 'N/A',
     };
-  }, [filteredPhotos]);
-
-  const groupedPhotos = useMemo<YearGroup[]>(() => {
-    const groups = new Map<string, AwardsGalleryPhoto[]>();
-    for (const photo of filteredPhotos) {
-      const existing = groups.get(photo.year);
-      if (existing) {
-        existing.push(photo);
-      } else {
-        groups.set(photo.year, [photo]);
-      }
-    }
-
-    return Array.from(groups.entries()).map(([year, items]) => ({
-      year,
-      photos: items,
-    }));
-  }, [filteredPhotos]);
-
-  const indexByPhotoKey = useMemo(() => {
-    const indexMap = new Map<string, number>();
-    filteredPhotos.forEach((photo, index) => {
-      indexMap.set(getPhotoKey(photo), index);
-    });
-    return indexMap;
-  }, [filteredPhotos]);
+  }, [sortedVideos, availableYears]);
 
   return (
     <section id="gallery" className="awards-gallery-section section-pad">
@@ -108,28 +66,33 @@ export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] 
       <div className="content-wrap awards-gallery-wrap">
         <header className="awards-gallery-header site-prose">
           <Badge variant="secondary" className="awards-gallery-badge">
-            <Camera size={12} aria-hidden="true" />
-            <span>Awards Gallery</span>
+            <Video size={12} aria-hidden="true" />
+            <span>Awards Video Library</span>
           </Badge>
-          <h2>Award Moments by Year</h2>
+          <h2>Top Shop Video Highlights by Year</h2>
           <p>
-            A curated visual archive of award presentations across recent Top Shop seasons.
+            Watch official Top Shop Awards recap videos by season, including winner
+            presentations and event highlights.
           </p>
         </header>
 
         <div className="awards-gallery-summary" aria-label="Gallery summary">
           <article className="awards-gallery-summary-card">
-            <p className="awards-gallery-summary-label">Photos</p>
-            <p className="awards-gallery-summary-value">{stats.photos}</p>
+            <p className="awards-gallery-summary-label">Videos</p>
+            <p className="awards-gallery-summary-value">{stats.videos}</p>
           </article>
           <article className="awards-gallery-summary-card">
-            <p className="awards-gallery-summary-label">Albums</p>
-            <p className="awards-gallery-summary-value">{stats.albums}</p>
+            <p className="awards-gallery-summary-label">Seasons With Video</p>
+            <p className="awards-gallery-summary-value">{stats.seasons}</p>
+          </article>
+          <article className="awards-gallery-summary-card">
+            <p className="awards-gallery-summary-label">Latest Season</p>
+            <p className="awards-gallery-summary-value">{stats.latestSeason}</p>
           </article>
         </div>
 
         <div className="awards-gallery-toolbar">
-          <div className="awards-gallery-filters" role="tablist" aria-label="Filter gallery by year">
+          <div className="awards-gallery-filters" role="tablist" aria-label="Filter videos by year">
             {yearFilters.map((year) => {
               const isActive = yearFilter === year;
               return (
@@ -146,72 +109,60 @@ export function AwardsGallerySection({ photos }: { photos: AwardsGalleryPhoto[] 
               );
             })}
           </div>
-          <Button type="button" variant="outline" size="sm" className="awards-gallery-open-all-btn" onClick={() => setSelectedIndex(0)} disabled={!filteredPhotos.length}>
-            <Images size={14} aria-hidden="true" />
-            Open Gallery
-          </Button>
         </div>
 
-        {filteredPhotos.length ? (
-          <div className="awards-gallery-groups">
-            {groupedPhotos.map((group) => (
-              <section className="awards-gallery-year-group" key={group.year}>
-                {yearFilter === 'all' ? (
-                  <header className="awards-gallery-year-head">
-                    <h3 className="awards-gallery-year-title">{group.year}</h3>
-                    <p className="awards-gallery-year-count">{group.photos.length} photos</p>
-                  </header>
-                ) : null}
+        <div className="awards-gallery-results-head">
+          <p>
+            Showing <strong>{filteredVideos.length}</strong>{' '}
+            {filteredVideos.length === 1 ? 'video' : 'videos'}
+            {yearFilter === 'all' ? ' across all seasons' : ` for ${yearFilter}`}.
+          </p>
+        </div>
 
-                <div className="awards-gallery-grid">
-                  {group.photos.map((photo, index) => {
-                    const variantClass = getGalleryCardVariant(index);
-                    const imageIndex = indexByPhotoKey.get(getPhotoKey(photo)) ?? 0;
-
-                    return (
-                      <button
-                        key={getPhotoKey(photo)}
-                        type="button"
-                        className={`awards-gallery-card${variantClass ? ` ${variantClass}` : ''}`}
-                        onClick={() => setSelectedIndex(imageIndex)}
-                        aria-label={`Open ${photo.companyName} winner photo for ${photo.year}`}
-                      >
-                        <div className="awards-gallery-card-media">
-                          <Image
-                            src={photo.thumbnailSrc ?? photo.src}
-                            alt={`${photo.title} (${photo.year})`}
-                            fill
-                            sizes="(max-width: 560px) 100vw, (max-width: 860px) 50vw, (max-width: 1100px) 67vw, 25vw"
-                            className="awards-gallery-card-image"
-                          />
-                          <span className="awards-gallery-card-overlay" aria-hidden="true" />
-                          <span className="awards-gallery-year-badge">{photo.year}</span>
-                        </div>
-                      </button>
-                    );
-                  })}
+        {filteredVideos.length ? (
+          <div className="awards-video-grid">
+            {filteredVideos.map((video) => (
+              <article className="awards-video-card" key={video.id}>
+                <div className="awards-video-player-shell">
+                  <ReactPlayer
+                    src={video.src}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    width="100%"
+                    height="100%"
+                    light={video.posterSrc ?? false}
+                    config={PLAYER_CONFIG}
+                    style={{ width: '100%', height: 'auto', aspectRatio: '16 / 9' }}
+                  />
                 </div>
-              </section>
+                <div className="awards-video-card-copy">
+                  <p className="awards-video-card-meta">
+                    <span>{video.year}</span>
+                    <span>Official Recap</span>
+                  </p>
+                  <p className="awards-video-card-title">{video.title}</p>
+                  <p className="awards-video-card-description">{video.description}</p>
+                </div>
+              </article>
             ))}
           </div>
-        ) : (
-          <article className="awards-gallery-empty">
-            <h3>No photos available for this filter</h3>
-            <p>Select a different season to continue browsing.</p>
-          </article>
-        )}
-      </div>
+        ) : null}
 
-      <Lightbox
-        open={selectedIndex >= 0}
-        close={() => setSelectedIndex(-1)}
-        index={selectedIndex}
-        slides={slides}
-        plugins={[Thumbnails, Zoom]}
-        carousel={{ finite: false }}
-        zoom={{ maxZoomPixelRatio: 3, scrollToZoom: true }}
-        thumbnails={{ position: 'bottom', width: 96, height: 64, border: 0, borderRadius: 8 }}
-      />
+        {!filteredVideos.length ? (
+          <article className="awards-gallery-empty">
+            <h3>No videos available yet</h3>
+            <p>
+              Add yearly videos under <code>public/assets/videos/gallery/&lt;year&gt;/</code> to populate this section.
+            </p>
+          </article>
+        ) : null}
+
+        <p className="awards-video-upload-note">
+          <Film size={14} aria-hidden="true" />
+          Supported formats: mp4, webm, mov, m4v, ogv
+        </p>
+      </div>
     </section>
   );
 }

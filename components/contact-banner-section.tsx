@@ -176,7 +176,7 @@ export function ContactBannerSection() {
             <p className="contact-submit-note" role="status">
               {submitState === 'submitted'
                 ? `Your email client should now open with a pre-filled message to ${CONTACT_EMAIL}.`
-                : `Static export mode: this sends through your local email client to ${CONTACT_EMAIL}.`}
+                : `Send Message will open your email client with a pre-filled draft to ${CONTACT_EMAIL}.`}
             </p>
           </form>
 

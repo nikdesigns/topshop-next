@@ -88,10 +88,11 @@ export const ACTIVE_AWARDS_SEASON: AwardsSeasonConfig = {
     heroRecapImageSrc: '/assets/images/banners/ts_winner_2026_1.jpg',
     winnersShowcaseYear: '2026',
     winnersShowcaseLocation: 'MRO Americas in Orlando, Florida, USA',
-    highlightsPosterImageSrc: '/assets/images/banners/ts_winner_2026_1.jpg',
+    highlightsPosterImageSrc: '/assets/images/banners/2026_highlight.webp',
     highlightsYear: '2026',
-    highlightsVideoEmbedUrl: 'https://player.vimeo.com/video/1075212605',
+    highlightsVideoEmbedUrl:
+      '/assets/videos/gallery/2026/2026%20Top%20Shop.mp4',
     highlightsVideoShareUrl:
-      'https://vimeo.com/1075212605/dbaa994485?share=copy',
+      '/assets/videos/gallery/2026/2026%20Top%20Shop.mp4',
   },
 };
