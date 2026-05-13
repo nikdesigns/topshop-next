@@ -12,8 +12,8 @@ import {
 } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import {
-  buildMailtoLink,
   CONTACT_EMAIL,
+  CONTACT_FORM_ENDPOINT,
   CONTACT_MAILTO_HREF,
   CONTACT_PHONE_LABEL,
   CONTACT_TEL_HREF,
@@ -41,37 +41,47 @@ const supportSignals = [
   'Sponsorship and partner opportunities',
 ];
 
-type SubmitState = 'idle' | 'submitting' | 'submitted';
+type SubmitState = 'idle' | 'submitting' | 'submitted' | 'error';
 
 export function ContactBannerSection() {
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     setSubmitState('submitting');
 
     const formData = new FormData(form);
-    const messageLines = [
-      'Top Shop Awards Contact Request',
-      '',
-      `Full Name: ${String(formData.get('fullName') ?? '').trim()}`,
-      `Email: ${String(formData.get('email') ?? '').trim()}`,
-      `Phone: ${String(formData.get('phone') ?? '').trim()}`,
-      `Company Name: ${String(formData.get('companyName') ?? '').trim()}`,
-      `Inquiry Type: ${String(formData.get('inquiryType') ?? '').trim()}`,
-      '',
-      'Details:',
-      String(formData.get('details') ?? '').trim(),
-    ];
-
-    const mailtoLink = buildMailtoLink({
-      subject: 'Top Shop Awards Contact Request',
-      body: messageLines.join('\n'),
+    const detail = String(formData.get('details') ?? '').trim();
+    const inquiryType = String(formData.get('inquiryType') ?? '').trim();
+    const payload = new URLSearchParams({
+      FullName: String(formData.get('fullName') ?? '').trim(),
+      Email: String(formData.get('email') ?? '').trim(),
+      Phone: String(formData.get('phone') ?? '').trim(),
+      CompanyName: String(formData.get('companyName') ?? '').trim(),
+      Detail: `Inquiry Type: ${inquiryType}\n\n${detail}`,
     });
 
-    window.location.href = mailtoLink;
-    setSubmitState('submitted');
+    try {
+      const response = await fetch(CONTACT_FORM_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body: payload.toString(),
+      });
+
+      const responseText = (await response.text()).trim();
+      const isSuccess = response.ok && /mail sent/i.test(responseText);
+      if (!isSuccess) {
+        throw new Error(`Unexpected response: ${responseText || 'empty response'}`);
+      }
+
+      form.reset();
+      setSubmitState('submitted');
+    } catch {
+      setSubmitState('error');
+    }
   };
 
   return (
@@ -90,12 +100,9 @@ export function ContactBannerSection() {
         <div className="content-wrap contact-banner-grid">
           <form
             className="contact-form-panel"
-            action={CONTACT_MAILTO_HREF}
-            method="post"
-            encType="text/plain"
             onSubmit={handleSubmit}
             onInput={() => {
-              if (submitState === 'submitted') {
+              if (submitState === 'submitted' || submitState === 'error') {
                 setSubmitState('idle');
               }
             }}
@@ -174,9 +181,13 @@ export function ContactBannerSection() {
             </button>
 
             <p className="contact-submit-note" role="status">
-              {submitState === 'submitted'
-                ? `Your email client should now open with a pre-filled message to ${CONTACT_EMAIL}.`
-                : `Send Message will open your email client with a pre-filled draft to ${CONTACT_EMAIL}.`}
+              {submitState === 'submitted' &&
+                `Your request was submitted successfully. Our team will contact you soon.`}
+              {submitState === 'submitting' && 'Submitting your request...'}
+              {submitState === 'error' &&
+                `We could not submit right now. Please email ${CONTACT_EMAIL}.`}
+              {submitState === 'idle' &&
+                `Send Message will submit your request directly to ${CONTACT_EMAIL}.`}
             </p>
           </form>
 

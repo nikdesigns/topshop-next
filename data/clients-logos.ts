@@ -25,10 +25,14 @@ function getAllCardWinners(card: WinnerSplitCard) {
 }
 
 /*
-  Edit only values in this map to change company logo files.
+  Edit this map to change company logo files.
+  You can use either:
+  - official company name, e.g. "A&R Aviation Services"
+  - normalized key, e.g. "a and r aviation services"
   If a company is not listed here, it automatically uses DEFAULT_CLIENT_LOGO_SRC.
 */
 export const TOPSHOP_2026_CLIENT_LOGO_OVERRIDES: Record<string, string> = {
+  'A&R Aviation Services': '/assets/images/clients/ar_logo.svg',
   'a i r s': '/assets/images/clients/airs_logo.png',
   'aar component services grand prairie': '/assets/images/winners/aar.jpg',
   'aar corporation': '/assets/images/winners/aar.jpg',
@@ -59,6 +63,13 @@ export const TOPSHOP_2026_CLIENT_LOGO_OVERRIDES: Record<string, string> = {
   'vse aviation services ky': '/assets/images/clients/vse.gif',
 };
 
+const normalizedClientLogoOverrides = Object.fromEntries(
+  Object.entries(TOPSHOP_2026_CLIENT_LOGO_OVERRIDES).map(([companyName, logoSrc]) => [
+    normalizeCompanyName(companyName),
+    logoSrc,
+  ]),
+);
+
 export const TOPSHOP_2026_CLIENTS: ClientLogoItem[] = Array.from(
   TOPSHOP_2026_WINNER_CARDS.reduce((uniqueByCompany, card) => {
     for (const winner of getAllCardWinners(card)) {
@@ -78,6 +89,6 @@ export const TOPSHOP_2026_CLIENTS: ClientLogoItem[] = Array.from(
 )
   .map(([key, name]) => ({
     name,
-    logoSrc: TOPSHOP_2026_CLIENT_LOGO_OVERRIDES[key] ?? DEFAULT_CLIENT_LOGO_SRC,
+    logoSrc: normalizedClientLogoOverrides[key] ?? DEFAULT_CLIENT_LOGO_SRC,
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
