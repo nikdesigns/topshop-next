@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Film, Video } from 'lucide-react';
+import { Video } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import type { AwardsGalleryVideo } from '@/lib/awards-gallery';

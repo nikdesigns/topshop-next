@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
+import { AppLink as Link } from '@/components/ui/app-link';
 import { ShieldCheck } from 'lucide-react';
 import { ProtectedAssetsLibrary } from '@/components/protected-assets-library';
 import { SiteFooter } from '@/components/site-footer';

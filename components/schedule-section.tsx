@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { AppLink as Link } from '@/components/ui/app-link';
 import { ArrowRight, CalendarClock, Trophy } from 'lucide-react';
 import { LATEST_FINALISTS_ROUTE, LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';

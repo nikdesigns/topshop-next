@@ -2,7 +2,7 @@
 
 import { FormEvent, useMemo, useState, useSyncExternalStore } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { AppLink as Link } from '@/components/ui/app-link';
 import {
   Download,
   ExternalLink,

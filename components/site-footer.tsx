@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { AppLink as Link } from '@/components/ui/app-link';
 import { ArrowRight, Mail, Phone } from 'lucide-react';
 import {
   LATEST_FINALISTS_ROUTE,
@@ -26,7 +26,7 @@ const exploreLinks = [
   { href: '/#welcome', label: 'Welcome' },
   { href: LATEST_WINNERS_ROUTE.href, label: LATEST_WINNERS_ROUTE.label },
   { href: LATEST_FINALISTS_ROUTE.href, label: LATEST_FINALISTS_ROUTE.label },
-  { href: '/gallery.html', label: 'Gallery' },
+  { href: '/gallery.html/', label: 'Gallery' },
   { href: '/assets.html', label: 'Assets' },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About Us' },

@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { AppLink as Link } from '@/components/ui/app-link';
 import { ChevronDown, Menu, TriangleAlert } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -41,7 +41,7 @@ const primaryLinks: NavLink[] = [
   { href: '/assets.html', label: 'Assets' },
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About' },
-  { href: '/gallery.html', label: 'Gallery' },
+  { href: '/gallery.html/', label: 'Gallery' },
 ];
 
 function normalizePath(path: string) {

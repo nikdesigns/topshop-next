@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import { AppLink as Link } from '@/components/ui/app-link';
 import { ArrowRight, CalendarClock, PlayCircle, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { HighlightsVideoModalTrigger } from '@/components/highlights-video-modal-trigger';

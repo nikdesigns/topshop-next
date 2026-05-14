@@ -30,6 +30,15 @@ function getAnchorFromEvent(event: MouseEvent): HTMLAnchorElement | null {
   return target.closest('a[href]');
 }
 
+function normalizeStaticPath(url: URL): string {
+  const nextPathname =
+    url.pathname.endsWith('.html') && !url.pathname.endsWith('/')
+      ? `${url.pathname}/`
+      : url.pathname;
+
+  return `${nextPathname}${url.search}${url.hash}`;
+}
+
 export function RouteLoadingIndicator() {
   const pathname = usePathname();
 
@@ -165,11 +174,20 @@ export function RouteLoadingIndicator() {
         return;
       }
 
-      if (nextUrl.pathname === window.location.pathname) {
+      if (
+        nextUrl.pathname === window.location.pathname &&
+        nextUrl.search === window.location.search
+      ) {
         return;
       }
 
       start();
+
+      // Static export + shared hosting can be unreliable with client-side route
+      // transitions, especially for extension-based routes. Force document
+      // navigation so links always resolve to exported files.
+      event.preventDefault();
+      window.location.assign(normalizeStaticPath(nextUrl));
     };
 
     const onPopState = () => {
