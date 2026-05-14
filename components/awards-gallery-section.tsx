@@ -21,7 +21,11 @@ function getYearLabel(year: YearFilter) {
   return year === 'all' ? 'All Years' : year;
 }
 
-export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] }) {
+export function AwardsGallerySection({
+  videos,
+}: {
+  videos: AwardsGalleryVideo[];
+}) {
   const [yearFilter, setYearFilter] = useState<YearFilter>('all');
 
   const sortedVideos = useMemo(() => {
@@ -71,8 +75,8 @@ export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] 
           </Badge>
           <h2>Top Shop Video Highlights by Year</h2>
           <p>
-            Watch official Top Shop Awards recap videos by season, including winner
-            presentations and event highlights.
+            Watch official Top Shop Awards recap videos by season, including
+            winner presentations and event highlights.
           </p>
         </header>
 
@@ -92,7 +96,11 @@ export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] 
         </div>
 
         <div className="awards-gallery-toolbar">
-          <div className="awards-gallery-filters" role="tablist" aria-label="Filter videos by year">
+          <div
+            className="awards-gallery-filters"
+            role="tablist"
+            aria-label="Filter videos by year"
+          >
             {yearFilters.map((year) => {
               const isActive = yearFilter === year;
               return (
@@ -115,7 +123,10 @@ export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] 
           <p>
             Showing <strong>{filteredVideos.length}</strong>{' '}
             {filteredVideos.length === 1 ? 'video' : 'videos'}
-            {yearFilter === 'all' ? ' across all seasons' : ` for ${yearFilter}`}.
+            {yearFilter === 'all'
+              ? ' across all seasons'
+              : ` for ${yearFilter}`}
+            .
           </p>
         </div>
 
@@ -133,7 +144,11 @@ export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] 
                     height="100%"
                     light={video.posterSrc ?? false}
                     config={PLAYER_CONFIG}
-                    style={{ width: '100%', height: 'auto', aspectRatio: '16 / 9' }}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      aspectRatio: '16 / 9',
+                    }}
                   />
                 </div>
                 <div className="awards-video-card-copy">
@@ -142,7 +157,9 @@ export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] 
                     <span>Official Recap</span>
                   </p>
                   <p className="awards-video-card-title">{video.title}</p>
-                  <p className="awards-video-card-description">{video.description}</p>
+                  <p className="awards-video-card-description">
+                    {video.description}
+                  </p>
                 </div>
               </article>
             ))}
@@ -153,15 +170,12 @@ export function AwardsGallerySection({ videos }: { videos: AwardsGalleryVideo[] 
           <article className="awards-gallery-empty">
             <h3>No videos available yet</h3>
             <p>
-              Add yearly videos under <code>public/assets/videos/gallery/&lt;year&gt;/</code> to populate this section.
+              Add yearly videos under{' '}
+              <code>public/assets/videos/gallery/&lt;year&gt;/</code> to
+              populate this section.
             </p>
           </article>
         ) : null}
-
-        <p className="awards-video-upload-note">
-          <Film size={14} aria-hidden="true" />
-          Supported formats: mp4, webm, mov, m4v, ogv
-        </p>
       </div>
     </section>
   );
