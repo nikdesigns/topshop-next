@@ -80,7 +80,11 @@ export default function HomePage() {
         <WelcomeSection />
         <ClientsStrip />
         <BannerFeatureSection />
-        <Suspense fallback={<section className="winners-cards-section section-pad" />}>
+        <Suspense
+          fallback={
+            <section id="winners-header" className="winners-cards-section section-pad" />
+          }
+        >
           <WinnersCardsSection />
         </Suspense>
         <ContactBannerSection />
