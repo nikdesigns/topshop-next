@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'SF Pro Display Local';
-  src: url('/fonts/sf-pro/SF-Pro-Display-Regular.otf') format('opentype');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
 @layer components {
   .site-prose {
     @apply prose prose-topshop max-w-none;
@@ -166,11 +158,11 @@
   margin: 0;
   color: #0b1320;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -1523,54 +1515,6 @@
   }
 }
 
-@font-face {
-  font-family: 'SF Pro Display Local';
-  src: url('/fonts/sf-pro/SF-Pro-Display-Semibold.otf') format('opentype');
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro Display Local';
-  src: url('/fonts/sf-pro/SF-Pro-Display-Bold.otf') format('opentype');
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro Text Local';
-  src: url('/fonts/sf-pro/SF-Pro-Text-Regular.otf') format('opentype');
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro Text Local';
-  src: url('/fonts/sf-pro/SF-Pro-Text-Medium.otf') format('opentype');
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro Text Local';
-  src: url('/fonts/sf-pro/SF-Pro-Text-Semibold.otf') format('opentype');
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro Text Local';
-  src: url('/fonts/sf-pro/SF-Pro-Text-Bold.otf') format('opentype');
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-}
-
 :root {
   color-scheme: dark light;
   --color-black: #000000;
@@ -1584,12 +1528,11 @@
   --color-link-dark: #2997ff;
   --shadow-soft: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
   --font-display:
-    'SF Pro Display Local', 'SF Pro Text Local', -apple-system,
-    BlinkMacSystemFont, 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial,
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-body:
-    'SF Pro Text Local', -apple-system, BlinkMacSystemFont, 'SF Pro Icons',
-    'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
+    system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 *,
@@ -1815,11 +1758,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -1907,11 +1850,11 @@ img {
 .about-page-title-content h1 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -1973,11 +1916,11 @@ img {
 .about-main-header h2 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2023,11 +1966,11 @@ img {
   background: var(--ui-brand-deep);
   color: #ffffff;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2235,11 +2178,11 @@ img {
 .assets-page-title-content h1 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2298,11 +2241,11 @@ img {
 .assets-library-header h2 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2614,11 +2557,11 @@ img {
   margin: 0;
   color: #0f1a2b;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2791,11 +2734,11 @@ img {
   margin: 0;
   color: #0f1a2b;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2972,11 +2915,11 @@ img {
   margin: 0;
   color: #0f1a2b;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3363,11 +3306,11 @@ img {
 .faqs-page-title-content h1 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3485,11 +3428,11 @@ img {
   margin: 0 0 10px;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3561,11 +3504,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3590,11 +3533,11 @@ img {
   margin: 0 0 12px;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3696,11 +3639,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3734,11 +3677,11 @@ img {
   margin: 0 0 8px;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3841,11 +3784,11 @@ img {
 .nomination-page-title-content h1 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -4054,11 +3997,11 @@ img {
 .winners-legacy-page-title-content h1 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -4143,11 +4086,11 @@ img {
   margin: 0 0 12px;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -4615,11 +4558,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5126,11 +5069,11 @@ img {
 .hero-content h1 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5144,11 +5087,11 @@ img {
 .hero-subtitle {
   margin: 12px 0 0;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5254,11 +5197,11 @@ img {
 .welcome-header h2 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5378,11 +5321,11 @@ img {
 .welcome-update-card h3 {
   margin: 0 0 10px;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5467,11 +5410,11 @@ img {
 .welcome-stat-value {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5552,11 +5495,11 @@ img {
 .clients-header h3 {
   margin: 0;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5848,11 +5791,11 @@ img {
   margin: 0;
   color: #ffffff;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5971,11 +5914,11 @@ img {
   margin: 0;
   color: #ffffff;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6041,11 +5984,11 @@ img {
   margin: 8px 0 10px;
   color: #3091ff;
   font-family:
-    'SF Pro Display Local',
+    'SF Pro Display',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Text Local',
-    'SF Pro Icons',
+    'SF Pro Text',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6499,11 +6442,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6785,11 +6728,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6947,11 +6890,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7273,11 +7216,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7445,11 +7388,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7626,11 +7569,11 @@ img {
   margin: 0;
   color: #ffffff;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7790,11 +7733,11 @@ img {
   margin: 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7849,11 +7792,11 @@ img {
   margin: 6px 0 0;
   color: var(--color-text-dark);
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -8010,11 +7953,11 @@ img {
   margin: 0 0 10px;
   color: #ffffff;
   font-family:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
+    'SF Pro Display',
+    'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    'SF Pro Icons',
+    system-ui, 'Segoe UI', Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
