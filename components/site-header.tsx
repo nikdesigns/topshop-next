@@ -47,6 +47,10 @@ const primaryTrailLinks: NavLink[] = [
   { href: '/about-us.html', label: 'About' },
 ];
 
+function isHashNavigationLink(href: string) {
+  return href.includes('#');
+}
+
 function normalizePath(path: string) {
   if (path.length > 1 && path.endsWith('/')) {
     return path.slice(0, -1);
@@ -150,13 +154,23 @@ export function SiteHeader() {
                 const isActive = isLinkActive(link.href);
                 return (
                   <li key={link.href}>
-                    <Link
-                      className={`rich-nav-link${isActive ? ' is-active' : ''}`}
-                      href={link.href}
-                      aria-current={isActive ? 'page' : undefined}
-                    >
-                      {link.label}
-                    </Link>
+                    {isHashNavigationLink(link.href) ? (
+                      <a
+                        className={`rich-nav-link${isActive ? ' is-active' : ''}`}
+                        href={link.href}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        className={`rich-nav-link${isActive ? ' is-active' : ''}`}
+                        href={link.href}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
@@ -279,13 +293,23 @@ export function SiteHeader() {
                       const isActive = isLinkActive(link.href);
                       return (
                         <li key={link.href}>
-                          <Link
-                            href={link.href}
-                            className={isActive ? 'is-active' : undefined}
-                            aria-current={isActive ? 'page' : undefined}
-                          >
-                            {link.label}
-                          </Link>
+                          {isHashNavigationLink(link.href) ? (
+                            <a
+                              href={link.href}
+                              className={isActive ? 'is-active' : undefined}
+                              aria-current={isActive ? 'page' : undefined}
+                            >
+                              {link.label}
+                            </a>
+                          ) : (
+                            <Link
+                              href={link.href}
+                              className={isActive ? 'is-active' : undefined}
+                              aria-current={isActive ? 'page' : undefined}
+                            >
+                              {link.label}
+                            </Link>
+                          )}
                         </li>
                       );
                     })}

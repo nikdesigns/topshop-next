@@ -39,6 +39,16 @@ function normalizeStaticPath(url: URL): string {
   return `${nextPathname}${url.search}${url.hash}`;
 }
 
+function normalizeHash(hash: string): string {
+  if (!hash) {
+    return '';
+  }
+
+  const withoutPrefix = hash.startsWith('#') ? hash.slice(1) : hash;
+  const normalized = withoutPrefix.split('#')[0]?.trim() ?? '';
+  return normalized ? `#${normalized}` : '';
+}
+
 export function RouteLoadingIndicator() {
   const pathname = usePathname();
 
@@ -178,6 +188,25 @@ export function RouteLoadingIndicator() {
         nextUrl.pathname === window.location.pathname &&
         nextUrl.search === window.location.search
       ) {
+        const normalizedHash = normalizeHash(nextUrl.hash);
+        if (normalizedHash) {
+          event.preventDefault();
+
+          if (window.location.hash !== normalizedHash) {
+            window.history.replaceState(
+              null,
+              '',
+              `${window.location.pathname}${window.location.search}${normalizedHash}`,
+            );
+          }
+
+          const targetId = decodeURIComponent(normalizedHash.slice(1));
+          const target = document.getElementById(targetId);
+          if (target) {
+            target.scrollIntoView({ block: 'start' });
+          }
+        }
+
         return;
       }
 

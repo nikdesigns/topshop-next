@@ -6462,6 +6462,10 @@ img {
   padding-bottom: 88px;
 }
 
+.winners-cards-section#winners-header {
+  scroll-margin-top: 116px;
+}
+
 .winners-pattern {
   position: absolute;
   inset: 0;

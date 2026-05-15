@@ -299,10 +299,10 @@ export function WinnersCardsSection() {
   const hasMoreCards = visibleCount < filteredWinnerCards.length;
 
   return (
-    <section id="servicesCarousel" className="winners-cards-section section-pad">
+    <section id="winners-header" className="winners-cards-section section-pad">
       <div className="winners-pattern" aria-hidden="true" />
       <div className="content-wrap">
-        <header id="winners-header" className="winners-header">
+        <header className="winners-header">
           <p className="winners-eyebrow">Top Shop Winners</p>
           <h2>
             Top Shop {showcaseYear}
