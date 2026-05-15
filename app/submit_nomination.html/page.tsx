@@ -1,39 +1,16 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { AppLink as Link } from '@/components/ui/app-link';
-import { ShieldCheck, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { NominationCompanyAutocomplete } from '@/components/nomination-company-autocomplete';
+import { NominationForm } from '@/components/nomination-form';
 import { NOMINATION_CATEGORIES_2026 } from '@/data/nomination-categories';
-import { CONTACT_MAILTO_HREF } from '@/lib/contact';
 import { NOMINATION_COMPANY_SUGGESTIONS } from '@/lib/company-suggestions';
 import { SITE_URL } from '@/lib/site';
 
 const nominationCategories = NOMINATION_CATEGORIES_2026;
-
-const CATEGORY_COLUMN_COUNT = 3;
-
-const nominationCategoriesSorted = [...nominationCategories].sort((a, b) =>
-  a.label.localeCompare(b.label),
-);
-
-const categoryChunkSize = Math.ceil(
-  nominationCategoriesSorted.length / CATEGORY_COLUMN_COUNT,
-);
-
-const nominationCategoryColumns = Array.from(
-  { length: CATEGORY_COLUMN_COUNT },
-  (_, index) =>
-    nominationCategoriesSorted.slice(
-      index * categoryChunkSize,
-      (index + 1) * categoryChunkSize,
-    ),
-);
 
 export const metadata: Metadata = {
   title: 'Submit Nominations | Top Shop Awards',
@@ -45,9 +22,6 @@ export const metadata: Metadata = {
 };
 
 export default function SubmitNominationPage() {
-  const companySuggestionsCount = NOMINATION_COMPANY_SUGGESTIONS.length;
-  const totalCategories = nominationCategoriesSorted.length;
-
   return (
     <div className="app-shell nomination-page-shell">
       <SiteHeader />
@@ -83,100 +57,10 @@ export default function SubmitNominationPage() {
               <h2>Select a Company and the Matching Categories</h2>
             </header>
 
-            <form
-              action={CONTACT_MAILTO_HREF}
-              method="post"
-              encType="text/plain"
-              className="nomination-form nomination-form-rich"
-            >
-              <input
-                type="hidden"
-                name="source"
-                value="Top Shop Awards Nomination"
-              />
-              <Card className="nomination-company-card nomination-company-card-rich">
-                <CardHeader>
-                  <CardTitle>Company Name</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <label htmlFor="companyName" className="sr-only">
-                    Company Name
-                  </label>
-                  <NominationCompanyAutocomplete
-                    id="companyName"
-                    name="companyName"
-                    placeholder="Enter company name here..."
-                    options={NOMINATION_COMPANY_SUGGESTIONS}
-                    maxSuggestions={14}
-                  />
-                  <p className="nomination-company-note">
-                    Autocomplete includes {companySuggestionsCount} known
-                    companies from past Top Shop finalists and winners.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <div className="nomination-chip-info nomination-chip-info-rich">
-                <h3>Select all categories that apply</h3>
-                <p>Multiple selections are allowed.</p>
-              </div>
-
-              <div className="nomination-category-shell">
-                <header className="nomination-category-shell-head">
-                  <div>
-                    <h3>Category Directory</h3>
-                    <p>
-                      Categories are listed alphabetically. Select all that
-                      apply.
-                    </p>
-                  </div>
-                  <p className="nomination-category-total">
-                    {totalCategories} Categories
-                  </p>
-                </header>
-
-                <fieldset className="nomination-category-fieldset">
-                  <legend className="sr-only">Nomination Categories</legend>
-                  <div className="nomination-category-columns">
-                    {nominationCategoryColumns.map((column, columnIndex) => (
-                      <div
-                        key={`column-${columnIndex}`}
-                        className="nomination-category-column"
-                      >
-                        {column.map((category) => (
-                          <label
-                            key={category.id}
-                            htmlFor={`category-${category.id}`}
-                            className="nomination-category-item"
-                          >
-                            <Checkbox
-                              id={`category-${category.id}`}
-                              name="categoryCheck[]"
-                              value={category.id}
-                            />
-                            <span>{category.label}</span>
-                          </label>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </fieldset>
-              </div>
-
-              <div className="nomination-actions nomination-actions-rich">
-                <Button type="submit" size="lg">
-                  Submit Nomination
-                </Button>
-
-                <p className="nomination-actions-note">
-                  <ShieldCheck size={14} aria-hidden="true" />
-                  <span>
-                    Your category selections remain visible for review before
-                    submit.
-                  </span>
-                </p>
-              </div>
-            </form>
+            <NominationForm
+              categories={nominationCategories}
+              fallbackCompanyOptions={NOMINATION_COMPANY_SUGGESTIONS}
+            />
           </div>
         </section>
       </main>

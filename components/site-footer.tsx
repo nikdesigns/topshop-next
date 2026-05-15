@@ -7,6 +7,7 @@ import {
 } from '@/lib/awards-route-map';
 import {
   CONTACT_EMAIL,
+  CONTACT_FORM_ENDPOINT,
   CONTACT_MAILTO_HREF,
   CONTACT_PHONE_LABEL,
   CONTACT_TEL_HREF,
@@ -125,21 +126,29 @@ export function SiteFooter() {
           </p>
           <form
             className="footer-newsletter-form"
-            action={CONTACT_MAILTO_HREF}
+            action={CONTACT_FORM_ENDPOINT}
             method="post"
-            encType="text/plain"
+            acceptCharset="UTF-8"
           >
-            <input type="hidden" name="source" value="Top Shop Awards Newsletter" />
+            <input type="hidden" name="FullName" value="Newsletter Subscriber" />
+            <input type="hidden" name="Phone" value="N/A" />
+            <input type="hidden" name="CompanyName" value="N/A" />
+            <input
+              type="hidden"
+              name="Detail"
+              value="Source: Top Shop Awards Newsletter signup"
+            />
             <input
               type="email"
-              name="newsletterEmail"
+              name="Email"
               placeholder="Your Email Address"
               aria-label="Your Email Address"
+              required
             />
             <button type="submit">Join</button>
           </form>
           <p className="footer-newsletter-note">
-            Newsletter requests are handled via email. We will share confirmation and next steps.
+            Newsletter requests are submitted securely to our support team.
           </p>
           <div className="footer-links">
             {legalLinks.map((item) => (

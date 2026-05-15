@@ -1377,6 +1377,16 @@
   line-height: 1.35;
 }
 
+.nomination-category-item.is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nomination-category-item.is-disabled:hover {
+  background: #ffffff;
+  border-color: #e2e9f6;
+}
+
 .nomination-category-item:hover {
   background: #f2f7ff;
   border-color: #c9daff;
@@ -1410,6 +1420,54 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
+}
+
+.nomination-prefill-status {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #23426a;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.nomination-submit-feedback {
+  margin: 0;
+  min-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.nomination-submit-feedback--idle {
+  color: #55657d;
+}
+
+.nomination-submit-feedback--submitting {
+  color: #355175;
+}
+
+.nomination-submit-feedback--submitted {
+  color: #0c5d38;
+}
+
+.nomination-submit-feedback--error {
+  color: #8a1e25;
+}
+
+.spin {
+  animation: ui-spin 0.8s linear infinite;
+}
+
+@keyframes ui-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 1180px) {

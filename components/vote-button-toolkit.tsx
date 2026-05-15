@@ -2,26 +2,13 @@
 
 import Image from 'next/image';
 import { AppLink as Link } from '@/components/ui/app-link';
+import { NominationCompanyAutocomplete } from '@/components/nomination-company-autocomplete';
+import { type The145CompanySuggestion, encodeFacilityIdToken } from '@/lib/the145-nomination';
 import { Check, Copy, Download, ExternalLink, X } from 'lucide-react';
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 type CopyTarget = 'url' | 'website' | 'email' | null;
-
-function buildCompanyToken(companyName: string) {
-  const normalized = companyName.trim().toLowerCase();
-  if (!normalized) {
-    return '';
-  }
-
-  let hash = 0;
-  for (let index = 0; index < normalized.length; index += 1) {
-    hash = (hash * 131 + normalized.charCodeAt(index)) % 1_000_000_000;
-  }
-
-  const numericCode = `${Math.abs(hash)}${normalized.length}`;
-  return typeof window !== 'undefined' ? window.btoa(numericCode) : '';
-}
 
 export function VoteButtonToolkit({
   seasonLabel,
@@ -38,21 +25,30 @@ export function VoteButtonToolkit({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [companyName, setCompanyName] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState<The145CompanySuggestion | null>(null);
   const [copiedTarget, setCopiedTarget] = useState<CopyTarget>(null);
-  const inputId = useId();
-  const datalistId = useId();
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const normalizedCompany = companyName.trim();
-  const token = useMemo(() => buildCompanyToken(normalizedCompany), [normalizedCompany]);
-
-  const generatedUrl = useMemo(() => {
-    if (!normalizedCompany || !token) {
+  const facilityIdToken = useMemo(() => {
+    if (!selectedCompany) {
       return '';
     }
 
-    return `${generatedBaseUrl}?tsn#${token}`;
-  }, [generatedBaseUrl, normalizedCompany, token]);
+    const facilityId = String(selectedCompany.FacilityId).trim();
+    if (!facilityId || facilityId === '-1') {
+      return '';
+    }
+
+    return encodeFacilityIdToken(facilityId);
+  }, [selectedCompany]);
+
+  const generatedUrl = useMemo(() => {
+    if (!normalizedCompany || !facilityIdToken) {
+      return '';
+    }
+
+    return `${generatedBaseUrl}?tsn#${facilityIdToken}`;
+  }, [facilityIdToken, generatedBaseUrl, normalizedCompany]);
 
   const websiteSnippet = useMemo(() => {
     if (!generatedUrl) {
@@ -74,8 +70,6 @@ export function VoteButtonToolkit({
     if (!isDialogOpen) {
       return;
     }
-
-    window.setTimeout(() => inputRef.current?.focus(), 40);
 
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -175,32 +169,32 @@ export function VoteButtonToolkit({
 
             <div className="vote-toolkit-modal-body">
               <div className="vote-toolkit-input-row">
-                <label htmlFor={inputId}>Company Name</label>
-                <input
-                  ref={inputRef}
-                  id={inputId}
-                  type="text"
-                  list={datalistId}
+                <label htmlFor="vote-toolkit-company-name">Company Name</label>
+                <NominationCompanyAutocomplete
+                  id="vote-toolkit-company-name"
+                  name="companyName"
+                  placeholder="Type your company name and select from suggestions"
                   value={companyName}
-                  onChange={(event) => setCompanyName(event.target.value)}
-                  placeholder="Type your company name"
-                  autoComplete="organization"
+                  onValueChange={(value) => {
+                    setCompanyName(value);
+                    setSelectedCompany(null);
+                  }}
+                  onSuggestionSelect={(suggestion) => {
+                    setSelectedCompany(suggestion);
+                  }}
+                  fallbackOptions={companyOptions}
+                  maxSuggestions={10}
                 />
-                <datalist id={datalistId}>
-                  {companyOptions.map((company) => (
-                    <option key={company} value={company} />
-                  ))}
-                </datalist>
               </div>
 
               <p className="vote-toolkit-modal-status">
-                {normalizedCompany
+                {generatedUrl
                   ? (
                     <>
                       Unique code generated for <strong>{normalizedCompany}</strong>.
                     </>
                   )
-                  : 'Type a company name to generate a unique voting link.'}
+                  : 'Select a company from suggestions to generate a unique voting link.'}
               </p>
 
               <article className="vote-toolkit-step-card site-prose">
