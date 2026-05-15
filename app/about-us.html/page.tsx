@@ -4,6 +4,7 @@ import { AppLink as Link } from '@/components/ui/app-link';
 import {
   ArrowRight,
   Compass,
+  PlayCircle,
   ShieldCheck,
   Sparkles,
   TimerReset,
@@ -11,6 +12,7 @@ import {
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { Badge } from '@/components/ui/badge';
+import { HighlightsVideoModalTrigger } from '@/components/highlights-video-modal-trigger';
 import { LATEST_WINNERS_ROUTE } from '@/lib/awards-route-map';
 import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
@@ -91,13 +93,23 @@ export default function AboutUsPage() {
 
             <div className="about-main-grid about-main-grid-rich">
               <figure className="about-media-card">
-                <Image
-                  src="/assets/images/about/2.jpg"
-                  alt="Top Shop Awards"
-                  width={417}
-                  height={625}
-                  className="about-media-image"
-                />
+                <HighlightsVideoModalTrigger
+                  videoSrc={nominationWindow.highlightsVideoEmbedUrl}
+                  title={nominationWindow.highlightsTitle}
+                  triggerClassName="about-media-video-trigger"
+                  triggerAriaLabel={`Play ${nominationWindow.highlightsTitle}`}
+                >
+                  <Image
+                    src={nominationWindow.heroRecapImageSrc}
+                    alt={`${nominationWindow.highlightsYear} Top Shop Awards highlights preview`}
+                    width={417}
+                    height={625}
+                    className="about-media-image"
+                  />
+                  <span className="about-media-video-play" aria-hidden="true">
+                    <PlayCircle className="about-media-play-icon" />
+                  </span>
+                </HighlightsVideoModalTrigger>
                 <figcaption>
                   Most Coveted Aviation Maintenance Awards In The World
                 </figcaption>
@@ -138,7 +150,7 @@ export default function AboutUsPage() {
                   </p>
 
                   <blockquote className="about-quote">
-                    Kudos to the {nominationWindow.seasonLabel} Top Shop winners
+                    Kudos to the {nominationWindow.winnersShowcaseYear} Top Shop winners
                     for their outstanding achievements and excellence.
                     <cite>Justin Spaulding, The145</cite>
                   </blockquote>

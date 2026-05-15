@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
+import { NOMINATION_CATEGORIES_2026 } from '@/data/nomination-categories';
 import {
   Accordion,
   AccordionContent,
@@ -25,29 +26,9 @@ import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
 
 const awardCategories = [
-  'Best Accessories Class I, II, and III Repair',
-  'Best Airframe and Aerostructures Repair',
-  'Best APU Repair',
-  'Best Avionics and Instruments Repair',
-  'Best Electro-Mechanical Repair',
-  'Best Engine Accessories Repair',
-  'Best Engine Components Repair',
-  'Best Engine Overhaul Repair',
-  'Best Fuel Systems and Fuel Accessories Repair',
-  'Best Galley Components Repair',
-  'Best Gyros Repair',
-  'Best Heat Transfer Repair',
-  'Best Hydraulics Repair',
-  'Best In-Flight Entertainment Systems Repair',
-  'Best Interiors Repair',
-  'Best Landing Gear Repair',
-  'Best Lavatory / Sanitation Components Repair',
-  'Best OEM Repair',
-  'Best Pneumatics Repair',
-  'Best Safety Equipment Repair',
-  'Best Total Solutions Provider',
-  'Best Wheel and Brake Repair',
-];
+  ...NOMINATION_CATEGORIES_2026.map((category) => category.label),
+].sort((a, b) => a.localeCompare(b));
+const totalAwardCategories = awardCategories.length;
 
 type FaqItem = {
   id: string;
@@ -61,8 +42,7 @@ const faqItemsLeft: FaqItem[] = [
   {
     id: 'faq-categories',
     question: 'How many award categories are there?',
-    answer:
-      'Currently, The145 presents twenty-two award categories each year. Over time, the number of awards has increased and remains one of the most comprehensive recognitions in aviation maintenance.',
+    answer: `Currently, The145 presents ${totalAwardCategories} award categories in the active directory. Over time, the number of awards has increased and remains one of the most comprehensive recognitions in aviation maintenance.`,
     openByDefault: true,
   },
   {
@@ -119,7 +99,7 @@ const tipsToWin = [
 ];
 
 const faqHighlights = [
-  { value: '22', label: 'Award Categories' },
+  { value: String(totalAwardCategories), label: 'Award Categories' },
   { value: '2-Phase', label: 'Selection Process' },
   { value: '100%', label: 'Peer-Driven Voting' },
 ];

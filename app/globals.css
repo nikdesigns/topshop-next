@@ -1946,6 +1946,8 @@ img {
   margin: 0;
   position: sticky;
   top: 102px;
+  display: grid;
+  grid-template-rows: minmax(500px, 1fr) auto;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.14);
@@ -1955,9 +1957,59 @@ img {
 
 .about-media-image {
   width: 100%;
-  aspect-ratio: 2 / 3;
+  height: 100%;
+  min-height: clamp(500px, 66vh, 720px);
+  aspect-ratio: auto;
   display: block;
   object-fit: cover;
+}
+
+.about-media-video-trigger {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: block;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.about-media-video-trigger .about-media-image {
+  transition: transform 0.22s ease;
+}
+
+.about-media-video-trigger:hover .about-media-image {
+  transform: scale(1.02);
+}
+
+.about-media-video-trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 3px rgba(12, 108, 242, 0.34);
+}
+
+.about-media-video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.74);
+  background: rgba(8, 20, 38, 0.48);
+  backdrop-filter: blur(2px);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.about-media-play-icon {
+  width: 30px;
+  height: 30px;
+  color: #ffffff;
 }
 
 .about-media-card figcaption {
@@ -8186,6 +8238,11 @@ img {
 
   .about-media-card {
     position: static;
+    grid-template-rows: minmax(340px, 1fr) auto;
+  }
+
+  .about-media-image {
+    min-height: 340px;
   }
 
   .about-standards {
@@ -8285,6 +8342,14 @@ img {
 
   .about-page-title {
     min-height: 250px;
+  }
+
+  .about-media-card {
+    grid-template-rows: minmax(280px, 1fr) auto;
+  }
+
+  .about-media-image {
+    min-height: 280px;
   }
 
   .about-page-title-content {
