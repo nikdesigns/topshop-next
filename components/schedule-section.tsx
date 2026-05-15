@@ -12,8 +12,16 @@ const highlights = [
       ? `Open through ${nominationWindow.nominationEndLabel}`
       : `Window: ${nominationWindow.nominationDateRangeLabel}`,
   },
-  { label: 'Winners', value: 'Announced', note: 'Presented at MRO Americas' },
-  { label: 'Finalists', value: 'Published', note: 'Visible on finalist section' },
+  {
+    label: `${nominationWindow.winnersShowcaseYear} Winners`,
+    value: 'Announced',
+    note: 'Presented at MRO Americas',
+  },
+  {
+    label: `${nominationWindow.winnersShowcaseYear} Finalists`,
+    value: 'Published',
+    note: 'Visible on finalist section',
+  },
 ];
 
 export function ScheduleSection() {

@@ -35,13 +35,15 @@ const finalistLinks: NavLink[] = AWARDS_FINALIST_LINKS.map((link) => ({
   label: link.label,
 }));
 
-const primaryLinks: NavLink[] = [
+const primaryLeadLinks: NavLink[] = [
   { href: '/#welcome', label: 'Welcome' },
-  { href: '/#schedule', label: 'Schedule' },
-  { href: '/assets.html', label: 'Assets' },
+  { href: '/#winners-header', label: 'Winners' },
+  { href: '/gallery.html/', label: 'Videos' },
+];
+
+const primaryTrailLinks: NavLink[] = [
   { href: '/faqs.html', label: 'FAQs' },
   { href: '/about-us.html', label: 'About' },
-  { href: '/gallery.html/', label: 'Gallery' },
 ];
 
 function normalizePath(path: string) {
@@ -135,7 +137,7 @@ export function SiteHeader() {
 
           <nav className="rich-desktop-nav" aria-label="Main navigation">
             <ul className="rich-nav-list">
-              {primaryLinks.map((link) => {
+              {primaryLeadLinks.map((link) => {
                 const isActive = isLinkActive(link.href);
                 return (
                   <li key={link.href}>
@@ -155,7 +157,7 @@ export function SiteHeader() {
                   type="button"
                   className={`rich-nav-link rich-nav-link-button${isWinnersMenuActive ? ' is-active' : ''}`}
                 >
-                  Hall of Fame <ChevronDown size={14} aria-hidden="true" />
+                  Winners Archive <ChevronDown size={14} aria-hidden="true" />
                 </button>
                 <div className="rich-nav-dropdown">
                   <ul>
@@ -203,6 +205,21 @@ export function SiteHeader() {
                   </ul>
                 </div>
               </li>
+
+              {primaryTrailLinks.map((link) => {
+                const isActive = isLinkActive(link.href);
+                return (
+                  <li key={link.href}>
+                    <Link
+                      className={`rich-nav-link${isActive ? ' is-active' : ''}`}
+                      href={link.href}
+                      aria-current={isActive ? 'page' : undefined}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
@@ -249,7 +266,7 @@ export function SiteHeader() {
                 <div className="rich-mobile-section">
                   <h3>Primary</h3>
                   <ul>
-                    {primaryLinks.map((link) => {
+                    {[...primaryLeadLinks, ...primaryTrailLinks].map((link) => {
                       const isActive = isLinkActive(link.href);
                       return (
                         <li key={link.href}>
@@ -267,7 +284,7 @@ export function SiteHeader() {
                 </div>
 
                 <div className="rich-mobile-section">
-                  <h3>Hall of Fame</h3>
+                  <h3>Winners Archive</h3>
                   <ul>
                     {winnerLinks.map((link) => {
                       const isActive = isLinkActive(link.href);

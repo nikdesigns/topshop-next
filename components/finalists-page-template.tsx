@@ -66,6 +66,7 @@ export function FinalistsPageTemplate({
       titleImageSrc={titleImageSrc}
       logo={logo}
       hideLogo
+      hideIntroSection
       singleIntroColumn={singleIntroColumn}
       introContent={introContent}
       structuredData={pageJsonLd}

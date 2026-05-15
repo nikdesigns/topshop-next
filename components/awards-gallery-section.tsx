@@ -64,6 +64,18 @@ export function AwardsGallerySection({
     };
   }, [sortedVideos, availableYears]);
 
+  const groupedVideos = useMemo(() => {
+    const grouped = new Map<string, AwardsGalleryVideo[]>();
+
+    filteredVideos.forEach((video) => {
+      const current = grouped.get(video.year) ?? [];
+      current.push(video);
+      grouped.set(video.year, current);
+    });
+
+    return Array.from(grouped.entries()).sort((a, b) => Number(b[0]) - Number(a[0]));
+  }, [filteredVideos]);
+
   return (
     <section id="gallery" className="awards-gallery-section section-pad">
       <div className="awards-gallery-bg" aria-hidden="true" />
@@ -131,37 +143,54 @@ export function AwardsGallerySection({
         </div>
 
         {filteredVideos.length ? (
-          <div className="awards-video-grid">
-            {filteredVideos.map((video) => (
-              <article className="awards-video-card" key={video.id}>
-                <div className="awards-video-player-shell">
-                  <ReactPlayer
-                    src={video.src}
-                    controls
-                    playsInline
-                    preload="metadata"
-                    width="100%"
-                    height="100%"
-                    light={video.posterSrc ?? false}
-                    config={PLAYER_CONFIG}
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      aspectRatio: '16 / 9',
-                    }}
-                  />
-                </div>
-                <div className="awards-video-card-copy">
-                  <p className="awards-video-card-meta">
-                    <span>{video.year}</span>
-                    <span>Official Recap</span>
+          <div className="awards-gallery-groups">
+            {groupedVideos.map(([year, yearVideos]) => (
+              <section className="awards-gallery-year-group" key={year}>
+                <header className="awards-gallery-year-head">
+                  <h3 className="awards-gallery-year-title">{year}</h3>
+                  <p className="awards-gallery-year-count">
+                    {yearVideos.length} {yearVideos.length === 1 ? 'video' : 'videos'}
                   </p>
-                  <p className="awards-video-card-title">{video.title}</p>
-                  <p className="awards-video-card-description">
-                    {video.description}
-                  </p>
+                </header>
+
+                <div className="awards-video-grid awards-video-grid--year">
+                  {yearVideos.map((video) => (
+                    <article className="awards-video-card awards-video-card--large" key={video.id}>
+                      <div className="awards-video-player-shell">
+                        <ReactPlayer
+                          src={video.src}
+                          controls
+                          playsInline
+                          preload="metadata"
+                          width="100%"
+                          height="100%"
+                          light={video.posterSrc ?? false}
+                          playIcon={
+                            <span className="awards-video-play-badge" aria-hidden="true">
+                              <span className="awards-video-play-triangle" />
+                            </span>
+                          }
+                          config={PLAYER_CONFIG}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                          }}
+                        />
+                      </div>
+                      <div className="awards-video-card-copy">
+                        <p className="awards-video-card-meta">
+                          <span>{video.year}</span>
+                          <span>Official Recap</span>
+                        </p>
+                        <p className="awards-video-card-title">{video.title}</p>
+                        <p className="awards-video-card-description">
+                          {video.description}
+                        </p>
+                      </div>
+                    </article>
+                  ))}
                 </div>
-              </article>
+              </section>
             ))}
           </div>
         ) : null}
@@ -170,9 +199,8 @@ export function AwardsGallerySection({
           <article className="awards-gallery-empty">
             <h3>No videos available yet</h3>
             <p>
-              Add yearly videos under{' '}
-              <code>public/assets/videos/gallery/&lt;year&gt;/</code> to
-              populate this section.
+              Add or update yearly YouTube links in{' '}
+              <code>lib/awards-gallery.ts</code> to populate this section.
             </p>
           </article>
         ) : null}

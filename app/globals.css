@@ -9508,6 +9508,10 @@ img {
   gap: 18px;
 }
 
+.awards-video-grid--year {
+  grid-template-columns: 1fr;
+}
+
 .awards-video-card {
   border: 1px solid rgba(15, 23, 42, 0.12);
   border-radius: 16px;
@@ -9526,13 +9530,85 @@ img {
   box-shadow: 0 16px 30px rgba(15, 23, 42, 0.12);
 }
 
+.awards-video-card--large {
+  width: 100%;
+  max-width: 1060px;
+  margin-inline: auto;
+}
+
 .awards-video-player-shell {
   background: #0b1320;
   position: relative;
+  aspect-ratio: 16 / 9;
+  min-height: clamp(220px, 18vw, 320px);
+}
+
+.awards-video-card--large .awards-video-player-shell {
+  min-height: clamp(280px, 30vw, 480px);
 }
 
 .awards-video-player-shell .react-player {
-  width: 100%;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.awards-video-player-shell .react-player > div {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.awards-video-player-shell .react-player__preview {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+
+.awards-video-player-shell .react-player__shadow {
+  position: relative !important;
+  margin: 0 !important;
+  width: 78px !important;
+  height: 78px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.awards-video-player-shell .react-player__play-icon {
+  margin-left: 6px !important;
+}
+
+.awards-video-play-badge {
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at 32% 28%,
+    rgba(31, 106, 204, 0.86) 0%,
+    rgba(10, 44, 99, 0.82) 52%,
+    rgba(6, 22, 54, 0.86) 100%
+  );
+  border: 1px solid rgba(188, 215, 255, 0.68);
+  box-shadow:
+    0 12px 28px rgba(7, 21, 44, 0.36),
+    0 0 0 2px rgba(8, 26, 58, 0.42) inset;
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.awards-video-play-triangle {
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  border-left: 20px solid #ffffff;
 }
 
 .awards-video-card-copy {
@@ -9839,6 +9915,14 @@ img {
   .awards-video-grid {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .awards-video-player-shell {
+    min-height: 210px;
+  }
+
+  .awards-video-card--large .awards-video-player-shell {
+    min-height: 250px;
   }
 
   .awards-gallery-card {

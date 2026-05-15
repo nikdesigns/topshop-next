@@ -77,11 +77,11 @@ export const AWARDS_FINALIST_LINKS_DATA = [
 ] as const satisfies readonly AwardsYearLink<FinalistsPageYear>[];
 
 export const ACTIVE_AWARDS_SEASON: AwardsSeasonConfig = {
-  seasonLabel: '2026',
-  nominationStartDate: '2025-09-01',
-  nominationEndDate: '2026-01-31',
+  seasonLabel: '2027',
+  nominationStartDate: '2026-08-01',
+  nominationEndDate: '2026-12-31',
   assets: {
-    scheduleImageSrc: '/assets/images/about/topshop_schedule_2026.png',
+    scheduleImageSrc: '/assets/images/about/topshop_schedule_2027.png',
     socialCardImageSrc: '/assets/images/banners/ts_winner_2026_1.jpg',
     heroWinnersImageSrc: '/assets/images/banners/ts_winner_2026.jpg',
     heroFinalistsImageSrc: '/assets/images/banners/145_finalist_2026.jpg',
@@ -90,9 +90,7 @@ export const ACTIVE_AWARDS_SEASON: AwardsSeasonConfig = {
     winnersShowcaseLocation: 'MRO Americas in Orlando, Florida, USA',
     highlightsPosterImageSrc: '/assets/images/banners/2026_highlight.webp',
     highlightsYear: '2026',
-    highlightsVideoEmbedUrl:
-      '/assets/videos/gallery/2026/2026%20Top%20Shop.mp4',
-    highlightsVideoShareUrl:
-      '/assets/videos/gallery/2026/2026%20Top%20Shop.mp4',
+    highlightsVideoEmbedUrl: 'https://youtu.be/vjWaOYW7hK8',
+    highlightsVideoShareUrl: 'https://youtu.be/vjWaOYW7hK8',
   },
 };

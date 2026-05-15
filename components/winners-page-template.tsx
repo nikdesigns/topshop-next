@@ -84,6 +84,7 @@ export function WinnersPageTemplate(props: WinnersPageTemplateProps) {
       titleImageSrc={props.titleImageSrc}
       logo={props.logo}
       hideLogo
+      hideIntroSection
       singleIntroColumn={props.singleIntroColumn}
       introContent={props.introContent}
       structuredData={pageJsonLd}

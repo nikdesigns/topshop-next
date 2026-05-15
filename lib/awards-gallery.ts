@@ -1,5 +1,3 @@
-import { AWARDS_WINNER_LINKS_DATA } from '@/data/awards-cycle';
-
 export type AwardsGalleryYear = string;
 
 export type AwardsGalleryVideo = {
@@ -12,19 +10,39 @@ export type AwardsGalleryVideo = {
   location?: string;
 };
 
-export const AWARDS_GALLERY_YEARS: AwardsGalleryYear[] = Array.from(
-  new Set(AWARDS_WINNER_LINKS_DATA.map((entry) => entry.year)),
-).sort((a, b) => Number(b) - Number(a));
-
-export const DEFAULT_AWARDS_GALLERY_VIDEOS: AwardsGalleryVideo[] = [
+export const AWARDS_GALLERY_VIDEOS: AwardsGalleryVideo[] = [
   {
-    id: '2026-official-recap',
-    src: 'https://vimeo.com/1075212605/dbaa994485?share=copy',
+    id: '2026-youtube-recap',
+    src: 'https://youtu.be/vjWaOYW7hK8',
     year: '2026',
     title: 'Top Shop Awards 2026 Official Recap',
     description:
       'Official Top Shop 2026 winners highlights from the awards presentation.',
-    posterSrc: '/assets/images/banners/ts_winner_2026_1.jpg',
+    posterSrc: 'https://i.ytimg.com/vi/vjWaOYW7hK8/maxresdefault.jpg',
+    location: 'MRO Americas',
+  },
+  {
+    id: '2025-youtube-recap',
+    src: 'https://youtu.be/n2kbsHKQrnQ',
+    year: '2025',
+    title: 'Top Shop Awards 2025 Official Recap',
+    description:
+      'Official Top Shop 2025 winners highlights from the awards presentation.',
+    posterSrc: 'https://i.ytimg.com/vi/n2kbsHKQrnQ/maxresdefault.jpg',
+    location: 'MRO Americas',
+  },
+  {
+    id: '2024-youtube-recap',
+    src: 'https://youtu.be/ApNCbtXmelM',
+    year: '2024',
+    title: 'Top Shop Awards 2024 Official Recap',
+    description:
+      'Official Top Shop 2024 winners highlights from the awards presentation.',
+    posterSrc: 'https://i.ytimg.com/vi/ApNCbtXmelM/maxresdefault.jpg',
     location: 'MRO Americas',
   },
 ];
+
+export const AWARDS_GALLERY_YEARS: AwardsGalleryYear[] = Array.from(
+  new Set(AWARDS_GALLERY_VIDEOS.map((video) => video.year)),
+).sort((a, b) => Number(b) - Number(a));
