@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AWARDS_FINALIST_LINKS, AWARDS_WINNER_LINKS, LATEST_WINNERS_LINK } from '@/lib/awards-links';
 import { nominationWindow } from '@/lib/nomination-window';
+import { TopStatusCountdown } from '@/components/top-status-countdown';
 import {
   Sheet,
   SheetClose,
@@ -103,19 +104,27 @@ export function SiteHeader() {
     <header className="site-header rich-header">
       <div className="promo-strip rich-promo-strip">
         <div className="content-wrap rich-promo-wrap">
-          <Badge
-            variant={nominationWindow.isOpen ? 'success' : 'danger'}
-            className={
-              nominationWindow.isOpen ? undefined : 'rich-promo-badge'
-            }
-          >
-            {nominationWindow.seasonLabel} Status
-          </Badge>
-          <p>
-            {nominationWindow.isOpen
-              ? nominationWindow.openMessage
-              : nominationWindow.closedMessage}
-          </p>
+          <div className="rich-promo-main">
+            <Badge
+              variant={nominationWindow.isOpen ? 'success' : 'danger'}
+              className={
+                nominationWindow.isOpen ? undefined : 'rich-promo-badge'
+              }
+            >
+              {nominationWindow.seasonLabel} Status
+            </Badge>
+            <p>
+              {nominationWindow.isOpen
+                ? nominationWindow.openMessage
+                : nominationWindow.closedMessage}
+            </p>
+          </div>
+
+          <TopStatusCountdown
+            seasonLabel={nominationWindow.seasonLabel}
+            nominationStartDate={nominationWindow.nominationStartDate}
+            nominationEndDate={nominationWindow.nominationEndDate}
+          />
         </div>
       </div>
 

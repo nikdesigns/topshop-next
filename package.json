@@ -5,10 +5,7 @@
   "scripts": {
     "clean": "node scripts/clean-output.mjs",
     "dev": "next dev",
-    "gallery:optimize": "node scripts/optimize-gallery-images.mjs",
-    "prebuild": "npm run gallery:optimize",
     "build": "next build",
-    "prebuild:root": "npm run gallery:optimize",
     "build:root": "NEXT_PUBLIC_BASE_PATH= next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
@@ -24,15 +21,13 @@
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.38.0",
     "jspdf": "^4.2.1",
     "lucide-react": "^1.8.0",
     "next": "16.2.3",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-player": "^3.3.2",
-    "tailwind-merge": "^3.5.0",
-    "yet-another-react-lightbox": "^3.31.0"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.19",
@@ -44,7 +39,6 @@
     "eslint-config-next": "16.2.3",
     "postcss": "^8.5.10",
     "shadcn": "^4.2.0",
-    "sharp": "^0.34.5",
     "tailwindcss": "^3.4.19",
     "typescript": "^5"
   }

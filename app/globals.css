@@ -497,7 +497,7 @@
 }
 
 .rich-promo-strip {
-  background: linear-gradient(90deg, var(--ui-brand-deep) 0%, #12366f 100%);
+  background: var(--ui-brand-deep);
   color: #e8efff;
   border-bottom: none;
 }
@@ -506,9 +506,16 @@
   min-height: 38px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 12px;
-  text-align: center;
+  text-align: left;
+}
+
+.rich-promo-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 .rich-promo-wrap p {
@@ -516,11 +523,97 @@
   font-size: 13px;
   line-height: 1.35;
   letter-spacing: -0.1px;
+  color: #081a3a;
+}
+
+.rich-promo-strip .ui-badge {
+  color: #ffffff;
+  background: var(--ui-brand);
+  border: 1px solid rgba(173, 210, 255, 0.52);
+}
+
+.rich-promo-strip .ui-badge--success {
+  background: var(--ui-brand);
+  border-color: rgba(173, 210, 255, 0.52);
+  color: #ffffff;
+}
+
+.rich-promo-strip .ui-badge--danger {
+  background: var(--ui-brand);
+  border-color: rgba(173, 210, 255, 0.52);
+  color: #ffffff;
+}
+
+.rich-status-countdown {
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid rgba(173, 210, 255, 0.52);
+  border-radius: 10px;
+  background: #e7f1ff;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rich-status-countdown-label {
+  margin: 0;
+  color: #f4f8ff;
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.rich-status-countdown-grid {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rich-status-countdown-cell {
+  min-width: 38px;
+  height: 28px;
+  border-radius: 7px;
+  border: 1px solid rgba(167, 208, 255, 0.58);
+  background: var(--ui-brand);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 6px;
+}
+
+.rich-status-countdown-cell strong {
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.rich-status-countdown-cell small {
+  color: #e8f2ff;
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.rich-status-countdown-ended {
+  margin: 0;
+  color: #f3f6ff;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: -0.08px;
+  font-weight: 600;
 }
 
 .rich-promo-badge {
   color: #ffffff;
-  background: linear-gradient(135deg, var(--ui-brand), #3091ff);
+  background: var(--ui-brand);
 }
 
 .rich-nav-shell {
@@ -1347,6 +1440,17 @@
     flex-direction: column;
     gap: 6px;
     padding: 8px 0;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .rich-promo-main {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rich-status-countdown {
+    justify-content: center;
   }
 
   .hero-content-rich {
@@ -1364,6 +1468,30 @@
 }
 
 @media (max-width: 640px) {
+  .rich-status-countdown {
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px 8px;
+  }
+
+  .rich-status-countdown-grid {
+    gap: 4px;
+  }
+
+  .rich-status-countdown-cell {
+    min-width: 34px;
+    height: 24px;
+    padding: 0 5px;
+  }
+
+  .rich-status-countdown-cell strong {
+    font-size: 12px;
+  }
+
+  .rich-status-countdown-cell small {
+    font-size: 9px;
+  }
+
   .hero-viewport-rich {
     min-height: 50vh;
   }
@@ -1456,24 +1584,12 @@
   --color-link-dark: #2997ff;
   --shadow-soft: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
   --font-display:
-    'SF Pro Display Local',
-    'SF Pro Text Local',
-    -apple-system,
-    BlinkMacSystemFont,
-    'SF Pro Icons',
-    'Helvetica Neue',
-    Helvetica,
-    Arial,
+    'SF Pro Display Local', 'SF Pro Text Local', -apple-system,
+    BlinkMacSystemFont, 'SF Pro Icons', 'Helvetica Neue', Helvetica, Arial,
     sans-serif;
   --font-body:
-    'SF Pro Text Local',
-    -apple-system,
-    BlinkMacSystemFont,
-    'SF Pro Icons',
-    'Helvetica Neue',
-    Helvetica,
-    Arial,
-    sans-serif;
+    'SF Pro Text Local', -apple-system, BlinkMacSystemFont, 'SF Pro Icons',
+    'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 *,
@@ -1627,12 +1743,7 @@ body {
   height: 2px;
   margin: 2px auto 0;
   border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    #57adff 0%,
-    #f7faff 56%,
-    #ff9b35 100%
-  );
+  background: linear-gradient(90deg, #57adff 0%, #f7faff 56%, #ff9b35 100%);
   opacity: 0.94;
 }
 
@@ -2152,7 +2263,11 @@ img {
 
 .assets-library {
   background:
-    radial-gradient(circle at 8% -20%, rgba(12, 108, 242, 0.16), transparent 36%),
+    radial-gradient(
+      circle at 8% -20%,
+      rgba(12, 108, 242, 0.16),
+      transparent 36%
+    ),
     linear-gradient(180deg, #f6f8fc 0%, #eff4fb 100%);
   color: var(--color-text-dark);
   padding-top: 66px;
@@ -2422,7 +2537,9 @@ img {
   background-position:
     calc(100% - 18px) calc(50% - 2px),
     calc(100% - 13px) calc(50% - 2px);
-  background-size: 5px 5px, 5px 5px;
+  background-size:
+    5px 5px,
+    5px 5px;
   background-repeat: no-repeat;
   transition:
     border-color var(--ui-motion-fast),
@@ -2612,14 +2729,13 @@ img {
   pointer-events: none;
   display: grid;
   place-items: center;
-  background:
-    repeating-linear-gradient(
-      -28deg,
-      rgba(8, 14, 26, 0) 0px,
-      rgba(8, 14, 26, 0) 28px,
-      rgba(8, 14, 26, 0.13) 28px,
-      rgba(8, 14, 26, 0.13) 56px
-    );
+  background: repeating-linear-gradient(
+    -28deg,
+    rgba(8, 14, 26, 0) 0px,
+    rgba(8, 14, 26, 0) 28px,
+    rgba(8, 14, 26, 0.13) 28px,
+    rgba(8, 14, 26, 0.13) 56px
+  );
 }
 
 .assets-card-watermark-badge {
@@ -2962,7 +3078,9 @@ img {
   background-position:
     calc(100% - 14px) calc(50% - 2px),
     calc(100% - 9px) calc(50% - 2px);
-  background-size: 5px 5px, 5px 5px;
+  background-size:
+    5px 5px,
+    5px 5px;
   background-repeat: no-repeat;
 }
 
@@ -3039,14 +3157,8 @@ img {
   color: #0f1a2b;
   padding: 9px 10px;
   font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    'Liberation Mono',
-    'Courier New',
-    monospace;
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   font-size: 12px;
   line-height: 1.43;
   letter-spacing: 0;
@@ -7207,7 +7319,6 @@ img {
   gap: 10px;
 }
 
-
 .winners-2026-column {
   border-radius: 10px;
   border: 1px solid rgba(15, 23, 42, 0.1);
@@ -7816,612 +7927,6 @@ img {
   height: auto;
   display: block;
   border-radius: 8px;
-}
-
-.schedule-roadmap {
-  display: block;
-}
-
-.schedule-roadmap-loading {
-  margin: 0;
-  min-height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #51627d;
-  font-size: 13px;
-  line-height: 1.35;
-  letter-spacing: -0.12px;
-}
-
-.schedule-roadmap-explorer {
-  display: grid;
-  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
-  gap: 14px;
-  align-items: stretch;
-}
-
-.schedule-roadmap-rail {
-  border-radius: 12px;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  background: linear-gradient(170deg, #f6f9ff 0%, #f2f6fd 52%, #ffffff 100%);
-  padding: 12px;
-  display: grid;
-  align-content: start;
-  gap: 10px;
-}
-
-.schedule-roadmap-rail-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.schedule-roadmap-rail-head p {
-  margin: 0;
-  color: #304c73;
-  font-size: 12px;
-  line-height: 1.33;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.schedule-roadmap-auto-toggle {
-  min-height: 28px;
-  border-radius: 999px;
-  border: 1px solid rgba(15, 23, 42, 0.16);
-  background: #ffffff;
-  color: #20314d;
-  padding: 0 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: -0.08px;
-  cursor: pointer;
-}
-
-.schedule-roadmap-rail-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 8px;
-}
-
-.schedule-roadmap-rail-item {
-  position: relative;
-}
-
-.schedule-roadmap-rail-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: calc(100% - 3px);
-  left: 18px;
-  width: 1px;
-  height: 10px;
-  background: rgba(15, 23, 42, 0.14);
-}
-
-.schedule-roadmap-rail-btn {
-  width: 100%;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  border-radius: 10px;
-  background: #ffffff;
-  color: #334d72;
-  padding: 9px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 8px;
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease,
-    transform 0.18s ease;
-}
-
-.schedule-roadmap-rail-btn:hover {
-  transform: translateY(-1px);
-  border-color: rgba(12, 108, 242, 0.34);
-  background: #f6faff;
-}
-
-.schedule-roadmap-rail-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(12, 108, 242, 0.2);
-}
-
-.schedule-roadmap-rail-btn.is-active {
-  border-color: rgba(12, 108, 242, 0.45);
-  background: linear-gradient(140deg, #edf4ff 0%, #f8fbff 100%);
-}
-
-.schedule-roadmap-rail-btn.is-complete {
-  border-color: rgba(15, 143, 84, 0.35);
-  background: linear-gradient(140deg, #f1fbf6 0%, #ffffff 100%);
-}
-
-.schedule-roadmap-rail-node {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  border: 1px solid rgba(12, 108, 242, 0.38);
-  color: #0d65df;
-  background: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.schedule-roadmap-rail-btn.is-complete .schedule-roadmap-rail-node {
-  border-color: rgba(15, 143, 84, 0.46);
-  color: #0f8f54;
-  background: #eaf8f0;
-}
-
-.schedule-roadmap-rail-copy {
-  min-width: 0;
-  display: grid;
-  gap: 2px;
-}
-
-.schedule-roadmap-rail-step {
-  color: #6f82a0;
-  font-size: 10px;
-  line-height: 1.2;
-  letter-spacing: 0.11em;
-  text-transform: uppercase;
-}
-
-.schedule-roadmap-rail-copy strong {
-  color: #162a47;
-  font-size: 13px;
-  line-height: 1.3;
-  letter-spacing: -0.1px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.schedule-roadmap-rail-copy small {
-  color: #5d7294;
-  font-size: 11px;
-  line-height: 1.25;
-  letter-spacing: -0.08px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.schedule-roadmap-rail-date {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  min-height: 20px;
-  max-width: 100%;
-  border-radius: 999px;
-  border: 1px solid rgba(12, 108, 242, 0.22);
-  background: rgba(237, 244, 255, 0.9);
-  color: #1d4f96;
-  font-size: 10px;
-  line-height: 1.15;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding: 3px 7px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.schedule-roadmap-rail-state {
-  color: #526884;
-  font-size: 10px;
-  line-height: 1.2;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.schedule-roadmap-stage {
-  border-radius: 12px;
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  padding: 12px;
-  display: grid;
-  align-content: start;
-  gap: 10px;
-}
-
-.schedule-roadmap-stage:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(12, 108, 242, 0.22);
-}
-
-.schedule-roadmap-stage-head {
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  border-radius: 10px;
-  min-height: 44px;
-  background: rgba(247, 251, 255, 0.88);
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.schedule-roadmap-stage-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.schedule-roadmap-stage-meta p {
-  margin: 0;
-  color: #536987;
-  font-size: 12px;
-  line-height: 1.33;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-stage-meta strong {
-  color: #15335b;
-  font-size: 13px;
-  line-height: 1.25;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-stage-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.schedule-roadmap-stage-btn {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  background: #ffffff;
-  color: #1f3556;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.schedule-roadmap-stage-btn:hover {
-  border-color: rgba(12, 108, 242, 0.35);
-  background: #edf4ff;
-}
-
-.schedule-roadmap-progress {
-  border: 1px solid rgba(15, 23, 42, 0.1);
-  border-radius: 10px;
-  background: #ffffff;
-  padding: 10px 11px;
-  display: grid;
-  gap: 8px;
-}
-
-.schedule-roadmap-progress-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.schedule-roadmap-progress-head p {
-  margin: 0;
-  color: #536987;
-  font-size: 12px;
-  line-height: 1.33;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-progress-head strong {
-  color: #17447b;
-  font-size: 13px;
-  line-height: 1.25;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-progress-track {
-  width: 100%;
-  margin: 0;
-  accent-color: #0d65df;
-  cursor: pointer;
-}
-
-.schedule-roadmap-progress-notes {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.schedule-roadmap-progress-notes small {
-  margin: 0;
-  color: #4f6686;
-  font-size: 11px;
-  line-height: 1.32;
-  letter-spacing: -0.08px;
-}
-
-.schedule-roadmap-progress-notes small span {
-  color: #1f4f88;
-  font-weight: 600;
-}
-
-.schedule-roadmap-jump-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-
-.schedule-roadmap-jump-btn {
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  background: #f8fbff;
-  color: #1f3556;
-  border-radius: 999px;
-  min-height: 27px;
-  padding: 0 10px;
-  font-size: 11px;
-  line-height: 1;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease;
-}
-
-.schedule-roadmap-jump-btn:hover {
-  border-color: rgba(12, 108, 242, 0.34);
-  background: #edf4ff;
-}
-
-.schedule-roadmap-panel {
-  border-radius: 12px;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  background:
-    radial-gradient(circle at 86% 14%, rgba(65, 139, 255, 0.16), rgba(255, 255, 255, 0) 38%),
-    #ffffff;
-  padding: 14px;
-  display: grid;
-  align-content: start;
-  gap: 12px;
-  box-shadow: 0 14px 26px rgba(15, 23, 42, 0.08);
-}
-
-.schedule-roadmap-panel-head {
-  display: grid;
-  gap: 6px;
-}
-
-.schedule-roadmap-panel-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.schedule-roadmap-panel-chip {
-  margin: 0;
-  width: fit-content;
-  border-radius: 999px;
-  border: 1px solid rgba(12, 108, 242, 0.26);
-  background: #edf4ff;
-  color: #1d4f96;
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 5px 8px;
-  font-weight: 600;
-}
-
-.schedule-roadmap-panel-date {
-  margin: 0;
-  width: fit-content;
-  border-radius: 999px;
-  border: 1px solid rgba(12, 108, 242, 0.3);
-  background: linear-gradient(135deg, #0d65df, #3f98ff);
-  color: #ffffff;
-  font-size: 11px;
-  line-height: 1.2;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 5px 9px;
-  font-weight: 700;
-  box-shadow: 0 8px 20px rgba(12, 108, 242, 0.2);
-}
-
-.schedule-roadmap-panel h3 {
-  margin: 0;
-  color: #132945;
-  font-size: 25px;
-  line-height: 1.16;
-  letter-spacing: -0.24px;
-}
-
-.schedule-roadmap-panel-subtitle {
-  margin: 0;
-  color: #2d4f7a;
-  font-size: 15px;
-  line-height: 1.33;
-  letter-spacing: -0.12px;
-  font-weight: 600;
-}
-
-.schedule-roadmap-panel-details {
-  margin: 0;
-  color: #4f6484;
-  font-size: 14px;
-  line-height: 1.5;
-  letter-spacing: -0.14px;
-}
-
-.schedule-roadmap-panel-grid {
-  display: grid;
-  grid-template-columns: 1.35fr minmax(170px, 0.8fr);
-  gap: 10px;
-}
-
-.schedule-roadmap-panel-block {
-  border-radius: 10px;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  background: #f8fbff;
-  padding: 11px;
-  display: grid;
-  align-content: start;
-  gap: 8px;
-}
-
-.schedule-roadmap-panel-block h4 {
-  margin: 0;
-  color: #1c3d67;
-  font-size: 13px;
-  line-height: 1.3;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-panel-block ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 6px;
-}
-
-.schedule-roadmap-panel-block li {
-  position: relative;
-  margin: 0;
-  padding-left: 12px;
-  color: #4f6484;
-  font-size: 13px;
-  line-height: 1.38;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-panel-block li::before {
-  content: '';
-  position: absolute;
-  top: 7px;
-  left: 0;
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: #398dff;
-}
-
-.schedule-roadmap-panel-block--signal {
-  border-color: rgba(12, 108, 242, 0.2);
-  background: linear-gradient(140deg, #edf4ff 0%, #f9fbff 100%);
-  justify-items: start;
-}
-
-.schedule-roadmap-signal-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 8px;
-  border: 1px solid rgba(12, 108, 242, 0.3);
-  color: #0d65df;
-  background: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.schedule-roadmap-panel-block--signal p {
-  margin: 0;
-  color: #506989;
-  font-size: 11px;
-  line-height: 1.3;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.schedule-roadmap-panel-block--signal strong {
-  color: #1a4475;
-  font-size: 17px;
-  line-height: 1.24;
-  letter-spacing: -0.14px;
-}
-
-.schedule-roadmap-panel-block--signal small {
-  color: #4f6686;
-  font-size: 12px;
-  line-height: 1.35;
-  letter-spacing: -0.1px;
-}
-
-.schedule-roadmap-dots {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.schedule-roadmap-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  border: 0;
-  background: rgba(15, 23, 42, 0.24);
-  cursor: pointer;
-  padding: 0;
-  transition:
-    width 0.18s ease,
-    background 0.18s ease;
-}
-
-.schedule-roadmap-dot.is-active {
-  width: 20px;
-  background: #0d65df;
-}
-
-@media (max-width: 1100px) {
-  .schedule-roadmap-explorer {
-    grid-template-columns: 1fr;
-  }
-
-  .schedule-roadmap-rail {
-    order: 2;
-  }
-
-  .schedule-roadmap-stage {
-    order: 1;
-  }
-}
-
-@media (max-width: 760px) {
-  .schedule-roadmap-rail-btn {
-    grid-template-columns: auto 1fr;
-  }
-
-  .schedule-roadmap-rail-state {
-    display: none;
-  }
-
-  .schedule-roadmap-panel h3 {
-    font-size: 21px;
-  }
-
-  .schedule-roadmap-panel-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .schedule-roadmap-progress-notes {
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
 }
 
 .site-footer {
@@ -9324,8 +8829,16 @@ img {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(800px 340px at 8% -10%, rgba(45, 115, 231, 0.08), transparent 62%),
-    radial-gradient(760px 300px at 96% 0%, rgba(32, 139, 255, 0.08), transparent 58%);
+    radial-gradient(
+      800px 340px at 8% -10%,
+      rgba(45, 115, 231, 0.08),
+      transparent 62%
+    ),
+    radial-gradient(
+      760px 300px at 96% 0%,
+      rgba(32, 139, 255, 0.08),
+      transparent 58%
+    );
   opacity: 0.9;
 }
 
@@ -9736,14 +9249,8 @@ img {
 .awards-gallery-empty code,
 .awards-gallery-header code {
   font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    'Liberation Mono',
-    'Courier New',
-    monospace;
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
   font-size: 0.92em;
 }
 
