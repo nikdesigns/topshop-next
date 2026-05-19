@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { RouteLoadingIndicator } from '@/components/route-loading-indicator';
+import { SiteToaster } from '@/components/ui/site-toaster';
 import { nominationWindow } from '@/lib/nomination-window';
 import { SITE_URL } from '@/lib/site';
 
@@ -65,6 +66,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RouteLoadingIndicator />
+        <SiteToaster />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}

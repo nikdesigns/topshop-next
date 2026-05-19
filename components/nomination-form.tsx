@@ -14,6 +14,7 @@ import {
 } from '@/lib/the145-nomination';
 import { CircleCheckBig, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react';
 import { type FormEvent, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 const CATEGORY_COLUMN_COUNT = 3;
 
@@ -175,17 +176,26 @@ export function NominationForm({
     if (!trimmedCompanyName) {
       setSubmitState('error');
       setStatusMessage('Please select a company before submitting.');
+      toast.error('Company is required', {
+        description: 'Please select a company before submitting your nomination.',
+      });
       return;
     }
 
     if (checkedCategoryIds.size === 0) {
       setSubmitState('error');
       setStatusMessage('Please select at least one category.');
+      toast.error('Category is required', {
+        description: 'Please select at least one category.',
+      });
       return;
     }
 
     setSubmitState('submitting');
     setStatusMessage('Submitting your nomination...');
+    const loadingToastId = toast.loading('Submitting nomination...', {
+      description: `Sending vote for ${trimmedCompanyName}.`,
+    });
 
     const payload = new URLSearchParams();
     payload.set('CompanyName', trimmedCompanyName);
@@ -204,6 +214,10 @@ export function NominationForm({
 
       setSubmitState('submitted');
       setStatusMessage('Your vote has been submitted successfully.');
+      toast.dismiss(loadingToastId);
+      toast.success('Nomination submitted', {
+        description: `${trimmedCompanyName} was submitted successfully.`,
+      });
       setCompanyName('');
       setCheckedCategoryIds(new Set());
       setLockedCategoryIds(null);
@@ -212,6 +226,11 @@ export function NominationForm({
       setStatusMessage(
         'We could not submit right now. Please retry from topshopawards.com or contact support@the145.com.',
       );
+      toast.dismiss(loadingToastId);
+      toast.error('Submission failed', {
+        description:
+          'Please retry from topshopawards.com or contact support@the145.com.',
+      });
     }
   };
 
