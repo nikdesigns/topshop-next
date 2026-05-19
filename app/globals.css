@@ -162,7 +162,9 @@
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -1587,10 +1589,12 @@
   --shadow-soft: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
   --font-display:
     -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
-    system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
   --font-body:
     -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display',
-    system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
 }
 
 *,
@@ -1820,7 +1824,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -1912,7 +1918,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -1978,7 +1986,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2080,7 +2090,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2117,7 +2129,13 @@ img {
 
 .about-principles-list {
   display: grid;
-  gap: 4px;
+  gap: 10px;
+  margin: 8px 0 12px;
+}
+
+.about-principles-list li {
+  margin: 0;
+  padding-block: 1px;
 }
 
 .about-quote {
@@ -2292,7 +2310,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2355,7 +2375,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2671,7 +2693,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -2848,7 +2872,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3029,7 +3055,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3420,7 +3448,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3542,7 +3572,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3618,7 +3650,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3647,7 +3681,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3753,7 +3789,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3791,7 +3829,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -3898,7 +3938,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -4111,7 +4153,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -4200,7 +4244,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -4672,7 +4718,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5183,7 +5231,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5201,7 +5251,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5311,7 +5363,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5435,7 +5489,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5524,7 +5580,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5609,7 +5667,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -5905,7 +5965,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6028,7 +6090,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6098,7 +6162,9 @@ img {
     -apple-system,
     BlinkMacSystemFont,
     'SF Pro Text',
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6560,7 +6626,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -6846,7 +6914,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7008,7 +7078,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7334,7 +7406,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7506,7 +7580,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7687,7 +7763,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7851,7 +7929,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -7910,7 +7990,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -8071,7 +8153,9 @@ img {
     'SF Pro Text',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui, 'Segoe UI', Roboto,
+    system-ui,
+    'Segoe UI',
+    Roboto,
     'Helvetica Neue',
     Helvetica,
     Arial,
@@ -9128,6 +9212,52 @@ img {
 
 .awards-video-card--large .awards-video-player-shell {
   min-height: clamp(280px, 30vw, 480px);
+}
+
+.awards-video-poster-image {
+  object-fit: cover;
+}
+
+.awards-video-poster-fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 22% 18%,
+      rgba(73, 112, 176, 0.35),
+      transparent 42%
+    ),
+    linear-gradient(160deg, #071933, #0d2b54 58%, #123d73);
+}
+
+.awards-video-play-trigger {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(4, 14, 29, 0.08) 0%,
+    rgba(4, 14, 29, 0.2) 52%,
+    rgba(4, 14, 29, 0.34) 100%
+  );
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.awards-video-play-trigger:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(4, 14, 29, 0.04) 0%,
+    rgba(4, 14, 29, 0.16) 50%,
+    rgba(4, 14, 29, 0.28) 100%
+  );
+}
+
+.awards-video-play-trigger:focus-visible {
+  outline: 3px solid rgba(64, 130, 231, 0.72);
+  outline-offset: -3px;
 }
 
 .awards-video-player-shell .react-player {

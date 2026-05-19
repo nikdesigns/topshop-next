@@ -1,19 +1,11 @@
 'use client';
 
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { Video } from 'lucide-react';
+import { HighlightsVideoModalTrigger } from '@/components/highlights-video-modal-trigger';
 import { useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import type { AwardsGalleryVideo } from '@/lib/awards-gallery';
-
-const ReactPlayer = dynamic(() => import('react-player'), { ssr: false });
-const PLAYER_CONFIG = {
-  hls: {
-    lowLatencyMode: true,
-    backBufferLength: 90,
-    maxBufferLength: 60,
-  },
-} as const;
 
 type YearFilter = 'all' | string;
 
@@ -157,25 +149,27 @@ export function AwardsGallerySection({
                   {yearVideos.map((video) => (
                     <article className="awards-video-card awards-video-card--large" key={video.id}>
                       <div className="awards-video-player-shell">
-                        <ReactPlayer
-                          src={video.src}
-                          controls
-                          playsInline
-                          preload="metadata"
-                          width="100%"
-                          height="100%"
-                          light={video.posterSrc ?? false}
-                          playIcon={
-                            <span className="awards-video-play-badge" aria-hidden="true">
-                              <span className="awards-video-play-triangle" />
-                            </span>
-                          }
-                          config={PLAYER_CONFIG}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
+                        {video.posterSrc ? (
+                          <Image
+                            src={video.posterSrc}
+                            alt={video.title}
+                            fill
+                            sizes="(max-width: 900px) 100vw, 1060px"
+                            className="awards-video-poster-image"
+                          />
+                        ) : (
+                          <div className="awards-video-poster-fallback" />
+                        )}
+                        <HighlightsVideoModalTrigger
+                          videoSrc={video.src}
+                          title={video.title}
+                          triggerClassName="awards-video-play-trigger"
+                          triggerAriaLabel={`Play ${video.title}`}
+                        >
+                          <span className="awards-video-play-badge" aria-hidden="true">
+                            <span className="awards-video-play-triangle" />
+                          </span>
+                        </HighlightsVideoModalTrigger>
                       </div>
                       <div className="awards-video-card-copy">
                         <p className="awards-video-card-meta">

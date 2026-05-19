@@ -78,16 +78,14 @@ export default function AboutUsPage() {
             <header className="about-main-header about-main-header-rich">
               <Badge variant="secondary" className="about-main-badge">
                 <Sparkles size={12} aria-hidden="true" />
-                Why We Created Top Shop Awards
+                Top Shop Awards Mission
               </Badge>
               <h2>
-                Built to celebrate repair centers that raise the aviation
-                standard.
+                Recognizing repair organizations that deliver more than technical excellence.
               </h2>
               <p>
-                Top Shop Awards is designed to recognize technical excellence,
-                operational discipline, and customer trust across the MRO
-                community.
+                We celebrate MRO organizations that lead through service quality, clear
+                communication, innovation, integrity, and customer-first execution.
               </p>
             </header>
 
@@ -100,7 +98,7 @@ export default function AboutUsPage() {
                   triggerAriaLabel={`Play ${nominationWindow.highlightsTitle}`}
                 >
                   <Image
-                    src={nominationWindow.heroRecapImageSrc}
+                    src="/assets/images/banners/2026_highlight.webp"
                     alt={`${nominationWindow.highlightsYear} Top Shop Awards highlights preview`}
                     width={417}
                     height={625}
@@ -118,41 +116,37 @@ export default function AboutUsPage() {
               <article className="about-copy about-copy-rich">
                 <div className="site-prose">
                   <p>
-                    Aviation is a zero-error industry and flying is the safest
-                    means of transportation because we make it so. When it comes
-                    to aviation maintenance, perfection is not an abstract
-                    concept, it is a daily goal.
+                    The aviation MRO industry is built on more than technical
+                    skills, engineering expertise, and quality materials. What
+                    truly distinguishes exceptional repair stations from mediocre
+                    ones is the human element: clear communication, innovative
+                    thinking, adaptability, integrity, and an unwavering
+                    commitment to doing things the right way.
                   </p>
                   <p>
-                    The MRO industry is more than workmanship, engineering, and
-                    quality material. The human element sets great shops apart:
-                    clear communication, innovative thinking, flexibility, and
-                    ethical principles.
-                  </p>
-                  <p>
-                    The145 created Top Shop Awards in honor of shops that deliver
-                    more than technical expertise. We created these awards for
-                    companies that believe in:
+                    The145 created the Top Shop Awards to recognize organizations
+                    that deliver more than technical excellence. These awards
+                    honor companies that embody:
                   </p>
 
                   <ul className="about-principles-list">
-                    <li>Quality of service</li>
-                    <li>Vision</li>
-                    <li>Exceptional turn-around times</li>
-                    <li>Competitive pricing and excellent customer relations</li>
+                    <li>Outstanding quality of service</li>
+                    <li>Vision and leadership</li>
+                    <li>Exceptional turnaround times</li>
+                    <li>Competitive pricing and superior customer relationships</li>
                   </ul>
 
                   <p>
-                    Top Shop Awards is 100% peer-driven and open to any repair
-                    center within the aviation community. No sign-up is required,
-                    and any professional within the industry can nominate a
-                    business.
+                    We&apos;re excited to recognize this year&apos;s repair
+                    centers that have gone above and beyond to offer their
+                    customers the best quality workmanship, turn-around-times,
+                    innovation and customer care in the industry.
                   </p>
 
                   <blockquote className="about-quote">
-                    Kudos to the {nominationWindow.winnersShowcaseYear} Top Shop winners
-                    for their outstanding achievements and excellence.
-                    <cite>Justin Spaulding, The145</cite>
+                    Congratulations to the 2026 Top Shop winners for their
+                    exceptional achievements and commitment to excellence.
+                    <cite>Justin Spaulding, President, The145</cite>
                   </blockquote>
                 </div>
 
